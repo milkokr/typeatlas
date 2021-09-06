@@ -1,0 +1,3744 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-09-06 16:49+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: typeatlas/filtering.py:940
+msgid "Any of"
+msgstr ""
+
+#: typeatlas/filtering.py:942
+msgid "All of"
+msgstr ""
+
+#: typeatlas/filtering.py:1256
+msgid "Font names"
+msgstr ""
+
+#: typeatlas/filtering.py:1290
+#, python-format
+msgid "one of: %s"
+msgstr ""
+
+#: typeatlas/filtering.py:1399 typeatlas/fontmodels.py:420
+#: typeatlas/annotations.py:618 typeatlas/opentype.py:1077
+#: typeatlas/gui.py:2904 typeatlas/gui.py:3209 typeatlas/fontlist.py:689
+msgid "Outline"
+msgstr ""
+
+#: typeatlas/filtering.py:1399
+msgid "Non-outline"
+msgstr ""
+
+#: typeatlas/filtering.py:1438 typeatlas/fontmodels.py:425
+#: typeatlas/gui.py:2915 typeatlas/gui.py:3218 typeatlas/fontlist.py:690
+msgid "Scalable"
+msgstr ""
+
+#: typeatlas/filtering.py:1438
+msgid "Non-scalable"
+msgstr ""
+
+#: typeatlas/filtering.py:1477 typeatlas/fontduel.py:265
+#: typeatlas/fontmodels.py:461 typeatlas/fontmodels.py:1459
+#: typeatlas/opentype.py:726 typeatlas/opentype.py:876
+#: typeatlas/opentype.py:1039 typeatlas/opentype.py:1124
+msgid "Monospace"
+msgstr ""
+
+#: typeatlas/filtering.py:1477 typeatlas/opentype.py:875
+#: typeatlas/opentype.py:1123
+msgid "Proportional"
+msgstr ""
+
+#: typeatlas/filtering.py:1767 typeatlas/fontmodels.py:1869
+#: typeatlas/fontlist.py:687
+msgid "File path"
+msgstr ""
+
+#: typeatlas/filtering.py:1769 typeatlas/fontmodels.py:1873
+msgid "File name"
+msgstr ""
+
+#: typeatlas/filtering.py:1776
+#, python-brace-format
+msgid "{property} matching {pattern}"
+msgstr ""
+
+#: typeatlas/filtering.py:1779
+#, python-brace-format
+msgid "{property} named {name}"
+msgstr ""
+
+#: typeatlas/filtering.py:1782
+#, python-brace-format
+msgid "{property} containing {text}"
+msgstr ""
+
+#: typeatlas/filtering.py:1861
+#, python-brace-format
+msgid "Containing: {characters}"
+msgstr ""
+
+#: typeatlas/filtering.py:1863
+#, python-brace-format
+msgid "Contains one of: {characters}"
+msgstr ""
+
+#: typeatlas/filtering.py:1947 typeatlas/gui.py:3310 typeatlas/fontlist.py:692
+msgid "Languages"
+msgstr ""
+
+#: typeatlas/filtering.py:2005 typeatlas/fontduel.py:271
+#: typeatlas/fontmodels.py:1437 typeatlas/annotations.py:395
+#: typeatlas/guicommon.py:762 typeatlas/gui.py:3183 typeatlas/fontlist.py:698
+msgid "Font format"
+msgstr ""
+
+#: typeatlas/filtering.py:2151 typeatlas/fontmodels.py:457
+#: typeatlas/fontmodels.py:1446
+msgid "unclassified"
+msgstr ""
+
+#: typeatlas/filtering.py:2177
+msgid "Generic families"
+msgstr ""
+
+#: typeatlas/filtering.py:2230
+msgid "PANOSE family"
+msgstr ""
+
+#: typeatlas/filtering.py:2337
+msgid "PANOSE properties"
+msgstr ""
+
+#: typeatlas/filtering.py:2428 typeatlas/filtering.py:2457
+#: typeatlas/fontduel.py:263 typeatlas/fontmodels.py:1590
+#: typeatlas/guicommon.py:747
+msgid "IBM class"
+msgstr ""
+
+#: typeatlas/filtering.py:2481 typeatlas/filtering.py:2511
+#: typeatlas/fontduel.py:264 typeatlas/guicommon.py:748
+msgid "IBM subclass"
+msgstr ""
+
+#: typeatlas/proginfo.py:59
+msgid "Type Atlas"
+msgstr ""
+
+#: typeatlas/qfontlist.py:320
+msgid "First run: Discovering font files: {} out of {}"
+msgstr ""
+
+#: typeatlas/fontduel.py:251
+msgid "yes"
+msgstr ""
+
+#: typeatlas/fontduel.py:251
+msgid "no"
+msgstr ""
+
+#: typeatlas/fontduel.py:258 typeatlas/opentype.py:507
+#: typeatlas/guicommon.py:732 typeatlas/gui.py:3108 typeatlas/fontlist.py:673
+msgid "Family"
+msgstr ""
+
+#: typeatlas/fontduel.py:259 typeatlas/guicommon.py:733
+#: typeatlas/guicommon.py:812 typeatlas/gui.py:3109 typeatlas/fontlist.py:676
+msgid "Style"
+msgstr ""
+
+#: typeatlas/fontduel.py:260 typeatlas/fontmodels.py:1433
+#: typeatlas/guicommon.py:735
+msgid "Generic family"
+msgstr ""
+
+#: typeatlas/fontduel.py:261 typeatlas/fontmodels.py:1501
+#: typeatlas/guicommon.py:743
+msgid "PANOSE class"
+msgstr ""
+
+#: typeatlas/fontduel.py:262 typeatlas/guicommon.py:744
+msgid "PANOSE subclass"
+msgstr ""
+
+#: typeatlas/fontduel.py:266 typeatlas/opentype.py:510
+#: typeatlas/opentype.py:559 typeatlas/opentype.py:572
+#: typeatlas/opentype.py:585 typeatlas/opentype.py:597
+#: typeatlas/fontlist.py:682
+msgid "Weight"
+msgstr ""
+
+#: typeatlas/fontduel.py:267 typeatlas/fontlist.py:680
+msgid "Slant"
+msgstr ""
+
+#: typeatlas/fontduel.py:268 typeatlas/fontlist.py:684
+msgid "Width"
+msgstr ""
+
+#: typeatlas/fontduel.py:269 typeatlas/opentype.py:273
+#: typeatlas/opentype.py:314 typeatlas/fontlist.py:699
+msgid "Decorative"
+msgstr ""
+
+#: typeatlas/fontduel.py:270 typeatlas/opentype.py:746
+#: typeatlas/opentype.py:748 typeatlas/opentype.py:750
+msgid "Vertical"
+msgstr ""
+
+#: typeatlas/fontduel.py:274 typeatlas/annotations.py:397
+#: typeatlas/guicommon.py:771 typeatlas/gui.py:3190
+msgid "File format"
+msgstr ""
+
+#: typeatlas/fontduel.py:277
+msgid "PANOSE number"
+msgstr ""
+
+#: typeatlas/fontduel.py:606
+msgid "TypeAtlas Duel of the Fonts"
+msgstr ""
+
+#: typeatlas/fontduel.py:660
+msgid "Stack view"
+msgstr ""
+
+#: typeatlas/fontduel.py:661 typeatlas/options.py:533
+msgid "Samples"
+msgstr ""
+
+#: typeatlas/fontduel.py:662 typeatlas/gui.py:2330
+msgid "Features"
+msgstr ""
+
+#: typeatlas/data/morse.py:441
+msgid "International Morse code (1865-present)"
+msgstr ""
+
+#: typeatlas/data/morse.py:442
+msgid "International Morse code with extensions"
+msgstr ""
+
+#: typeatlas/data/morse.py:446
+msgid "Morse code for Greek"
+msgstr ""
+
+#: typeatlas/data/morse.py:447
+msgid "Morse code for Russian"
+msgstr ""
+
+#: typeatlas/data/morse.py:448
+msgid "Morse code for Bulgarian"
+msgstr ""
+
+#: typeatlas/data/morse.py:449
+msgid "Morse code for Ukrainian"
+msgstr ""
+
+#: typeatlas/data/morse.py:450
+msgid "Morse code for Hebrew"
+msgstr ""
+
+#: typeatlas/data/morse.py:451
+msgid "Morse code for Arabic"
+msgstr ""
+
+#: typeatlas/data/morse.py:452
+msgid "Morse code for Persian"
+msgstr ""
+
+#: typeatlas/data/morse.py:453
+msgid "Morse code for Korean"
+msgstr ""
+
+#: typeatlas/data/morse.py:455
+msgid "American Morse code (1844-1970s)"
+msgstr ""
+
+#: typeatlas/data/morse.py:457
+msgid "Five-needle telegraph code"
+msgstr ""
+
+#: typeatlas/fontmodels.py:326
+msgid "Font name"
+msgstr ""
+
+#: typeatlas/fontmodels.py:422 typeatlas/annotations.py:613
+#: typeatlas/gui.py:2911 typeatlas/gui.py:3214
+msgid "Bitmap"
+msgstr ""
+
+#: typeatlas/fontmodels.py:464
+#, python-brace-format
+msgid "Width {width}, slant {slant}, weight {weight}."
+msgstr ""
+
+#: typeatlas/fontmodels.py:467
+msgid "Decorative."
+msgstr ""
+
+#: typeatlas/fontmodels.py:497
+msgid "REPLACEME"
+msgstr ""
+
+#: typeatlas/fontmodels.py:788 typeatlas/fontmodels.py:1257
+msgid "Select languages"
+msgstr ""
+
+#: typeatlas/fontmodels.py:1083
+msgid "Edit..."
+msgstr ""
+
+#: typeatlas/fontmodels.py:1086
+msgid "Delete..."
+msgstr ""
+
+#: typeatlas/fontmodels.py:1110
+msgid "Confirm deletion of {}"
+msgstr ""
+
+#: typeatlas/fontmodels.py:1111
+msgid "Are you sure you want to delete the selected {}?"
+msgstr ""
+
+#: typeatlas/fontmodels.py:1138
+msgid "{} already exists"
+msgstr ""
+
+#: typeatlas/fontmodels.py:1139
+msgid "The name you entered for {} already exists: {}"
+msgstr ""
+
+#: typeatlas/fontmodels.py:1258
+msgid "Search languages..."
+msgstr ""
+
+#: typeatlas/fontmodels.py:1273
+msgid "Select tags"
+msgstr ""
+
+#: typeatlas/fontmodels.py:1274
+msgid "Search tags..."
+msgstr ""
+
+#: typeatlas/fontmodels.py:1291
+msgid "Select categories"
+msgstr ""
+
+#: typeatlas/fontmodels.py:1292
+msgid "Search categories..."
+msgstr ""
+
+#: typeatlas/fontmodels.py:1308
+msgid "Edit searches"
+msgstr ""
+
+#: typeatlas/fontmodels.py:1309
+msgid "Search searches..."
+msgstr ""
+
+#: typeatlas/fontmodels.py:1329
+msgid "Select writing systems"
+msgstr ""
+
+#: typeatlas/fontmodels.py:1405
+msgid "Select font style family and features"
+msgstr ""
+
+#: typeatlas/fontmodels.py:1489
+msgid "Only OpenType"
+msgstr ""
+
+#: typeatlas/fontmodels.py:1527 typeatlas/fontmodels.py:1615
+#, python-format
+msgid "%s subclass"
+msgstr ""
+
+#: typeatlas/fontmodels.py:1561
+msgid "Any"
+msgstr ""
+
+#: typeatlas/fontmodels.py:1879 typeatlas/fontmodels.py:1935
+msgid "Search fonts..."
+msgstr ""
+
+#: typeatlas/fontmodels.py:1883
+msgid ""
+"Enter search ords or search patterns to find in names, including filename "
+"and filepath special keywords:"
+msgstr ""
+
+#: typeatlas/fontmodels.py:1903 typeatlas/fontmodels.py:1952
+msgid "&Writing..."
+msgstr ""
+
+#: typeatlas/fontmodels.py:1905 typeatlas/fontmodels.py:1956
+msgid "&Languages..."
+msgstr ""
+
+#: typeatlas/fontmodels.py:1907 typeatlas/fontmodels.py:1961
+msgid "&Class..."
+msgstr ""
+
+#: typeatlas/fontmodels.py:1911
+msgid "&Tags..."
+msgstr ""
+
+#: typeatlas/fontmodels.py:1913
+msgid "&Categories..."
+msgstr ""
+
+#: typeatlas/fontmodels.py:2361 typeatlas/gui.py:3260
+msgid "Writing systems"
+msgstr ""
+
+#: typeatlas/fontmodels.py:3130
+msgid "Filter description"
+msgstr ""
+
+#: typeatlas/fontmodels.py:3294
+msgid "Copy all"
+msgstr ""
+
+#: typeatlas/fontmodels.py:3296
+msgid "Paste"
+msgstr ""
+
+#: typeatlas/fontmodels.py:3300
+msgid "Copy selected"
+msgstr ""
+
+#: typeatlas/fontmodels.py:3302
+msgid "Remove"
+msgstr ""
+
+#: typeatlas/fontmodels.py:3305 typeatlas/guicommon.py:1097
+#: typeatlas/guicommon.py:1102
+msgid "Clear"
+msgstr ""
+
+#: typeatlas/langutil.py:722 typeatlas/langutil.py:739
+msgid "script|Unknown"
+msgstr ""
+
+#: typeatlas/langutil.py:735
+msgid "script|Common"
+msgstr ""
+
+#: typeatlas/langutil.py:743
+msgid "script|Inherited"
+msgstr ""
+
+#: typeatlas/about.py:54 typeatlas/about.py:262
+#, python-format
+msgid "About %s"
+msgstr ""
+
+#: typeatlas/about.py:80 typeatlas/about.py:251
+msgid "About FreeType"
+msgstr ""
+
+#: typeatlas/about.py:91
+#, python-format
+msgid "Fonts rendering provided by FreeType %s"
+msgstr ""
+
+#: typeatlas/about.py:93
+msgid ""
+"FreeType is a cross-platform multi-format library for font rasterization."
+msgstr ""
+
+#: typeatlas/about.py:110 typeatlas/about.py:253
+msgid "About fontconfig"
+msgstr ""
+
+#: typeatlas/about.py:122
+#, python-format
+msgid "TypeAtlas is powered by the font database of fontconfig %s"
+msgstr ""
+
+#: typeatlas/about.py:125
+msgid ""
+"fontconfig is freedesktop.org's library for font discovery, substitution and "
+"configuration."
+msgstr ""
+
+#: typeatlas/about.py:143
+msgid "About Pythonⓡ"
+msgstr ""
+
+#: typeatlas/about.py:150
+#, python-format
+msgid "This program is powered by <b>Python®</b> %s"
+msgstr ""
+
+#: typeatlas/about.py:153
+msgid "Python is a cross-platform high-level programming language"
+msgstr ""
+
+#: typeatlas/about.py:155
+#, python-format
+msgid "Currently using %s implementation"
+msgstr ""
+
+#: typeatlas/about.py:162
+#, python-format
+msgid ""
+"The Python language is distributed under the terms of the <a href=\"%s\">PSF "
+"License Agreement.</a>"
+msgstr ""
+
+#: typeatlas/about.py:169
+#, python-format
+msgid ""
+"“Python” and the Python logos are trademarks or registered trademarks of the "
+"Python Software Foundation, used in TypeAtlas under <a href=\"%s\">PSF "
+"Trademark Usage Policy</a> as published by the Foundation."
+msgstr ""
+
+#: typeatlas/about.py:197 typeatlas/about.py:258
+msgid "About operating system"
+msgstr ""
+
+#: typeatlas/about.py:220
+#, python-format
+msgid "System: %s"
+msgstr ""
+
+#: typeatlas/about.py:255
+msgid "About Qt®"
+msgstr ""
+
+#: typeatlas/about.py:256
+msgid "About Python®"
+msgstr ""
+
+#: typeatlas/osinfo.py:285 typeatlas/osinfo.py:292 typeatlas/osinfo.py:353
+#, python-format
+msgid "Drive %s"
+msgstr ""
+
+#: typeatlas/osinfo.py:305
+#, python-format
+msgid "Home directory %s"
+msgstr ""
+
+#: typeatlas/osinfo.py:310
+msgid "Root /"
+msgstr ""
+
+#: typeatlas/osinfo.py:337
+#, python-format
+msgid "Optical drive %s"
+msgstr ""
+
+#: typeatlas/osinfo.py:341
+#, python-format
+msgid "Remote folder %s"
+msgstr ""
+
+#: typeatlas/osinfo.py:348
+#, python-format
+msgid "Removable drive %s"
+msgstr ""
+
+#: typeatlas/osinfo.py:355
+#, python-format
+msgid "Mountpoint %s"
+msgstr ""
+
+#: typeatlas/annotations.py:111
+msgid "Alternative name"
+msgstr ""
+
+#: typeatlas/annotations.py:112
+msgid "Standard name"
+msgstr ""
+
+#: typeatlas/annotations.py:113 typeatlas/annotations.py:114
+#: typeatlas/annotations.py:115 typeatlas/annotations.py:117
+#: typeatlas/annotations.py:118
+msgid "Name"
+msgstr ""
+
+#: typeatlas/annotations.py:116
+msgid "Unofficial name"
+msgstr ""
+
+#: typeatlas/annotations.py:277
+msgid "Extended from"
+msgstr ""
+
+#: typeatlas/annotations.py:289
+msgid "A variant of"
+msgstr ""
+
+#: typeatlas/annotations.py:400 typeatlas/guicommon.py:728
+msgid "Type"
+msgstr ""
+
+#: typeatlas/annotations.py:402 typeatlas/cli/charmap.py:174
+#: typeatlas/guicommon.py:964 typeatlas/fontgrid.py:1103
+msgid "Category"
+msgstr ""
+
+#: typeatlas/annotations.py:420
+#, python-format
+msgid "Developed by %s"
+msgstr ""
+
+#: typeatlas/annotations.py:432
+msgid "Draft"
+msgstr ""
+
+#: typeatlas/annotations.py:434
+msgid "Recommendation"
+msgstr ""
+
+#: typeatlas/annotations.py:436
+msgid "noun|Standard"
+msgstr ""
+
+#: typeatlas/annotations.py:440
+#, python-format
+msgid "Related entity: %s"
+msgstr ""
+
+#: typeatlas/annotations.py:479
+#, python-brace-format
+msgid "{name} is a registered trademark of {owner}"
+msgstr ""
+
+#: typeatlas/annotations.py:481
+#, python-brace-format
+msgid "{name} is a trademark of {owner}"
+msgstr ""
+
+#: typeatlas/annotations.py:614
+msgid "Raster"
+msgstr ""
+
+#: typeatlas/annotations.py:619
+msgid "Vector"
+msgstr ""
+
+#: typeatlas/annotations.py:623
+msgid "Stroke"
+msgstr ""
+
+#: typeatlas/annotations.py:627
+msgid "Cubic Bézier outline"
+msgstr ""
+
+#: typeatlas/annotations.py:630
+msgid "Quadratic Bézier outline"
+msgstr ""
+
+#: typeatlas/annotations.py:641
+msgid "Metonym"
+msgstr ""
+
+#: typeatlas/annotations.py:669
+msgid "International Organization for Standardization"
+msgstr ""
+
+#: typeatlas/annotations.py:675
+msgid "International Electrotechnical Commission"
+msgstr ""
+
+#: typeatlas/annotations.py:682
+msgid "World Wide Web Consortium"
+msgstr ""
+
+#: typeatlas/annotations.py:734
+msgid "PostScript font file"
+msgstr ""
+
+#: typeatlas/annotations.py:798
+msgid "PostScript font"
+msgstr ""
+
+#: typeatlas/annotations.py:832
+msgid "SVG color outline"
+msgstr ""
+
+#: typeatlas/annotations.py:835
+msgid "Scalable Vector Graphics color outline"
+msgstr ""
+
+#: typeatlas/annotations.py:891 typeatlas/fontlist.py:249
+msgid "Legacy application-specific font"
+msgstr ""
+
+#: typeatlas/cli/charmap.py:66
+msgid "TypeAtlas character map"
+msgstr ""
+
+#: typeatlas/cli/charmap.py:70
+msgid "Display the given script"
+msgstr ""
+
+#: typeatlas/cli/charmap.py:74
+msgid "Display the given character set"
+msgstr ""
+
+#: typeatlas/cli/charmap.py:82
+msgid "Search for characters related to a word"
+msgstr ""
+
+#: typeatlas/cli/charmap.py:172 typeatlas/guicommon.py:961
+#: typeatlas/fontgrid.py:1101
+msgid "Hex code"
+msgstr ""
+
+#: typeatlas/cli/charmap.py:173 typeatlas/samples.py:141
+#: typeatlas/guicommon.py:962 typeatlas/fontgrid.py:1102
+msgid "Character"
+msgstr ""
+
+#: typeatlas/cli/charmap.py:176 typeatlas/guicommon.py:952
+#: typeatlas/fontgrid.py:1110 typeatlas/fontgrid.py:1136
+msgid "Block"
+msgstr ""
+
+#: typeatlas/cli/charmap.py:177 typeatlas/guicommon.py:954
+#: typeatlas/fontgrid.py:1111 typeatlas/fontgrid.py:1141
+msgid "Script"
+msgstr ""
+
+#: typeatlas/cli/charmap.py:178 typeatlas/guicommon.py:956
+msgid "Plane"
+msgstr ""
+
+#: typeatlas/cli/charmap.py:187 typeatlas/guicommon.py:990
+#: typeatlas/fontgrid.py:1122
+msgid "Variation"
+msgstr ""
+
+#: typeatlas/cli/finder.py:74
+msgid "TypeAtlas font finder"
+msgstr ""
+
+#: typeatlas/cli/finder.py:142
+#, python-format
+msgid "Unexpected %r"
+msgstr ""
+
+#: typeatlas/cli/finder.py:170
+#, python-format
+msgid "Invalid predicate %r"
+msgstr ""
+
+#: typeatlas/cli/finder.py:185
+#, python-format
+msgid "Missing %s"
+msgstr ""
+
+#: typeatlas/cli/finder.py:188
+msgid "Empty expression"
+msgstr ""
+
+#: typeatlas/cli/finder.py:354
+#, python-format
+msgid "Select fonts whose %s matches a regular expression"
+msgstr ""
+
+#: typeatlas/cli/finder.py:358
+#, python-format
+msgid ""
+"Select fonts whose %s contains a string or wildcard pattern. Prefix with = "
+"to to get exact match, or with ~ to match the pattern against the whole name."
+msgstr ""
+
+#: typeatlas/cli/finder.py:377
+msgid "Use case sensitive matching."
+msgstr ""
+
+#: typeatlas/cli/finder.py:385
+msgid "PATTERN"
+msgstr ""
+
+#: typeatlas/cli/finder.py:430
+msgid "family"
+msgstr ""
+
+#: typeatlas/cli/finder.py:431
+msgid "style"
+msgstr ""
+
+#: typeatlas/cli/finder.py:432
+msgid "fullname"
+msgstr ""
+
+#: typeatlas/cli/finder.py:433
+msgid "file"
+msgstr ""
+
+#: typeatlas/cli/finder.py:434
+msgid "foundry"
+msgstr ""
+
+#: typeatlas/cli/finder.py:436
+msgid "description"
+msgstr ""
+
+#: typeatlas/cli/finder.py:437
+msgid "copyright"
+msgstr ""
+
+#: typeatlas/cli/finder.py:438
+msgid "trademark"
+msgstr ""
+
+#: typeatlas/cli/finder.py:439
+msgid "license"
+msgstr ""
+
+#: typeatlas/cli/finder.py:440
+msgid "license URL"
+msgstr ""
+
+#: typeatlas/cli/finder.py:441
+msgid "designer"
+msgstr ""
+
+#: typeatlas/cli/finder.py:442
+msgid "manufacturer"
+msgstr ""
+
+#: typeatlas/cli/finder.py:444
+msgid "vendor URL"
+msgstr ""
+
+#: typeatlas/cli/finder.py:445
+msgid "designer URL"
+msgstr ""
+
+#: typeatlas/cli/finder.py:446
+msgid "sample text"
+msgstr ""
+
+#: typeatlas/cli/finder.py:447
+msgid "version"
+msgstr ""
+
+#: typeatlas/cli/finder.py:525
+msgid "Font weight, e.g. 'bold', '>=120'"
+msgstr ""
+
+#: typeatlas/cli/finder.py:552
+msgid "Font slant, e.g. 'italic', '>=30'"
+msgstr ""
+
+#: typeatlas/cli/finder.py:578
+msgid "Font slant, e.g. 'condensed', '<=70'"
+msgstr ""
+
+#: typeatlas/cli/finder.py:602 typeatlas/cli/finder.py:616
+msgid "ABCXYZ"
+msgstr ""
+
+#: typeatlas/cli/finder.py:603 typeatlas/cli/finder.py:617
+msgid "Select fonts that contain the given characters."
+msgstr ""
+
+#: typeatlas/cli/finder.py:673
+msgid "Use Qt (default is to guess)"
+msgstr ""
+
+#: typeatlas/cli/finder.py:677
+msgid ""
+"Do not use Qt (default is to guess). This breaks universal character checks."
+msgstr ""
+
+#: typeatlas/cli/finder.py:682
+msgid "Use progress (default is to guess)"
+msgstr ""
+
+#: typeatlas/cli/finder.py:686
+msgid "Do not use progress (default is to guess)"
+msgstr ""
+
+#: typeatlas/cli/finder.py:691
+msgid "Prune fc-match matches"
+msgstr ""
+
+#: typeatlas/cli/finder.py:697
+msgid "Do not localize font strings"
+msgstr ""
+
+#: typeatlas/cli/finder.py:700
+msgid "Display styles"
+msgstr ""
+
+#: typeatlas/cli/finder.py:703
+msgid "Display files"
+msgstr ""
+
+#: typeatlas/cli/finder.py:705
+msgid "TEMPLATE"
+msgstr ""
+
+#: typeatlas/cli/finder.py:706
+msgid "Use the TEMPLATE as printing format"
+msgstr ""
+
+#: typeatlas/cli/finder.py:709
+msgid "FILE"
+msgstr ""
+
+#: typeatlas/cli/finder.py:710
+msgid "Write fonts to FILE instead of standard output"
+msgstr ""
+
+#: typeatlas/cli/finder.py:714
+msgid "PRED"
+msgstr ""
+
+#: typeatlas/cli/finder.py:716
+msgid ""
+"Match fonts using an expression. The expression can contain all predicates "
+"options, without the leading dashes, as well as keywords 'or', 'and' and "
+"brackets for grouping."
+msgstr ""
+
+#: typeatlas/cli/finder.py:828
+#, python-format
+msgid "%d out of %d families processed..."
+msgstr ""
+
+#: typeatlas/samples.py:142
+msgid "Phrase"
+msgstr ""
+
+#: typeatlas/samples.py:143
+msgid "Pangram"
+msgstr ""
+
+#: typeatlas/samples.py:151
+msgid "Perfect pangram"
+msgstr ""
+
+#: typeatlas/samples.py:154
+msgid "Phrase with all vowels and consonants"
+msgstr ""
+
+#: typeatlas/samples.py:158
+msgid "Phrase with all consonants"
+msgstr ""
+
+#: typeatlas/samples.py:162
+msgid "Pangram without all accents"
+msgstr ""
+
+#: typeatlas/samples.py:165
+msgid "Pangram without all accent combinations"
+msgstr ""
+
+#: typeatlas/samples.py:167
+msgid "Syllable pangram"
+msgstr ""
+
+#: typeatlas/samples.py:170
+msgid "Partial pangram"
+msgstr ""
+
+#: typeatlas/samples.py:173
+msgid "Yong character"
+msgstr ""
+
+#: typeatlas/options.py:238 typeatlas/options.py:239 typeatlas/options.py:241
+#: typeatlas/gui.py:969
+msgid "Default"
+msgstr ""
+
+#: typeatlas/options.py:241
+msgid "Unset"
+msgstr ""
+
+#: typeatlas/options.py:406
+msgid "Toolbar icon size"
+msgstr ""
+
+#: typeatlas/options.py:407 typeatlas/options.py:411 typeatlas/options.py:415
+#: typeatlas/options.py:419
+msgid "pixels"
+msgstr ""
+
+#: typeatlas/options.py:410
+msgid "Information document icon size"
+msgstr ""
+
+#: typeatlas/options.py:414
+msgid "Information document flag size"
+msgstr ""
+
+#: typeatlas/options.py:418
+msgid "Tooltip preview icon size"
+msgstr ""
+
+#: typeatlas/options.py:423
+msgid "List font size"
+msgstr ""
+
+#: typeatlas/options.py:424 typeatlas/options.py:427 typeatlas/options.py:430
+#: typeatlas/options.py:433 typeatlas/options.py:436 typeatlas/options.py:439
+msgid "pt"
+msgstr ""
+
+#: typeatlas/options.py:426
+msgid "Default sample font size"
+msgstr ""
+
+#: typeatlas/options.py:429
+msgid "Font size of stack comparison"
+msgstr ""
+
+#: typeatlas/options.py:432
+msgid "Default preview font size"
+msgstr ""
+
+#: typeatlas/options.py:435
+msgid "Default font grid font size"
+msgstr ""
+
+#: typeatlas/options.py:438
+msgid "Font grid preview character size"
+msgstr ""
+
+#: typeatlas/options.py:442
+msgid "Use standard OS style for all checkboxes"
+msgstr ""
+
+#: typeatlas/options.py:445
+msgid "Preferred Qt version"
+msgstr ""
+
+#: typeatlas/options.py:452
+msgid "Preferred Qt bindings"
+msgstr ""
+
+#: typeatlas/options.py:455
+msgid "Qt style"
+msgstr ""
+
+#: typeatlas/options.py:459
+msgid "Font sample selection"
+msgstr ""
+
+#: typeatlas/options.py:460
+msgid "Display highlights"
+msgstr ""
+
+#: typeatlas/options.py:461
+msgid "Display all available samples"
+msgstr ""
+
+#: typeatlas/options.py:462
+msgid "Display the sample name"
+msgstr ""
+
+#: typeatlas/options.py:466
+msgid "Maximum fonts in preview"
+msgstr ""
+
+#: typeatlas/options.py:469
+msgid "Maximum fonts in character map"
+msgstr ""
+
+#: typeatlas/options.py:473
+msgid "Renderer for color layer fonts (CPAL/COLR)"
+msgstr ""
+
+#: typeatlas/options.py:474 typeatlas/options.py:478
+msgid "Operating system"
+msgstr ""
+
+#: typeatlas/options.py:475 typeatlas/options.py:479
+msgid "Internal renderer"
+msgstr ""
+
+#: typeatlas/options.py:477
+msgid "Renderer for SVG color fonts"
+msgstr ""
+
+#: typeatlas/options.py:498
+msgid "TypeAtlas options"
+msgstr ""
+
+#: typeatlas/options.py:505
+msgid "Icon sizes"
+msgstr ""
+
+#: typeatlas/options.py:510
+msgid "Font sizes"
+msgstr ""
+
+#: typeatlas/options.py:543
+msgid "Color fonts"
+msgstr ""
+
+#: typeatlas/options.py:550
+msgid "Enable 3D acceleration"
+msgstr ""
+
+#: typeatlas/options.py:570
+msgid "Select executable..."
+msgstr ""
+
+#: typeatlas/options.py:584
+msgid "Browse..."
+msgstr ""
+
+#: typeatlas/options.py:592
+msgid "Interface"
+msgstr ""
+
+#: typeatlas/options.py:593
+msgid "Behaviour"
+msgstr ""
+
+#: typeatlas/options.py:594
+msgid "Dependencies"
+msgstr ""
+
+#: typeatlas/options.py:598
+msgid "Save"
+msgstr ""
+
+#: typeatlas/options.py:599 typeatlas/gui.py:1007
+msgid "Cancel"
+msgstr ""
+
+#: typeatlas/charinfo.py:101
+msgid "ConScript Unicode Registry (unofficial)"
+msgstr ""
+
+#: typeatlas/charinfo.py:154
+msgid "Basic Multilingual Plane"
+msgstr ""
+
+#: typeatlas/charinfo.py:155
+msgid "Supplementary Multilingual Plane"
+msgstr ""
+
+#: typeatlas/charinfo.py:156
+msgid "Supplementary Ideographic Plane"
+msgstr ""
+
+#: typeatlas/charinfo.py:157
+msgid "Supplementary Special-purpose Plane"
+msgstr ""
+
+#: typeatlas/charinfo.py:158
+msgid "Supplementary Private Use Area Plane A"
+msgstr ""
+
+#: typeatlas/charinfo.py:159
+msgid "Supplementary Private Use Area Plane B"
+msgstr ""
+
+#: typeatlas/charinfo.py:163 typeatlas/charinfo.py:164
+#: typeatlas/charinfo.py:165 typeatlas/charinfo.py:170
+#: typeatlas/charinfo.py:181 typeatlas/charinfo.py:182
+msgid "Letter"
+msgstr ""
+
+#: typeatlas/charinfo.py:163
+msgid "Uppercase"
+msgstr ""
+
+#: typeatlas/charinfo.py:164
+msgid "Lowercase"
+msgstr ""
+
+#: typeatlas/charinfo.py:165
+msgid "Titlecase"
+msgstr ""
+
+#: typeatlas/charinfo.py:166 typeatlas/charinfo.py:167
+#: typeatlas/charinfo.py:168
+msgid "Mark"
+msgstr ""
+
+#: typeatlas/charinfo.py:166
+msgid "Non-Spacing"
+msgstr ""
+
+#: typeatlas/charinfo.py:167
+msgid "Spacing Combining"
+msgstr ""
+
+#: typeatlas/charinfo.py:168
+msgid "Enclosing"
+msgstr ""
+
+#: typeatlas/charinfo.py:169 typeatlas/charinfo.py:170
+#: typeatlas/charinfo.py:171 typeatlas/gui.py:3171
+msgid "Number"
+msgstr ""
+
+#: typeatlas/charinfo.py:169
+msgid "Decimal Digit"
+msgstr ""
+
+#: typeatlas/charinfo.py:171 typeatlas/charinfo.py:175
+#: typeatlas/charinfo.py:176 typeatlas/charinfo.py:177
+#: typeatlas/charinfo.py:178 typeatlas/charinfo.py:179
+#: typeatlas/charinfo.py:182 typeatlas/charinfo.py:189
+#: typeatlas/charinfo.py:193 typeatlas/charsets.py:601
+#: typeatlas/charsets.py:795
+msgid "Other"
+msgstr ""
+
+#: typeatlas/charinfo.py:172 typeatlas/charinfo.py:173
+#: typeatlas/charinfo.py:174
+msgid "Separator"
+msgstr ""
+
+#: typeatlas/charinfo.py:172
+msgid "Space"
+msgstr ""
+
+#: typeatlas/charinfo.py:173
+msgid "Line"
+msgstr ""
+
+#: typeatlas/charinfo.py:174
+msgid "Paragraph"
+msgstr ""
+
+#: typeatlas/charinfo.py:175
+msgid "Control"
+msgstr ""
+
+#: typeatlas/charinfo.py:176
+msgid "Format"
+msgstr ""
+
+#: typeatlas/charinfo.py:177
+msgid "Surrogate"
+msgstr ""
+
+#: typeatlas/charinfo.py:178
+msgid "Private Use"
+msgstr ""
+
+#: typeatlas/charinfo.py:179
+msgid "Not Assigned"
+msgstr ""
+
+#: typeatlas/charinfo.py:181 typeatlas/charinfo.py:192
+msgid "Modifier"
+msgstr ""
+
+#: typeatlas/charinfo.py:183 typeatlas/charinfo.py:184
+#: typeatlas/charinfo.py:185 typeatlas/charinfo.py:186
+#: typeatlas/charinfo.py:187 typeatlas/charinfo.py:188
+#: typeatlas/charinfo.py:189
+msgid "Punctuation"
+msgstr ""
+
+#: typeatlas/charinfo.py:183
+msgid "Connector"
+msgstr ""
+
+#: typeatlas/charinfo.py:184
+msgid "Dash"
+msgstr ""
+
+#: typeatlas/charinfo.py:185
+msgid "Open"
+msgstr ""
+
+#: typeatlas/charinfo.py:186
+msgid "Close"
+msgstr ""
+
+#: typeatlas/charinfo.py:187
+msgid "Initial quote"
+msgstr ""
+
+#: typeatlas/charinfo.py:188
+msgid "Final quote"
+msgstr ""
+
+#: typeatlas/charinfo.py:190 typeatlas/charinfo.py:191
+#: typeatlas/charinfo.py:192 typeatlas/charinfo.py:193
+#: typeatlas/opentype.py:221 typeatlas/opentype.py:315
+msgid "Symbol"
+msgstr ""
+
+#: typeatlas/charinfo.py:190
+msgid "Math"
+msgstr ""
+
+#: typeatlas/charinfo.py:191
+msgid "Currency"
+msgstr ""
+
+#: typeatlas/charinfo.py:238
+msgid "Left-to-Right"
+msgstr ""
+
+#: typeatlas/charinfo.py:239
+msgid "Left-to-Right Embedding"
+msgstr ""
+
+#: typeatlas/charinfo.py:240
+msgid "Left-to-Right Override"
+msgstr ""
+
+#: typeatlas/charinfo.py:241
+msgid "Right-to-Left"
+msgstr ""
+
+#: typeatlas/charinfo.py:242
+msgid "Right-to-Left Arabic"
+msgstr ""
+
+#: typeatlas/charinfo.py:243
+msgid "Right-to-Left Embedding"
+msgstr ""
+
+#: typeatlas/charinfo.py:244
+msgid "Right-to-Left Override"
+msgstr ""
+
+#: typeatlas/charinfo.py:245
+msgid "Pop Directional Format"
+msgstr ""
+
+#: typeatlas/charinfo.py:246
+msgid "European Number"
+msgstr ""
+
+#: typeatlas/charinfo.py:247
+msgid "European Number Separator"
+msgstr ""
+
+#: typeatlas/charinfo.py:248
+msgid "European Number Terminator"
+msgstr ""
+
+#: typeatlas/charinfo.py:249
+msgid "Arabic Number"
+msgstr ""
+
+#: typeatlas/charinfo.py:250
+msgid "Common Number Separator"
+msgstr ""
+
+#: typeatlas/charinfo.py:251
+msgid "Non-Spacing Mark"
+msgstr ""
+
+#: typeatlas/charinfo.py:252
+msgid "Boundary Neutral"
+msgstr ""
+
+#: typeatlas/charinfo.py:253
+msgid "Paragraph Separator"
+msgstr ""
+
+#: typeatlas/charinfo.py:254
+msgid "Segment Separator"
+msgstr ""
+
+#: typeatlas/charinfo.py:255
+msgid "Whitespace"
+msgstr ""
+
+#: typeatlas/charinfo.py:256
+msgid "Other Neutrals"
+msgstr ""
+
+#: typeatlas/charinfo.py:397
+msgid "Unknown"
+msgstr ""
+
+#: typeatlas/charinfo.py:436
+msgid "Unicode Character Database"
+msgstr ""
+
+#: typeatlas/charinfo.py:671
+msgid "Unassigned plane"
+msgstr ""
+
+#: typeatlas/charsets.py:356
+msgid "Control characters"
+msgstr ""
+
+#: typeatlas/charsets.py:357 typeatlas/charsets.py:362
+msgid "Intereptations of the 7-bit ASCII control characters"
+msgstr ""
+
+#: typeatlas/charsets.py:361
+msgid "Ambiguous characters"
+msgstr ""
+
+#: typeatlas/charsets.py:367
+msgid "ASCII"
+msgstr ""
+
+#: typeatlas/charsets.py:368
+msgid "ASCII control code interpretation of leading CP437 range"
+msgstr ""
+
+#: typeatlas/charsets.py:372
+msgid "Graphical"
+msgstr ""
+
+#: typeatlas/charsets.py:375
+msgid "Graphical interpretation of leading CP437 range"
+msgstr ""
+
+#: typeatlas/charsets.py:382
+msgid "Locale interpretation"
+msgstr ""
+
+#: typeatlas/charsets.py:383
+msgid ""
+"The correct interpretation in the locale for ambiguous Shift-JIS or UHC "
+"characters"
+msgstr ""
+
+#: typeatlas/charsets.py:389
+msgid "ASCII compatibility"
+msgstr ""
+
+#: typeatlas/charsets.py:390
+msgid ""
+"ASCII equivalent interpretation of ambiguous Shift-JIS or UHC characters"
+msgstr ""
+
+#: typeatlas/charsets.py:559
+#, python-format
+msgid "DOS code page %s"
+msgstr ""
+
+#: typeatlas/charsets.py:561
+#, python-format
+msgid "EBCDIC code page %s"
+msgstr ""
+
+#: typeatlas/charsets.py:597 typeatlas/guiglyphs.py:223
+msgid "Unicode"
+msgstr ""
+
+#: typeatlas/fontsampler.py:54
+msgid "AbQqRr"
+msgstr ""
+
+#: typeatlas/fontsampler.py:81
+msgid "Column flow"
+msgstr ""
+
+#: typeatlas/fontsampler.py:84
+msgid "Row flow"
+msgstr ""
+
+#: typeatlas/fontsampler.py:87
+msgid "List"
+msgstr ""
+
+#: typeatlas/fontsampler.py:94 typeatlas/opentype.py:711
+msgid "Bold"
+msgstr ""
+
+#: typeatlas/fontsampler.py:96
+msgid "Italic"
+msgstr ""
+
+#: typeatlas/fontsampler.py:98 typeatlas/opentype.py:723
+#: typeatlas/opentype.py:881 typeatlas/opentype.py:1034
+msgid "Condensed"
+msgstr ""
+
+#: typeatlas/fontsampler.py:103 typeatlas/gui.py:913 typeatlas/fontgrid.py:1639
+msgid "Smaller"
+msgstr ""
+
+#: typeatlas/fontsampler.py:105 typeatlas/gui.py:915 typeatlas/fontgrid.py:1641
+msgid "Larger"
+msgstr ""
+
+#: typeatlas/fontsampler.py:111
+msgid "Enter sample..."
+msgstr ""
+
+#: typeatlas/fontsampler.py:196
+msgid "TypeAtlas Sampler"
+msgstr ""
+
+#: typeatlas/opentype.py:211
+msgid "Unclassfied"
+msgstr ""
+
+#: typeatlas/opentype.py:212 typeatlas/opentype.py:286
+msgid "Old-style Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:213
+msgid "Transitional Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:214
+msgid "Modern Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:215
+msgid "Clarendon Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:216
+msgid "Slab Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:217
+msgid "Freeform Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:218
+msgid "Sans Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:219
+msgid "Ornamental"
+msgstr ""
+
+#: typeatlas/opentype.py:220 typeatlas/opentype.py:241
+#: typeatlas/opentype.py:244 typeatlas/opentype.py:1059
+msgid "class|Script"
+msgstr ""
+
+#: typeatlas/opentype.py:226 typeatlas/opentype.py:310
+#: typeatlas/opentype.py:396 typeatlas/guicommon.py:736
+msgid "Unclassified"
+msgstr ""
+
+#: typeatlas/opentype.py:227 typeatlas/opentype.py:311
+#: typeatlas/opentype.py:397
+msgid "Miscellaneous"
+msgstr ""
+
+#: typeatlas/opentype.py:231
+msgid "IBM Rounded Legibility"
+msgstr ""
+
+#: typeatlas/opentype.py:232
+msgid "Garalde"
+msgstr ""
+
+#: typeatlas/opentype.py:233
+msgid "Venetian"
+msgstr ""
+
+#: typeatlas/opentype.py:234
+msgid "Modified Venetian"
+msgstr ""
+
+#: typeatlas/opentype.py:235
+msgid "Dutch Modern"
+msgstr ""
+
+#: typeatlas/opentype.py:236
+msgid "Dutch Traditional"
+msgstr ""
+
+#: typeatlas/opentype.py:237
+msgid "Contemporary"
+msgstr ""
+
+#: typeatlas/opentype.py:238
+msgid "Calligraphic"
+msgstr ""
+
+#: typeatlas/opentype.py:240
+msgid "Direct Line"
+msgstr ""
+
+#: typeatlas/opentype.py:243
+msgid "Italian"
+msgstr ""
+
+#: typeatlas/opentype.py:246
+msgid "Clarendon"
+msgstr ""
+
+#: typeatlas/opentype.py:247 typeatlas/opentype.py:260
+#: typeatlas/opentype.py:720
+msgid "Modern"
+msgstr ""
+
+#: typeatlas/opentype.py:248
+msgid "Traditional"
+msgstr ""
+
+#: typeatlas/opentype.py:249
+msgid "Newspaper"
+msgstr ""
+
+#: typeatlas/opentype.py:250
+msgid "Stub Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:251 typeatlas/opentype.py:254
+msgid "Monotone"
+msgstr ""
+
+#: typeatlas/opentype.py:252 typeatlas/opentype.py:258
+msgid "Typewriter"
+msgstr ""
+
+#: typeatlas/opentype.py:255 typeatlas/opentype.py:263
+msgid "Humanist"
+msgstr ""
+
+#: typeatlas/opentype.py:256
+msgid "Geometric"
+msgstr ""
+
+#: typeatlas/opentype.py:257
+msgid "Swiss"
+msgstr ""
+
+#: typeatlas/opentype.py:262
+msgid "IBM Neo-grotesque Gothic"
+msgstr ""
+
+#: typeatlas/opentype.py:264
+msgid "Low-X Round Geometric"
+msgstr ""
+
+#: typeatlas/opentype.py:265
+msgid "High-X Round Geometric"
+msgstr ""
+
+#: typeatlas/opentype.py:266
+msgid "Neo-grotesque Gothic"
+msgstr ""
+
+#: typeatlas/opentype.py:267
+msgid "Modified Neo-grotesque Gothic"
+msgstr ""
+
+#: typeatlas/opentype.py:268
+msgid "Typewriter Gothic"
+msgstr ""
+
+#: typeatlas/opentype.py:269
+msgid "Matrix"
+msgstr ""
+
+#: typeatlas/opentype.py:271
+msgid "Engraver"
+msgstr ""
+
+#: typeatlas/opentype.py:272
+msgid "Black Letter"
+msgstr ""
+
+#: typeatlas/opentype.py:274
+msgid "Three-dimensional"
+msgstr ""
+
+#: typeatlas/opentype.py:276
+msgid "Uncial"
+msgstr ""
+
+#: typeatlas/opentype.py:277
+msgid "Brush Joined"
+msgstr ""
+
+#: typeatlas/opentype.py:278
+msgid "Formal Joined"
+msgstr ""
+
+#: typeatlas/opentype.py:279 typeatlas/opentype.py:280
+msgid "Monotone Joined"
+msgstr ""
+
+#: typeatlas/opentype.py:281
+msgid "Brush Unjoined"
+msgstr ""
+
+#: typeatlas/opentype.py:282
+msgid "Formal Unjoined"
+msgstr ""
+
+#: typeatlas/opentype.py:283
+msgid "Monotone Unjoined"
+msgstr ""
+
+#: typeatlas/opentype.py:285
+msgid "Mixed Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:287
+msgid "Neo-grotesque Sans Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:312
+msgid "Text"
+msgstr ""
+
+#: typeatlas/opentype.py:313
+msgid "Handwritten"
+msgstr ""
+
+#: typeatlas/opentype.py:405
+msgid "Cove Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:406
+msgid "Obtuse Cove Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:407
+msgid "Square Cove Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:408
+msgid "Obtuse Square Cove Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:409
+msgid "Square Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:410
+msgid "Thin Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:414
+msgid "Oval Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:415
+msgid "Exaggerated Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:416
+msgid "Triangle Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:417
+msgid "Normal Sans"
+msgstr ""
+
+#: typeatlas/opentype.py:418
+msgid "Obtuse Sans"
+msgstr ""
+
+#: typeatlas/opentype.py:419
+msgid "Perpendicular Sans"
+msgstr ""
+
+#: typeatlas/opentype.py:420
+msgid "Flared Transitional Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:421
+msgid "Rounded Transitional Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:442
+msgid "Flat Nib"
+msgstr ""
+
+#: typeatlas/opentype.py:443
+msgid "Pressure Point"
+msgstr ""
+
+#: typeatlas/opentype.py:444
+msgid "Engraved"
+msgstr ""
+
+#: typeatlas/opentype.py:445
+msgid "Ball (Round Cap)"
+msgstr ""
+
+#: typeatlas/opentype.py:446
+msgid "Brush"
+msgstr ""
+
+#: typeatlas/opentype.py:447
+msgid "Rough"
+msgstr ""
+
+#: typeatlas/opentype.py:448
+msgid "Felt Pen / Brush Tip"
+msgstr ""
+
+#: typeatlas/opentype.py:449
+msgid "Wild Brush (Drips and splatters)"
+msgstr ""
+
+#: typeatlas/opentype.py:453
+msgid "Derivative"
+msgstr ""
+
+#: typeatlas/opentype.py:454
+msgid "Non-standard Topology"
+msgstr ""
+
+#: typeatlas/opentype.py:455
+msgid "Non-standard Elements"
+msgstr ""
+
+#: typeatlas/opentype.py:456
+msgid "Non-standard Aspect"
+msgstr ""
+
+#: typeatlas/opentype.py:457
+msgid "Initials"
+msgstr ""
+
+#: typeatlas/opentype.py:458
+msgid "Cartoon"
+msgstr ""
+
+#: typeatlas/opentype.py:459
+msgid "Picture Stems"
+msgstr ""
+
+#: typeatlas/opentype.py:460
+msgid "Ornamented"
+msgstr ""
+
+#: typeatlas/opentype.py:461
+msgid "Text and Background"
+msgstr ""
+
+#: typeatlas/opentype.py:462
+msgid "Collage"
+msgstr ""
+
+#: typeatlas/opentype.py:463
+msgid "Montage"
+msgstr ""
+
+#: typeatlas/opentype.py:467
+msgid "Montages"
+msgstr ""
+
+#: typeatlas/opentype.py:468
+msgid "Pictures"
+msgstr ""
+
+#: typeatlas/opentype.py:469
+msgid "Shapes"
+msgstr ""
+
+#: typeatlas/opentype.py:470
+msgid "Scientific"
+msgstr ""
+
+#: typeatlas/opentype.py:471
+msgid "Music"
+msgstr ""
+
+#: typeatlas/opentype.py:472
+msgid "Expert"
+msgstr ""
+
+#: typeatlas/opentype.py:473
+msgid "Patterns"
+msgstr ""
+
+#: typeatlas/opentype.py:474
+msgid "Boarders"
+msgstr ""
+
+#: typeatlas/opentype.py:475
+msgid "Icons"
+msgstr ""
+
+#: typeatlas/opentype.py:476
+msgid "Logos"
+msgstr ""
+
+#: typeatlas/opentype.py:477
+msgid "Industry specific"
+msgstr ""
+
+#: typeatlas/opentype.py:509
+msgid "Subfamily"
+msgstr ""
+
+#: typeatlas/opentype.py:558 typeatlas/opentype.py:588
+msgid "Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:560
+msgid "Proportion"
+msgstr ""
+
+#: typeatlas/opentype.py:561 typeatlas/opentype.py:575
+#: typeatlas/opentype.py:587
+msgid "Contrast"
+msgstr ""
+
+#: typeatlas/opentype.py:562
+msgid "Stroke Variation"
+msgstr ""
+
+#: typeatlas/opentype.py:563
+msgid "Arm Style"
+msgstr ""
+
+#: typeatlas/opentype.py:564
+msgid "Letterform"
+msgstr ""
+
+#: typeatlas/opentype.py:565
+msgid "Midline"
+msgstr ""
+
+#: typeatlas/opentype.py:566
+msgid "X-Height"
+msgstr ""
+
+#: typeatlas/opentype.py:571
+msgid "Tool"
+msgstr ""
+
+#: typeatlas/opentype.py:573 typeatlas/opentype.py:598
+#: typeatlas/fontlist.py:715
+msgid "Spacing"
+msgstr ""
+
+#: typeatlas/opentype.py:574
+msgid "Aspect Ratio"
+msgstr ""
+
+#: typeatlas/opentype.py:576 typeatlas/opentype.py:591
+msgid "Topology"
+msgstr ""
+
+#: typeatlas/opentype.py:577
+msgid "Form"
+msgstr ""
+
+#: typeatlas/opentype.py:578
+msgid "Finials"
+msgstr ""
+
+#: typeatlas/opentype.py:579
+msgid "X-Ascent"
+msgstr ""
+
+#: typeatlas/opentype.py:584
+msgid "Class"
+msgstr ""
+
+#: typeatlas/opentype.py:586
+msgid "Aspect"
+msgstr ""
+
+#: typeatlas/opentype.py:589
+msgid "Treatment"
+msgstr ""
+
+#: typeatlas/opentype.py:590
+msgid "Lining"
+msgstr ""
+
+#: typeatlas/opentype.py:592
+msgid "Character Range"
+msgstr ""
+
+#: typeatlas/opentype.py:596
+msgid "Kind"
+msgstr ""
+
+#: typeatlas/opentype.py:599
+msgid "Aspect and Contrast"
+msgstr ""
+
+#: typeatlas/opentype.py:600
+msgid "Asp. ratio char. 94"
+msgstr ""
+
+#: typeatlas/opentype.py:601
+msgid "Asp. ratio char. 119"
+msgstr ""
+
+#: typeatlas/opentype.py:602
+msgid "Asp. ratio char. 157"
+msgstr ""
+
+#: typeatlas/opentype.py:603
+msgid "Asp. ratio char. 163"
+msgstr ""
+
+#: typeatlas/opentype.py:604
+msgid "Asp. ratio char. 211"
+msgstr ""
+
+#: typeatlas/opentype.py:705
+msgid "Very Light"
+msgstr ""
+
+#: typeatlas/opentype.py:706
+msgid "Light"
+msgstr ""
+
+#: typeatlas/opentype.py:707
+msgid "Thin"
+msgstr ""
+
+#: typeatlas/opentype.py:708
+msgid "Book"
+msgstr ""
+
+#: typeatlas/opentype.py:709
+msgid "Medium"
+msgstr ""
+
+#: typeatlas/opentype.py:710
+msgid "Demi"
+msgstr ""
+
+#: typeatlas/opentype.py:712
+msgid "Heavy"
+msgstr ""
+
+#: typeatlas/opentype.py:713
+msgid "Black"
+msgstr ""
+
+#: typeatlas/opentype.py:714
+msgid "Nord"
+msgstr ""
+
+#: typeatlas/opentype.py:719
+msgid "Old Style"
+msgstr ""
+
+#: typeatlas/opentype.py:721
+msgid "Even Width"
+msgstr ""
+
+#: typeatlas/opentype.py:722 typeatlas/opentype.py:1036
+msgid "Extended"
+msgstr ""
+
+#: typeatlas/opentype.py:724 typeatlas/opentype.py:1037
+msgid "Very Extended"
+msgstr ""
+
+#: typeatlas/opentype.py:725 typeatlas/opentype.py:880
+#: typeatlas/opentype.py:1033
+msgid "Very Condensed"
+msgstr ""
+
+#: typeatlas/opentype.py:731 typeatlas/opentype.py:889
+#: typeatlas/opentype.py:1043
+msgid "contrast|None"
+msgstr ""
+
+#: typeatlas/opentype.py:732 typeatlas/opentype.py:890
+#: typeatlas/opentype.py:1044
+msgid "contrast|Very Low"
+msgstr ""
+
+#: typeatlas/opentype.py:733 typeatlas/opentype.py:891
+#: typeatlas/opentype.py:1045
+msgid "contrast|Low"
+msgstr ""
+
+#: typeatlas/opentype.py:734 typeatlas/opentype.py:892
+#: typeatlas/opentype.py:1046
+msgid "contrast|Medium Low"
+msgstr ""
+
+#: typeatlas/opentype.py:735 typeatlas/opentype.py:893
+#: typeatlas/opentype.py:1047
+msgid "contrast|Medium"
+msgstr ""
+
+#: typeatlas/opentype.py:736 typeatlas/opentype.py:894
+#: typeatlas/opentype.py:1048
+msgid "contrast|Medium High"
+msgstr ""
+
+#: typeatlas/opentype.py:737 typeatlas/opentype.py:895
+#: typeatlas/opentype.py:1049
+msgid "contrast|High"
+msgstr ""
+
+#: typeatlas/opentype.py:738 typeatlas/opentype.py:896
+#: typeatlas/opentype.py:1050
+msgid "contrast|Very High"
+msgstr ""
+
+#: typeatlas/opentype.py:743
+msgid "No Variation"
+msgstr ""
+
+#: typeatlas/opentype.py:744 typeatlas/opentype.py:745
+#: typeatlas/opentype.py:746 typeatlas/opentype.py:747
+msgid "Gradual"
+msgstr ""
+
+#: typeatlas/opentype.py:744
+msgid "Diagonal"
+msgstr ""
+
+#: typeatlas/opentype.py:745
+msgid "stroke|Transitional"
+msgstr ""
+
+#: typeatlas/opentype.py:747 typeatlas/opentype.py:749
+#: typeatlas/opentype.py:751
+msgid "Horizontal"
+msgstr ""
+
+#: typeatlas/opentype.py:748 typeatlas/opentype.py:749
+msgid "Rapid"
+msgstr ""
+
+#: typeatlas/opentype.py:750 typeatlas/opentype.py:751
+msgid "Instant"
+msgstr ""
+
+#: typeatlas/opentype.py:755 typeatlas/opentype.py:756
+#: typeatlas/opentype.py:757 typeatlas/opentype.py:758
+#: typeatlas/opentype.py:759
+msgid "Straight Arms"
+msgstr ""
+
+#: typeatlas/opentype.py:755 typeatlas/opentype.py:760
+msgid "arms|Horizontal"
+msgstr ""
+
+#: typeatlas/opentype.py:756 typeatlas/opentype.py:761
+msgid "Wedge"
+msgstr ""
+
+#: typeatlas/opentype.py:757 typeatlas/opentype.py:762
+msgid "arms|Vertical"
+msgstr ""
+
+#: typeatlas/opentype.py:758 typeatlas/opentype.py:763
+msgid "Single Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:759 typeatlas/opentype.py:764
+msgid "Double Serif"
+msgstr ""
+
+#: typeatlas/opentype.py:760 typeatlas/opentype.py:761
+#: typeatlas/opentype.py:762 typeatlas/opentype.py:763
+#: typeatlas/opentype.py:764
+msgid "Non-Straight Arms"
+msgstr ""
+
+#: typeatlas/opentype.py:768 typeatlas/opentype.py:769
+#: typeatlas/opentype.py:770 typeatlas/opentype.py:771
+#: typeatlas/opentype.py:772 typeatlas/opentype.py:773
+#: typeatlas/opentype.py:774 typeatlas/opentype.py:882
+#: typeatlas/opentype.py:1035 typeatlas/opentype.py:1133
+msgid "Normal"
+msgstr ""
+
+#: typeatlas/opentype.py:768 typeatlas/opentype.py:775
+msgid "Contact"
+msgstr ""
+
+#: typeatlas/opentype.py:769 typeatlas/opentype.py:776
+msgid "Weighted"
+msgstr ""
+
+#: typeatlas/opentype.py:770 typeatlas/opentype.py:777
+msgid "Boxed"
+msgstr ""
+
+#: typeatlas/opentype.py:771 typeatlas/opentype.py:778
+msgid "Flattened"
+msgstr ""
+
+#: typeatlas/opentype.py:772 typeatlas/opentype.py:779
+msgid "Rounded"
+msgstr ""
+
+#: typeatlas/opentype.py:773 typeatlas/opentype.py:780
+msgid "Off-Center"
+msgstr ""
+
+#: typeatlas/opentype.py:774 typeatlas/opentype.py:781
+msgid "Square"
+msgstr ""
+
+#: typeatlas/opentype.py:775 typeatlas/opentype.py:776
+#: typeatlas/opentype.py:777 typeatlas/opentype.py:778
+#: typeatlas/opentype.py:779 typeatlas/opentype.py:780
+#: typeatlas/opentype.py:781 typeatlas/opentype.py:916
+#: typeatlas/opentype.py:917 typeatlas/opentype.py:918
+#: typeatlas/opentype.py:919
+msgid "Oblique"
+msgstr ""
+
+#: typeatlas/opentype.py:786 typeatlas/opentype.py:787
+#: typeatlas/opentype.py:788
+msgid "midline|Standard"
+msgstr ""
+
+#: typeatlas/opentype.py:786 typeatlas/opentype.py:789
+#: typeatlas/opentype.py:792 typeatlas/opentype.py:795
+msgid "Trimmed"
+msgstr ""
+
+#: typeatlas/opentype.py:787 typeatlas/opentype.py:790
+#: typeatlas/opentype.py:793 typeatlas/opentype.py:796
+msgid "Pointed"
+msgstr ""
+
+#: typeatlas/opentype.py:788 typeatlas/opentype.py:791
+#: typeatlas/opentype.py:794 typeatlas/opentype.py:797
+msgid "Serifed"
+msgstr ""
+
+#: typeatlas/opentype.py:789 typeatlas/opentype.py:790
+#: typeatlas/opentype.py:791
+msgid "midline|High"
+msgstr ""
+
+#: typeatlas/opentype.py:792 typeatlas/opentype.py:793
+#: typeatlas/opentype.py:794
+msgid "midline|Constant"
+msgstr ""
+
+#: typeatlas/opentype.py:795 typeatlas/opentype.py:796
+#: typeatlas/opentype.py:797
+msgid "midline|Low"
+msgstr ""
+
+#: typeatlas/opentype.py:801 typeatlas/opentype.py:802
+#: typeatlas/opentype.py:803
+msgid "Constant"
+msgstr ""
+
+#: typeatlas/opentype.py:801 typeatlas/opentype.py:804
+msgid "Small"
+msgstr ""
+
+#: typeatlas/opentype.py:802 typeatlas/opentype.py:805
+msgid "Standard"
+msgstr ""
+
+#: typeatlas/opentype.py:803 typeatlas/opentype.py:806
+msgid "Large"
+msgstr ""
+
+#: typeatlas/opentype.py:804 typeatlas/opentype.py:805
+#: typeatlas/opentype.py:806
+msgid "Ducking"
+msgstr ""
+
+#: typeatlas/opentype.py:883
+msgid "Expanded"
+msgstr ""
+
+#: typeatlas/opentype.py:884
+msgid "Very Expanded"
+msgstr ""
+
+#: typeatlas/opentype.py:900 typeatlas/opentype.py:901
+#: typeatlas/opentype.py:902
+msgid "Roman"
+msgstr ""
+
+#: typeatlas/opentype.py:900 typeatlas/opentype.py:903
+#: typeatlas/opentype.py:906
+msgid "Disconnected"
+msgstr ""
+
+#: typeatlas/opentype.py:901 typeatlas/opentype.py:904
+#: typeatlas/opentype.py:907
+msgid "Trailing"
+msgstr ""
+
+#: typeatlas/opentype.py:902 typeatlas/opentype.py:905
+#: typeatlas/opentype.py:908
+msgid "Connected"
+msgstr ""
+
+#: typeatlas/opentype.py:903 typeatlas/opentype.py:904
+#: typeatlas/opentype.py:905 typeatlas/opentype.py:1096
+msgid "Cursive"
+msgstr ""
+
+#: typeatlas/opentype.py:906 typeatlas/opentype.py:907
+#: typeatlas/opentype.py:908 typeatlas/opentype.py:1097
+msgid "Blackletter"
+msgstr ""
+
+#: typeatlas/opentype.py:912 typeatlas/opentype.py:913
+#: typeatlas/opentype.py:914 typeatlas/opentype.py:915
+msgid "Upright"
+msgstr ""
+
+#: typeatlas/opentype.py:912 typeatlas/opentype.py:916
+#: typeatlas/opentype.py:920
+msgid "No Wrapping"
+msgstr ""
+
+#: typeatlas/opentype.py:913 typeatlas/opentype.py:917
+#: typeatlas/opentype.py:921
+msgid "Some Wrapping"
+msgstr ""
+
+#: typeatlas/opentype.py:914 typeatlas/opentype.py:918
+#: typeatlas/opentype.py:922
+msgid "More Wrapping"
+msgstr ""
+
+#: typeatlas/opentype.py:915 typeatlas/opentype.py:919
+#: typeatlas/opentype.py:923
+msgid "Extreme Wrapping"
+msgstr ""
+
+#: typeatlas/opentype.py:920 typeatlas/opentype.py:921
+#: typeatlas/opentype.py:922 typeatlas/opentype.py:923
+msgid "Exaggerated"
+msgstr ""
+
+#: typeatlas/opentype.py:928 typeatlas/opentype.py:929
+#: typeatlas/opentype.py:930
+msgid "finials|None"
+msgstr ""
+
+#: typeatlas/opentype.py:928 typeatlas/opentype.py:931
+#: typeatlas/opentype.py:934 typeatlas/opentype.py:937
+msgid "No loops"
+msgstr ""
+
+#: typeatlas/opentype.py:929 typeatlas/opentype.py:932
+#: typeatlas/opentype.py:935 typeatlas/opentype.py:938
+msgid "Closed loops"
+msgstr ""
+
+#: typeatlas/opentype.py:930 typeatlas/opentype.py:933
+#: typeatlas/opentype.py:936 typeatlas/opentype.py:939
+msgid "Open loops"
+msgstr ""
+
+#: typeatlas/opentype.py:931 typeatlas/opentype.py:932
+#: typeatlas/opentype.py:933
+msgid "finials|Sharp"
+msgstr ""
+
+#: typeatlas/opentype.py:934 typeatlas/opentype.py:935
+#: typeatlas/opentype.py:936
+msgid "finials|Tapered"
+msgstr ""
+
+#: typeatlas/opentype.py:937 typeatlas/opentype.py:938
+#: typeatlas/opentype.py:939
+msgid "finials|Round"
+msgstr ""
+
+#: typeatlas/opentype.py:945
+msgid "xascent|Very Low"
+msgstr ""
+
+#: typeatlas/opentype.py:946
+msgid "xascent|Low"
+msgstr ""
+
+#: typeatlas/opentype.py:947
+msgid "xascent|Medium"
+msgstr ""
+
+#: typeatlas/opentype.py:948
+msgid "xascent|High"
+msgstr ""
+
+#: typeatlas/opentype.py:949
+msgid "xascent|Very High"
+msgstr ""
+
+#: typeatlas/opentype.py:1032
+msgid "Super Condensed"
+msgstr ""
+
+#: typeatlas/opentype.py:1038
+msgid "Super Extended"
+msgstr ""
+
+#: typeatlas/opentype.py:1051
+msgid "contrast|Horizontal Low"
+msgstr ""
+
+#: typeatlas/opentype.py:1052
+msgid "contrast|Horizontal Medium"
+msgstr ""
+
+#: typeatlas/opentype.py:1053
+msgid "contrast|Horizontal High"
+msgstr ""
+
+#: typeatlas/opentype.py:1054
+msgid "contrast|Broken"
+msgstr ""
+
+#: typeatlas/opentype.py:1065
+msgid "Solid Fill"
+msgstr ""
+
+#: typeatlas/opentype.py:1066
+msgid "No Fill"
+msgstr ""
+
+#: typeatlas/opentype.py:1067
+msgid "Patterned Fill"
+msgstr ""
+
+#: typeatlas/opentype.py:1068
+msgid "Complex Fill"
+msgstr ""
+
+#: typeatlas/opentype.py:1069
+msgid "Shaped Fill"
+msgstr ""
+
+#: typeatlas/opentype.py:1070
+msgid "Drawn / Distressed"
+msgstr ""
+
+#: typeatlas/opentype.py:1075
+msgid "lining|None"
+msgstr ""
+
+#: typeatlas/opentype.py:1076
+msgid "Inline"
+msgstr ""
+
+#: typeatlas/opentype.py:1078
+msgid "Engraved (Multiple Lines)"
+msgstr ""
+
+#: typeatlas/opentype.py:1079
+msgid "Shadow"
+msgstr ""
+
+#: typeatlas/opentype.py:1080
+msgid "Relief"
+msgstr ""
+
+#: typeatlas/opentype.py:1081
+msgid "Backdrop"
+msgstr ""
+
+#: typeatlas/opentype.py:1085
+msgid "topology|Standard"
+msgstr ""
+
+#: typeatlas/opentype.py:1086
+msgid "topology|Square"
+msgstr ""
+
+#: typeatlas/opentype.py:1087
+msgid "Multiple Segment"
+msgstr ""
+
+#: typeatlas/opentype.py:1088
+msgid "Deco (E,M,S) Waco midline"
+msgstr ""
+
+#: typeatlas/opentype.py:1089
+msgid "Uneven Weighting"
+msgstr ""
+
+#: typeatlas/opentype.py:1090
+msgid "Diverse Arms"
+msgstr ""
+
+#: typeatlas/opentype.py:1091
+msgid "Diverse Forms"
+msgstr ""
+
+#: typeatlas/opentype.py:1092
+msgid "Lombardic Forms"
+msgstr ""
+
+#: typeatlas/opentype.py:1093
+msgid "Upper Case in Lower Case"
+msgstr ""
+
+#: typeatlas/opentype.py:1094
+msgid "Implied Topology"
+msgstr ""
+
+#: typeatlas/opentype.py:1095
+msgid "Horseshoe E and A"
+msgstr ""
+
+#: typeatlas/opentype.py:1098
+msgid "Swash Variance"
+msgstr ""
+
+#: typeatlas/opentype.py:1102
+msgid "Extended Collection"
+msgstr ""
+
+#: typeatlas/opentype.py:1103
+msgid "Literals"
+msgstr ""
+
+#: typeatlas/opentype.py:1104
+msgid "No Lower Case"
+msgstr ""
+
+#: typeatlas/opentype.py:1105
+msgid "Small Caps"
+msgstr ""
+
+#: typeatlas/opentype.py:1128
+msgid "No Width"
+msgstr ""
+
+#: typeatlas/opentype.py:1129
+msgid "Exceptionally Wide"
+msgstr ""
+
+#: typeatlas/opentype.py:1130
+msgid "Super Wide"
+msgstr ""
+
+#: typeatlas/opentype.py:1131
+msgid "Very Wide"
+msgstr ""
+
+#: typeatlas/opentype.py:1132
+msgid "Wide"
+msgstr ""
+
+#: typeatlas/opentype.py:1134
+msgid "Narrow"
+msgstr ""
+
+#: typeatlas/opentype.py:1135
+msgid "Very Narrow"
+msgstr ""
+
+#: typeatlas/opentype.py:1234
+msgid "embedding|Installable"
+msgstr ""
+
+#: typeatlas/opentype.py:1235
+msgid "No embedding"
+msgstr ""
+
+#: typeatlas/opentype.py:1236
+msgid "embedding|Printable"
+msgstr ""
+
+#: typeatlas/opentype.py:1237
+msgid "embedding|Editable"
+msgstr ""
+
+#: typeatlas/opentype.py:1240
+msgid "Non-valid obsolete restriction to embedding"
+msgstr ""
+
+#: typeatlas/opentype.py:1242
+msgid "No subsetting"
+msgstr ""
+
+#: typeatlas/opentype.py:1243
+msgid "Only bitmap embedding"
+msgstr ""
+
+#: typeatlas/opentype.py:1248
+msgid ""
+"Applications should allow the embedding or installation of this font — it "
+"carries no explicit restrictions on embedding it or on permanently "
+"installing it on remote systems or for other users."
+msgstr ""
+
+#: typeatlas/opentype.py:1249
+msgid ""
+"Some applications may refuse to embed this font in documents — the font "
+"flags indicate no automatic permission has been granted to embed it or "
+"transfer it to third parties, if such actions have not been permitted "
+"through other means."
+msgstr ""
+
+#: typeatlas/opentype.py:1250
+msgid ""
+"Some applications may only allow to embed this font in read-only documents, "
+"such as PDF, and some viewers may retain the font only temporarily — the "
+"font flags indicate permissions to embed it in read-only documents, and to "
+"temporarily use it on remote systems for the purposes of viewing or "
+"printing, but do not include editing the documents or permanently installing "
+"the font."
+msgstr ""
+
+#: typeatlas/opentype.py:1251
+msgid ""
+"Applications should allow embedding this font in documents, but some viewers "
+"may retain the font only temporarily — the font flags indicate permissions "
+"to embed it, and to temporarily use it on remote systems for the purposes of "
+"viewing, printing or editing the documents in which it has been embedded, "
+"but they do not include permanently installing the font."
+msgstr ""
+
+#: typeatlas/opentype.py:1254
+msgid ""
+"The font file flags are set to apply an invalid restriction to embedding "
+"that has been included in an early draft of the file format."
+msgstr ""
+
+#: typeatlas/opentype.py:1256
+msgid ""
+"Some appplications may refuse to subset the font when embeddeding — the "
+"permissions indicated by the flags apply to the full font, and do not "
+"explicitly allow subsets of it to be used for embedding."
+msgstr ""
+
+#: typeatlas/opentype.py:1257
+msgid ""
+"Some applications may refuse to embed the font outlines — the permissions "
+"indicated by the flags apply only to bitmaps contained in the font, not to "
+"the font outlines."
+msgstr ""
+
+#: typeatlas/opentype.py:1260
+msgid ""
+"The flags indicating the embedding rights are merely a numeric value inside "
+"the font file, which is used by some automated software systems. It may not "
+"represent the true legal rights that the user has for using this font.\n"
+"\n"
+"For example, fonts that come with no legal permissions beyond what is "
+"permitted by law can still be marked as Installable, either in error, or to "
+"prevent the technical inconenience of automated restrictions, or because the "
+"font file has had unauthorized modifications. Conversely, unrestricted fonts "
+"released under permissive licenses have sometimes been distributed with the "
+"flags set to Restricted by third parties (see https://www.1001fonts.com/"
+"users/steffmann/). In addition, some jurisdictions may automatically provide "
+"rights not explicitly granted by these flags."
+msgstr ""
+
+#: typeatlas/opentype.py:1692 typeatlas/fontlist.py:1470
+#: typeatlas/fontlist.py:1472 typeatlas/fontlist.py:1477
+#: typeatlas/fontlist.py:1481 typeatlas/fontlist.py:1483
+#: typeatlas/fontlist.py:1485 typeatlas/fontlist.py:1506
+#: typeatlas/fontlist.py:1514 typeatlas/fontlist.py:2199
+msgid "serif"
+msgstr ""
+
+#: typeatlas/opentype.py:1694 typeatlas/fontlist.py:1468
+#: typeatlas/fontlist.py:1474 typeatlas/fontlist.py:1506
+#: typeatlas/fontlist.py:1514 typeatlas/fontlist.py:2199
+msgid "sans-serif"
+msgstr ""
+
+#: typeatlas/opentype.py:1696 typeatlas/fontlist.py:1507
+#: typeatlas/fontlist.py:1515 typeatlas/fontlist.py:2200
+msgid "fantasy"
+msgstr ""
+
+#: typeatlas/opentype.py:1698 typeatlas/fontlist.py:1507
+#: typeatlas/fontlist.py:1515 typeatlas/fontlist.py:2200
+msgid "cursive"
+msgstr ""
+
+#: typeatlas/opentype.py:1700 typeatlas/fontlist.py:2201
+msgid "symbol"
+msgstr ""
+
+#: typeatlas/opentype.py:1826
+msgid "No information embedding restrictions"
+msgstr ""
+
+#: typeatlas/guicommon.py:110
+msgid "Default antialiasing"
+msgstr ""
+
+#: typeatlas/guicommon.py:111
+msgid "No antialiasing"
+msgstr ""
+
+#: typeatlas/guicommon.py:115
+msgid "No subpixel rendering"
+msgstr ""
+
+#: typeatlas/guicommon.py:117
+msgid "Antialiasing"
+msgstr ""
+
+#: typeatlas/guicommon.py:120
+msgid "Default hinting"
+msgstr ""
+
+#: typeatlas/guicommon.py:121
+msgid "No hinting"
+msgstr ""
+
+#: typeatlas/guicommon.py:122
+msgid "Vertical hinting"
+msgstr ""
+
+#: typeatlas/guicommon.py:123
+msgid "Full hinting"
+msgstr ""
+
+#: typeatlas/guicommon.py:266
+msgid "Trash"
+msgstr ""
+
+#: typeatlas/guicommon.py:702 typeatlas/guicommon.py:914
+msgid "Summary"
+msgstr ""
+
+#: typeatlas/guicommon.py:728
+msgid "Font style"
+msgstr ""
+
+#: typeatlas/guicommon.py:729
+msgid "Font family"
+msgstr ""
+
+#: typeatlas/guicommon.py:734
+msgid "Main style"
+msgstr ""
+
+#: typeatlas/guicommon.py:776
+msgid "Character count"
+msgstr ""
+
+#: typeatlas/guicommon.py:779
+msgid "Style count"
+msgstr ""
+
+#: typeatlas/guicommon.py:782 typeatlas/guicommon.py:795 typeatlas/gui.py:2043
+#: typeatlas/gui.py:3179
+msgid "Files"
+msgstr ""
+
+#: typeatlas/guicommon.py:783 typeatlas/guicommon.py:810
+#: typeatlas/fontlist.py:716
+msgid "Size"
+msgstr ""
+
+#: typeatlas/guicommon.py:808
+msgid "File"
+msgstr ""
+
+#: typeatlas/guicommon.py:809
+msgid "No."
+msgstr ""
+
+#: typeatlas/guicommon.py:813
+msgid "Purpose"
+msgstr ""
+
+#: typeatlas/guicommon.py:814
+msgid "Directory"
+msgstr ""
+
+#: typeatlas/guicommon.py:838 typeatlas/gui.py:3168
+msgid "PANOSE information"
+msgstr ""
+
+#: typeatlas/guicommon.py:940
+msgid "Unicode name"
+msgstr ""
+
+#: typeatlas/guicommon.py:942
+msgid "Old unicode name"
+msgstr ""
+
+#: typeatlas/guicommon.py:945
+msgid "Character name in font"
+msgstr ""
+
+#: typeatlas/guicommon.py:946
+msgid "In font"
+msgstr ""
+
+#: typeatlas/guicommon.py:956 typeatlas/fontgrid.py:1112
+#, python-format
+msgid "Plane %d"
+msgstr ""
+
+#: typeatlas/guicommon.py:975
+msgid "Aliases"
+msgstr ""
+
+#: typeatlas/guicommon.py:996
+msgid "Names and references"
+msgstr ""
+
+#: typeatlas/guicommon.py:1009
+msgid "group"
+msgstr ""
+
+#: typeatlas/guicommon.py:1011
+msgid "edit"
+msgstr ""
+
+#: typeatlas/guicommon.py:1012
+msgid "create"
+msgstr ""
+
+#: typeatlas/guicommon.py:1062
+msgid "Save {}"
+msgstr ""
+
+#: typeatlas/guicommon.py:1064
+msgid "&Save"
+msgstr ""
+
+#: typeatlas/guicommon.py:1065 typeatlas/guicommon.py:1271
+#: typeatlas/guicommon.py:1360 typeatlas/guiglyphs.py:562
+msgid "&Cancel"
+msgstr ""
+
+#: typeatlas/guicommon.py:1093
+msgid "Icon..."
+msgstr ""
+
+#: typeatlas/guicommon.py:1100
+msgid "Color..."
+msgstr ""
+
+#: typeatlas/guicommon.py:1105
+msgid "Name..."
+msgstr ""
+
+#: typeatlas/guicommon.py:1191
+#, python-format
+msgid "Select %s color"
+msgstr ""
+
+#: typeatlas/guicommon.py:1198
+#, python-format
+msgid "Select %s icon"
+msgstr ""
+
+#: typeatlas/guicommon.py:1265
+msgid "Remove {} for selected the fonts"
+msgstr ""
+
+#: typeatlas/guicommon.py:1270
+msgid "&Remove"
+msgstr ""
+
+#: typeatlas/guicommon.py:1297
+msgid "Fonts"
+msgstr ""
+
+#: typeatlas/guicommon.py:1297
+msgid "Count"
+msgstr ""
+
+#: typeatlas/guicommon.py:1303 typeatlas/fontgrid.py:1941
+#: typeatlas/fontgrid.py:1970
+msgid "All"
+msgstr ""
+
+#: typeatlas/guicommon.py:1303
+msgid "Some"
+msgstr ""
+
+#: typeatlas/guicommon.py:1359
+msgid "&OK"
+msgstr ""
+
+#: typeatlas/guicommon.py:1361
+msgid "&Browse..."
+msgstr ""
+
+#: typeatlas/gui.py:501
+msgid "New window"
+msgstr ""
+
+#: typeatlas/gui.py:506
+msgid "Sampler"
+msgstr ""
+
+#: typeatlas/gui.py:508
+msgid "Duel"
+msgstr ""
+
+#: typeatlas/gui.py:510
+msgid "Character map"
+msgstr ""
+
+#: typeatlas/gui.py:514
+msgid "Download ISO language and country data"
+msgstr ""
+
+#: typeatlas/gui.py:517
+#, python-format
+msgid "Download %s"
+msgstr ""
+
+#: typeatlas/gui.py:519
+msgid "&Options..."
+msgstr ""
+
+#: typeatlas/gui.py:522
+msgid "&Quit"
+msgstr ""
+
+#: typeatlas/gui.py:560
+msgid "Copy font"
+msgstr ""
+
+#: typeatlas/gui.py:562
+msgid "Copy font name"
+msgstr ""
+
+#: typeatlas/gui.py:564
+msgid "Copy font unlocalised name"
+msgstr ""
+
+#: typeatlas/gui.py:566
+msgid "Copy font style"
+msgstr ""
+
+#: typeatlas/gui.py:568
+msgid "Copy font unlocalised style"
+msgstr ""
+
+#: typeatlas/gui.py:570
+msgid "Copy font full name"
+msgstr ""
+
+#: typeatlas/gui.py:572
+msgid "Copy font unlocalised full name"
+msgstr ""
+
+#: typeatlas/gui.py:575
+msgid "Copy font filename"
+msgstr ""
+
+#: typeatlas/gui.py:579
+msgid "Copy fontspec for LuaLaTeX or XeLaTeX"
+msgstr ""
+
+#: typeatlas/gui.py:582
+msgid "Copy fontspec code with full paths"
+msgstr ""
+
+#: typeatlas/gui.py:586
+msgid "Tag families..."
+msgstr ""
+
+#: typeatlas/gui.py:587
+msgid "Add families to category..."
+msgstr ""
+
+#: typeatlas/gui.py:589
+msgid "Save search as..."
+msgstr ""
+
+#: typeatlas/gui.py:591
+msgid "Untag families..."
+msgstr ""
+
+#: typeatlas/gui.py:595
+msgid "Open with default application"
+msgstr ""
+
+#: typeatlas/gui.py:603
+msgid "Font properties..."
+msgstr ""
+
+#: typeatlas/gui.py:862
+msgid "Open with system file manager"
+msgstr ""
+
+#: typeatlas/gui.py:919
+msgid "Language"
+msgstr ""
+
+#: typeatlas/gui.py:921 typeatlas/gui.py:1003
+msgid "Custom sample"
+msgstr ""
+
+#: typeatlas/gui.py:927
+msgid "Language samples"
+msgstr ""
+
+#: typeatlas/gui.py:929
+msgid "Size samples"
+msgstr ""
+
+#: typeatlas/gui.py:931
+msgid "Long sample text"
+msgstr ""
+
+#: typeatlas/gui.py:934 typeatlas/gui.py:1740
+msgid "User interface demo"
+msgstr ""
+
+#: typeatlas/gui.py:1004
+msgid "Sample"
+msgstr ""
+
+#: typeatlas/gui.py:1006
+msgid "Set text"
+msgstr ""
+
+#: typeatlas/gui.py:1260
+#, python-format
+msgid "Preview of %s"
+msgstr ""
+
+#: typeatlas/gui.py:1267
+#, python-format
+msgid "No sample available for %s"
+msgstr ""
+
+#: typeatlas/gui.py:1307
+#, python-brace-format
+msgid "Sample for {language} in {script}"
+msgstr ""
+
+#: typeatlas/gui.py:1370
+msgid "12 Font Sample Texts You Wouldn't Believe Exist!"
+msgstr ""
+
+#: typeatlas/gui.py:1397
+msgid "interface configurations"
+msgstr ""
+
+#: typeatlas/gui.py:1398
+msgid "Edit saved interface configurations"
+msgstr ""
+
+#: typeatlas/gui.py:1399
+msgid "Search configurations..."
+msgstr ""
+
+#: typeatlas/gui.py:1483
+msgid "Loading cache..."
+msgstr ""
+
+#: typeatlas/gui.py:1492
+msgid "Loading font list..."
+msgstr ""
+
+#: typeatlas/gui.py:1509
+msgid "Filling detailed font info..."
+msgstr ""
+
+#: typeatlas/gui.py:1516
+msgid "First run: Parsing detailed font information: {} out of {}"
+msgstr ""
+
+#: typeatlas/gui.py:1527
+msgid "Building global feature table..."
+msgstr ""
+
+#: typeatlas/gui.py:1532
+msgid "Attempting to guess family type..."
+msgstr ""
+
+#: typeatlas/gui.py:1540 typeatlas/guiglyphs.py:113
+msgid "Populating unicode info..."
+msgstr ""
+
+#: typeatlas/gui.py:1545 typeatlas/guiglyphs.py:119
+msgid "Populating language info..."
+msgstr ""
+
+#: typeatlas/gui.py:1610
+msgid "Character lists not loaded"
+msgstr ""
+
+#: typeatlas/gui.py:1611
+msgid ""
+"The lists of characters supported by the individual fonts is not loaded yet. "
+"This can be a very slow process if fontTools is not available. Do you wish "
+"to continue with loading the lists?"
+msgstr ""
+
+#: typeatlas/gui.py:1622
+msgid "Loading character lists..."
+msgstr ""
+
+#: typeatlas/gui.py:1623
+msgid "Abort"
+msgstr ""
+
+#: typeatlas/gui.py:1744
+msgid "&Demo"
+msgstr ""
+
+#: typeatlas/gui.py:1744
+msgid "AaQqRr"
+msgstr ""
+
+#: typeatlas/gui.py:1744
+msgid "E&xample"
+msgstr ""
+
+#: typeatlas/gui.py:1745
+msgid "Prime&r"
+msgstr ""
+
+#: typeatlas/gui.py:1745
+msgid "Test &label"
+msgstr ""
+
+#: typeatlas/gui.py:1746
+msgid "Example &1"
+msgstr ""
+
+#: typeatlas/gui.py:1746
+msgid "Example &2"
+msgstr ""
+
+#: typeatlas/gui.py:1746
+msgid "Example &3"
+msgstr ""
+
+#: typeatlas/gui.py:1766
+msgid "Do nothing"
+msgstr ""
+
+#: typeatlas/gui.py:1820
+msgid "Simple interface"
+msgstr ""
+
+#: typeatlas/gui.py:1824
+msgid "Basic customizable interface"
+msgstr ""
+
+#: typeatlas/gui.py:1830
+msgid "Fully customizable interface"
+msgstr ""
+
+#: typeatlas/gui.py:1835
+msgid "Expansive interface"
+msgstr ""
+
+#: typeatlas/gui.py:1903
+msgid "TypeAtlas font explorer"
+msgstr ""
+
+#: typeatlas/gui.py:1907
+msgid "&Fonts"
+msgstr ""
+
+#: typeatlas/gui.py:1908
+msgid "&Edit"
+msgstr ""
+
+#: typeatlas/gui.py:1909
+msgid "&View"
+msgstr ""
+
+#: typeatlas/gui.py:1910
+msgid "&Selections"
+msgstr ""
+
+#: typeatlas/gui.py:1911
+msgid "&Help"
+msgstr ""
+
+#: typeatlas/gui.py:1913
+msgid "Main toolbar"
+msgstr ""
+
+#: typeatlas/gui.py:1918
+msgid "Search toolbar"
+msgstr ""
+
+#: typeatlas/gui.py:1935
+msgid "Saved"
+msgstr ""
+
+#: typeatlas/gui.py:1969
+msgid "Select font list..."
+msgstr ""
+
+#: typeatlas/gui.py:1970
+msgid "Fonts defined in PostScript level 1"
+msgstr ""
+
+#: typeatlas/gui.py:1972
+msgid "Fonts defined in PostScript level 2"
+msgstr ""
+
+#: typeatlas/gui.py:1974
+msgid "Fonts defined in PostScript level 3"
+msgstr ""
+
+#: typeatlas/gui.py:1976
+msgid "Fonts provided by Microsoft in Core Fonts for the Web"
+msgstr ""
+
+#: typeatlas/gui.py:1978
+msgid "Fonts defined for PDF"
+msgstr ""
+
+#: typeatlas/gui.py:2006
+msgid "Enter server name..."
+msgstr ""
+
+#: typeatlas/gui.py:2042
+msgid "System fonts"
+msgstr ""
+
+#: typeatlas/gui.py:2045
+msgid "Remote"
+msgstr ""
+
+#: typeatlas/gui.py:2046
+msgid "Standard substitutions"
+msgstr ""
+
+#: typeatlas/gui.py:2101
+msgid "&Searches"
+msgstr ""
+
+#: typeatlas/gui.py:2103
+msgid "&Categories"
+msgstr ""
+
+#: typeatlas/gui.py:2188
+msgid "Interface configuration"
+msgstr ""
+
+#: typeatlas/gui.py:2208
+msgid "Custom interface"
+msgstr ""
+
+#: typeatlas/gui.py:2323
+msgid "Overview"
+msgstr ""
+
+#: typeatlas/gui.py:2327
+msgid "Characters"
+msgstr ""
+
+#: typeatlas/gui.py:2329
+msgid "Information"
+msgstr ""
+
+#: typeatlas/gui.py:2332
+msgid "License"
+msgstr ""
+
+#: typeatlas/gui.py:2334
+msgid "Character info"
+msgstr ""
+
+#: typeatlas/gui.py:2348
+msgid "Active filters"
+msgstr ""
+
+#: typeatlas/gui.py:2616
+msgid "Toggle information"
+msgstr ""
+
+#: typeatlas/gui.py:2659
+#, python-brace-format
+msgid "{count} font families out of {total}"
+msgstr ""
+
+#: typeatlas/gui.py:2666
+#, python-brace-format
+msgid "{count} filters"
+msgstr ""
+
+#: typeatlas/gui.py:2678
+#, python-brace-format
+msgid "Font {family}, style {style}: {filename}"
+msgstr ""
+
+#: typeatlas/gui.py:2683
+#, python-brace-format
+msgid "Font family {family}"
+msgstr ""
+
+#: typeatlas/gui.py:2863
+#, python-format
+msgid "...and %d others"
+msgstr ""
+
+#: typeatlas/gui.py:2975
+msgid "Delete or edit searches..."
+msgstr ""
+
+#: typeatlas/gui.py:3020
+msgid "Save interface configuration..."
+msgstr ""
+
+#: typeatlas/gui.py:3023
+msgid "Delete or edit configurations..."
+msgstr ""
+
+#: typeatlas/gui.py:3111
+msgid "Classification"
+msgstr ""
+
+#: typeatlas/gui.py:3115
+msgid "Version"
+msgstr ""
+
+#: typeatlas/gui.py:3116
+msgid "Description"
+msgstr ""
+
+#: typeatlas/gui.py:3117
+msgid "Designer"
+msgstr ""
+
+#: typeatlas/gui.py:3118
+msgid "Manufacturer"
+msgstr ""
+
+#: typeatlas/gui.py:3120
+msgid "Copyright"
+msgstr ""
+
+#: typeatlas/gui.py:3149
+msgid "Warning"
+msgstr ""
+
+#: typeatlas/gui.py:3161
+msgid "Embedding"
+msgstr ""
+
+#: typeatlas/gui.py:3198
+msgid "Compression"
+msgstr ""
+
+#: typeatlas/gui.py:3205
+msgid "Glyph format"
+msgstr ""
+
+#: typeatlas/gui.py:3257
+msgid "This is a personal font, installed locally in the current user account."
+msgstr ""
+
+#: typeatlas/gui.py:3270
+msgid "Unicode support"
+msgstr ""
+
+#: typeatlas/gui.py:3296
+msgid "Scripts"
+msgstr ""
+
+#: typeatlas/gui.py:3305
+msgid "Blocks"
+msgstr ""
+
+#: typeatlas/gui.py:3506 typeatlas/guiglyphs.py:672
+#, python-format
+msgid "Started %s, licensed under %s"
+msgstr ""
+
+#: typeatlas/gui.py:3510 typeatlas/guiglyphs.py:676
+#, python-format
+msgid "Using Qt %s toolkit with %s bindings"
+msgstr ""
+
+#: typeatlas/fontgrid.py:1077
+msgid "Unicode database not loaded"
+msgstr ""
+
+#: typeatlas/fontgrid.py:1082
+msgid "Unknown character"
+msgstr ""
+
+#: typeatlas/fontgrid.py:1126
+msgid "Font's character name"
+msgstr ""
+
+#: typeatlas/fontgrid.py:1441
+msgid "Copy formatted characters"
+msgstr ""
+
+#: typeatlas/fontgrid.py:1443
+msgid "Copy plain characters"
+msgstr ""
+
+#: typeatlas/fontgrid.py:1445
+msgid "Copy decimal code"
+msgstr ""
+
+#: typeatlas/fontgrid.py:1446
+msgid "Copy hex code"
+msgstr ""
+
+#: typeatlas/fontgrid.py:1447
+msgid "Copy XML code"
+msgstr ""
+
+#: typeatlas/fontgrid.py:1448
+msgid "Copy UTF-8 byte codes"
+msgstr ""
+
+#: typeatlas/fontgrid.py:1450
+msgid "Copy name"
+msgstr ""
+
+#: typeatlas/fontgrid.py:1451
+msgid "Copy image"
+msgstr ""
+
+#: typeatlas/fontgrid.py:1454
+msgid "Character properties..."
+msgstr ""
+
+#: typeatlas/fontgrid.py:1721
+msgid "Search characters..."
+msgstr ""
+
+#: typeatlas/fontgrid.py:1780
+msgid "Character information"
+msgstr ""
+
+#: typeatlas/fontgrid.py:1927
+#, python-brace-format
+msgid "{count} characters out of {total}"
+msgstr ""
+
+#: typeatlas/datastore.py:321
+msgid "category"
+msgstr ""
+
+#: typeatlas/datastore.py:321
+msgid "categories"
+msgstr ""
+
+#: typeatlas/datastore.py:334
+msgid "tag"
+msgstr ""
+
+#: typeatlas/datastore.py:334
+msgid "tags"
+msgstr ""
+
+#: typeatlas/datastore.py:347
+msgid "search"
+msgstr ""
+
+#: typeatlas/datastore.py:347
+msgid "searches"
+msgstr ""
+
+#: typeatlas/external.py:702
+msgid "Execute command with OpenSSH"
+msgstr ""
+
+#: typeatlas/external.py:719
+msgid "Debian package"
+msgstr ""
+
+#: typeatlas/external.py:720
+msgid "RPM package"
+msgstr ""
+
+#: typeatlas/external.py:754 typeatlas/external.py:762
+#: typeatlas/external.py:808 typeatlas/external.py:816
+msgid "Find the package containing file"
+msgstr ""
+
+#: typeatlas/external.py:863
+msgid "Edit with FontForge"
+msgstr ""
+
+#: typeatlas/external.py:881
+msgid "View with KFontView"
+msgstr ""
+
+#: typeatlas/external.py:900
+msgid "View with GNOME Font Viewer"
+msgstr ""
+
+#: typeatlas/external.py:918
+msgid "Open GNOME Character Map with this font"
+msgstr ""
+
+#: typeatlas/external.py:937
+msgid "View fonts with Fonty Python"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:212
+msgid "Telegraphy"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:358
+msgid "Select symbol from a specific font"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:362
+msgid "Cannot change display font"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:363
+msgid ""
+"You are selecting a symbol from a font, the display font cannot be changed"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:367
+msgid "Choose display font"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:400
+msgid "GlyphAtlas character map"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:404
+msgid "&Character set"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:405
+msgid "&Alternative characters"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:523 typeatlas/guiglyphs.py:785
+msgid "Select symbol or character"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:561
+msgid "&Select"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:565
+msgid "Change &encoding..."
+msgstr ""
+
+#: typeatlas/guiglyphs.py:572
+msgid "Symbol from &font..."
+msgstr ""
+
+#: typeatlas/guiglyphs.py:576
+msgid "Generic symbols"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:788
+msgid "write the output to file"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:790
+msgid "append to output"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:796
+msgid "choose a result mode to return the character(s)"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:801
+msgid "use the given character or escape code as delimiter instead of newline"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:806
+msgid "use null byte as constant"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:809
+msgid "indent the json to the given level"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:813
+msgid "do not indent the json"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:816
+msgid "include more information"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:819
+msgid "select multiple characters"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:822
+msgid "select a single character"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:825
+msgid "return a character in a given character set"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:828
+msgid "select legacy encodings and character sets"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:831
+msgid "get unicode result"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:836
+msgid "select only generic or font-specific characters"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:838
+msgid "choose a font"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:839
+msgid "choose a style"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:842
+msgid "default to symbols from the specified font"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:845
+msgid "only select symbols from the specified font"
+msgstr ""
+
+#: typeatlas/guiglyphs.py:848
+msgid "leave debug enabled"
+msgstr ""
+
+#: typeatlas/fontlist.py:162
+msgid "TrueType Font"
+msgstr ""
+
+#: typeatlas/fontlist.py:166
+msgid "TrueType Collection"
+msgstr ""
+
+#: typeatlas/fontlist.py:170
+msgid "OpenType Font"
+msgstr ""
+
+#: typeatlas/fontlist.py:175
+msgid "OpenType Collection"
+msgstr ""
+
+#: typeatlas/fontlist.py:180
+msgid "Embedded OpenType"
+msgstr ""
+
+#: typeatlas/fontlist.py:189
+msgid "PostScript Printer Font ASCII"
+msgstr ""
+
+#: typeatlas/fontlist.py:192
+msgid "PostScript Printer Font Binary"
+msgstr ""
+
+#: typeatlas/fontlist.py:195
+msgid "PostScript Type 1 Printer Font"
+msgstr ""
+
+#: typeatlas/fontlist.py:199
+msgid "Bare CFF font"
+msgstr ""
+
+#: typeatlas/fontlist.py:203
+msgid "CEF font (Adobe SVG viewer)"
+msgstr ""
+
+#: typeatlas/fontlist.py:216
+msgid "Portable Compiled Font Format"
+msgstr ""
+
+#: typeatlas/fontlist.py:219
+msgid "Glyph Bitmap Distribution Format"
+msgstr ""
+
+#: typeatlas/fontlist.py:222
+msgid "Server Normal Format"
+msgstr ""
+
+#: typeatlas/fontlist.py:225
+msgid "Windows FNT Bitmap Fonts"
+msgstr ""
+
+#: typeatlas/fontlist.py:234 typeatlas/fontlist.py:358
+msgid "Metafont (TeX font)"
+msgstr ""
+
+#: typeatlas/fontlist.py:254
+msgid "Unknown file format"
+msgstr ""
+
+#: typeatlas/fontlist.py:276
+msgid "Gzip Lempel-Ziv compression"
+msgstr ""
+
+#: typeatlas/fontlist.py:279
+msgid "Bzip2 Burrows-Wheeler block-sorting compression"
+msgstr ""
+
+#: typeatlas/fontlist.py:283
+msgid "XZ-encoded Lempel-Ziv-Markov chain-Algorithm compression"
+msgstr ""
+
+#: typeatlas/fontlist.py:287
+msgid "Lempel-Ziv-Markov chain-Algorithm compression"
+msgstr ""
+
+#: typeatlas/fontlist.py:347
+msgid "Windows FNT Bitmap Font"
+msgstr ""
+
+#: typeatlas/fontlist.py:351
+msgid "Type 42 (TrueType font wrapper)"
+msgstr ""
+
+#: typeatlas/fontlist.py:356
+msgid "SVG color font"
+msgstr ""
+
+#: typeatlas/fontlist.py:367
+msgid "Unknown font format"
+msgstr ""
+
+#: typeatlas/fontlist.py:678
+msgid "Full name"
+msgstr ""
+
+#: typeatlas/fontlist.py:686
+msgid "Foundry"
+msgstr ""
+
+#: typeatlas/fontlist.py:688
+msgid "Font index"
+msgstr ""
+
+#: typeatlas/fontlist.py:694
+msgid "Version number"
+msgstr ""
+
+#: typeatlas/fontlist.py:697
+msgid "Capabilities"
+msgstr ""
+
+#: typeatlas/fontlist.py:701
+msgid "PostScript name"
+msgstr ""
+
+#: typeatlas/fontlist.py:717
+msgid "Pixel size"
+msgstr ""
+
+#: typeatlas/fontlist.py:1962 typeatlas/fontlist.py:1965
+msgid "Glyphs"
+msgstr ""
+
+#: typeatlas/fontlist.py:1968
+msgid "Metrics"
+msgstr ""

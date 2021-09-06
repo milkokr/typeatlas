@@ -1,0 +1,552 @@
+#!/usr/bin/env python3
+#
+#    TypeAtlas Sample Text Management & Support Tool
+#
+#    Copyright (C) 2018-2021 Milko Krachounov
+#
+#    This file is part of TypeAtlas
+#
+#    TypeAtlas is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    TypeAtlas is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with TypeAtlas.  If not, see <http://www.gnu.org/licenses/>.
+#
+#                                 ***
+#
+#    Alternatively, you may use this file (part of TypeAtlas libraries)
+#    under the terms of the X11/MIT license as follows:
+#
+#    Permission is hereby granted, free of charge, to any person
+#    obtaining a copy of this software and associated documentation
+#    files (the "Software"), to deal in the Software without
+#    restriction, including without limitation the rights to use,
+#    copy, modify, merge, publish, distribute, sublicense, and/or sell
+#    copies of the Software, and to permit persons to whom the
+#    Software is furnished to do so, subject to the following
+#    conditions:
+#
+#    The above copyright notice and this permission notice shall be
+#    included in all copies or substantial portions of the Software.
+#
+#    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+#    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+#    OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+#    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+#    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+#    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+#    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+#    OTHER DEALINGS IN THE SOFTWARE.
+#
+
+import re
+import os
+import sys
+import traceback
+import unicodedata
+import subprocess as sp
+from itertools import chain
+from typeatlas import samples, charinfo
+from typeatlas.util import OrderedSet
+import argparse
+
+pangolangs = 'af ar arn bar bg bi bn bo bs ca ch cs cy da de el en enm eo es et eu fa fi fr fro ga gd gl got gu gv haw he hi hr hu hy is it ja jam jbo jv ka kn ko kw la lt lv map mk ml mn mr ms nap nb nl nn no nv oc or pa pcd pl pt pt-br ro ru sa scn sk sl sq sr sv swg ta te th tl tr tw uk ur vec vi wa yi yo zh-cn zh-mo zh-sg zh-tw zlm'.split()
+fontlangs = {
+    'ii': '2',
+    'mn-cn': '2',
+    'nqo': '2',
+    'bo': '3',
+    'dz': '3',
+    'am': '6',
+    'byn': '6',
+    'gez': '6',
+    'sid': '6',
+    'ti-er': '6',
+    'ti-et': '6',
+    'tig': '6',
+    'wal': '6',
+    'km': '7',
+    'kn': '7',
+    'or': '7',
+    'si': '7',
+    'syr': '7',
+    'te': '7',
+    'dv': '8',
+    'gu': '9',
+    'my': '9',
+    'ta': '10',
+    'ml': '11',
+    'iu': '12',
+    'mni': '13',
+    'pa': '13',
+    'as': '15',
+    'bh': '15',
+    'bho': '15',
+    'bn': '15',
+    'brx': '15',
+    'doi': '15',
+    'hi': '15',
+    'hne': '15',
+    'kok': '15',
+    'lo': '15',
+    'mai': '15',
+    'mr': '15',
+    'ne': '15',
+    'sa': '15',
+    'sat': '15',
+    'ber-ma': '16',
+    'chr': '20',
+    'ks': '24',
+    'ps-af': '25',
+    'ps-pk': '25',
+    'lah': '28',
+    'pa-pk': '28',
+    'ur': '28',
+    'sd': '30',
+    'ug': '30',
+    'ku-iq': '31',
+    'ku-ir': '31',
+    'ota': '31',
+    'az-ir': '33',
+    'fa': '33',
+    'zh-hk': '43',
+    'zh-mo': '43',
+    'ar': '45',
+    'zh-cn': '50',
+    'zh-sg': '50',
+    'zh-tw': '51',
+    'ja': '53',
+    'hy': '66',
+    'ka': '66',
+    'ko': '73',
+    'th': '83',
+    'he': '104',
+    'yi': '104',
+    'ku-am': '122',
+    'cu': '132',
+    'kr': '154',
+    'ee': '158',
+    'ber-dz': '166',
+    'kab': '166',
+    'ff': '177',
+    'ha': '177',
+    'sms': '179',
+    'nv': '191',
+    'sco': '192',
+    'vi': '192',
+    'hz': '194',
+    'yo': '195',
+    'ak': '197',
+    'fat': '197',
+    'tw': '197',
+    've': '199',
+    'qu': '210',
+    'quz': '210',
+    'ln': '211',
+    'bm': '216',
+    'ga': '222',
+    'ab': '241',
+    'shs': '242',
+    'mi': '244',
+    'az-az': '257',
+    'kw': '258',
+    'haw': '260',
+    'sm': '269',
+    'to': '269',
+    'sah': '294',
+    'ty': '302',
+    'chm': '319',
+    'ast': '324',
+    'cv': '325',
+    'sh': '325',
+    'ba': '327',
+    'tg': '339',
+    'kv': '365',
+    'kaa': '368',
+    'kk': '368',
+    'tt': '370',
+    'ky': '374',
+    'tyv': '374',
+    'bua': '388',
+    'mn-mn': '398',
+    'bin': '445',
+    'mk': '445',
+    'mo': '455',
+    'el': '473',
+    'ig': '521',
+    'gn': '530',
+    'se': '541',
+    'uk': '541',
+    'cy': '551',
+    'kl': '560',
+    'av': '575',
+    'be': '575',
+    'ce': '575',
+    'ik': '575',
+    'lez': '575',
+    'sr': '575',
+    'ro': '590',
+    'af': '596',
+    'kum': '643',
+    'os': '643',
+    'ru': '643',
+    'sel': '643',
+    'bg': '645',
+    'smn': '663',
+    'la': '692',
+    'mt': '692',
+    'lv': '693',
+    'lt': '695',
+    'mh': '695',
+    'wo': '696',
+    'ny': '705',
+    'bs': '707',
+    'hr': '707',
+    'lg': '707',
+    'sl': '707',
+    'eo': '709',
+    'ca': '711',
+    'cs': '713',
+    'sk': '713',
+    'tk': '713',
+    'csb': '718',
+    'pl': '718',
+    'hsb': '721',
+    'wen': '721',
+    'hu': '726',
+    'crh': '732',
+    'tr': '732',
+    'ku-tr': '745',
+    'ki': '749',
+    'na': '749',
+    'et': '834',
+    'fi': '834',
+    'vot': '835',
+    'co': '844',
+    'fr': '844',
+    'nso': '855',
+    'tn': '855',
+    'is': '933',
+    'fo': '937',
+    'fy': '939',
+    'lb': '939',
+    'de': '941',
+    'nds': '941',
+    'da': '942',
+    'nb': '942',
+    'nn': '942',
+    'no': '942',
+    'en': '945',
+    'fil': '945',
+    'fur': '945',
+    'gd': '945',
+    'ht': '945',
+    'it': '945',
+    'li': '945',
+    'nl': '945',
+    'oc': '945',
+    'pap-an': '945',
+    'pt': '945',
+    'rm': '945',
+    'sc': '945',
+    'sg': '945',
+    'sma': '945',
+    'smj': '945',
+    'sv': '945',
+    'tl': '945',
+    'wa': '945',
+    'ay': '946',
+    'yap': '946',
+    'aa': '947',
+    'an': '947',
+    'br': '947',
+    'ch': '947',
+    'es': '947',
+    'gl': '947',
+    'mg': '947',
+    'sq': '947',
+    'vo': '947',
+    'bi': '948',
+    'gv': '948',
+    'jv': '948',
+    'eu': '949',
+    'pap-aw': '949',
+    'id': '950',
+    'su': '950',
+    'fj': '999',
+    'ho': '999',
+    'ia': '999',
+    'ie': '999',
+    'io': '999',
+    'kj': '999',
+    'kwm': '999',
+    'ms': '999',
+    'ng': '999',
+    'nr': '999',
+    'om': '999',
+    'rn': '999',
+    'rw': '999',
+    'sn': '999',
+    'so': '999',
+    'ss': '999',
+    'st': '999',
+    'sw': '999',
+    'ts': '999',
+    'uz': '999',
+    'xh': '999',
+    'za': '999',
+    'zu': '999',
+}
+
+try:
+    import langdetect
+
+except ImportError:
+    langdetect = None
+
+try:
+    import transliterate
+except ImportError:
+    transliterate = False
+
+# Doesn't really work.
+DETECT_LANGUAGE = False
+TRANSLITERATE = True
+
+main_parser = argparse.ArgumentParser()
+subparsers = main_parser.add_subparsers(help="action help")
+
+
+def add_action(func=None, *args, **kwargs):
+    parser = subparsers.add_parser(func.__name__.replace('_', '-'),
+                                   *args, **kwargs)
+    parser.set_defaults(func=func)
+    func.parser = parser
+    return func
+
+
+@add_action
+def check(parser, args):
+    if langdetect is None:
+        print("langdetect not found, proceeding with language validation",
+              file=sys.stderr)
+
+    chardb = charinfo.CharacterDatabase.get_instance(populated=True)
+
+    def msg(template, *a, **kw):
+        print(template.format(*a, **kw), file=sys.stderr)
+
+    seenlangs = set()
+    seenlangs.update(s.lang 
+                     for vs in samples.main_samples.samples_regular.values()
+                     for s in vs)
+    seenlangs.update(samples.main_samples.sample_fallbacks)
+
+    for lang in fontlangs:
+        if lang not in seenlangs:
+            msg('FATAL: Font language {lang} sample NOT FOUND', lang=lang)
+    for lang in pangolangs:
+        if lang not in seenlangs:
+            msg('FATAL: Pango language {lang} sample NOT FOUND', lang=lang)
+
+
+    def msg(template, *a, **kw):
+        print(template.format(*a, lang=sample.lang, text=sample.text,
+                                  translit=sample.translit, **kw),
+              file=sys.stderr)
+
+    for values in chain(samples.main_samples.samples_long.values(),
+                        samples.main_samples.samples_regular.values()):
+
+        for sample in values:
+            scripts = OrderedSet(chardb.find_scripts(sample.text))
+            scripts.discard('Common')
+            scripts = OrderedSet(chardb.get_values_aliases('sc', scripts))
+
+            if not sample.script:
+                msg('FATAL: Script missing for {lang} sample: {text}')
+
+            elif sample.script is samples.ALL:
+                msg('FATAL: "ALL" scripts defined for {lang} sample: {text}')
+
+            elif sample.script is samples.ANY:
+                msg('FATAL: "ANY" scripts defined for {lang} sample: {text}')
+                
+            elif sample.script not in scripts:
+                msg('FATAL: Sample for {lang} has {script} script, '
+                    'but contains {scripts!r}: {text}',
+                    script=sample.script, scripts=scripts)
+            elif len(scripts) > 1:
+                msg('FATAL: Sample for {lang} has multiple scripts '
+                    '{scripts!r}: {text}', scripts=scripts)
+
+            if sample.translit:
+                # FIXME: Strange diacritics will probably not fall in latin1
+                try:
+                    sample.translit.encode('latin1')
+                except UnicodeEncodeError:
+                    msg('FATAL: Non-latin text in transliteration for {lang} '
+                        'sample: {text}')
+
+            if not re.search(r'[a-zA-Z]', sample.text) and not sample.translit:
+                msg('WARN: Transliteration missing for {lang} sample: {text}')
+
+            if ((not sample.lang == 'en' or sample.lang.startswith('en-'))
+                and not sample.english):
+                    msg('WARN: English missing for {lang} sample: {text}')
+
+            if unicodedata.normalize('NFC', sample.text) != sample.text:
+                msg('FATAL: Text not normalized for {lang} sample: {text}')
+
+            if (sample.translit and
+                unicodedata.normalize('NFC', sample.translit) !=
+                sample.translit):
+
+                msg('FATAL: Transliteration not normalized for {lang} sample: '
+                    '{text}')
+
+            if (sample.english and
+                unicodedata.normalize('NFC', sample.english) != sample.english):
+
+                msg('FATAL: English not normalized for {lang} sample: {text}')
+
+            if transliterate is not None and TRANSLITERATE and sample.translit:
+                try:
+                    trans = transliterate.translit(sample.text, sample.lang,
+                                                   reversed=True)
+                except transliterate.exceptions.LanguagePackNotFound:
+                    continue
+
+                if (unicodedata.normalize('NFC', trans).lower() !=
+                    unicodedata.normalize('NFC', sample.translit).lower()):
+
+                    msg('WARN: Transliteration differs for {lang} sample: '
+                        '{text}')
+                    msg('  Expected: {}', trans)
+                    msg('  Got:      {translit}')
+
+            if langdetect is not None and DETECT_LANGUAGE:
+                try:
+                    lang = langdetect.detect(sample.text)
+                except langdetect.lang_detect_exception.LangDetectException:
+                    traceback.print_exc()
+                    print("^^^", sample.lang, sample.text, file=sys.stderr)
+                    continue
+
+                if lang != sample.lang:
+                    print("sample is detected as {}, not {}: {}".format(
+                                lang, sample.lang, sample.text),
+                          file=sys.stderr)
+
+
+@add_action
+def make_braille(parser, args):
+    tables = sorted(os.listdir('/usr/share/liblouis/tables'),
+                    key=str.lower)
+    print(
+'''# coding: utf-8
+# This file is auto-generated from samples_lanauge_*. For copying, see
+# notices there.
+
+from typeatlas.samples import add_sample
+from typeatlas.samples import PRIO_PREFER, PRIO_WITHHOLD, PRIO_DEFAULT
+''')
+
+    for key, values in samples.main_samples.samples_regular.items():
+        # Skip languages with script
+        if isinstance(key, tuple):
+            continue
+
+        for sample in values:
+
+
+            if sample.script == 'Brai':
+                continue
+
+            if 'no-display' in sample.flags or 'non-default' in sample.flags:
+                continue
+
+            for table in tables:
+                #if (not table.endswith('-g1.ctb') and
+                #    not table.endswith('-g2.ctb')):
+                #        continue
+
+                if not table.endswith('.ctb'):
+                    continue
+
+                if table.startswith('en-ueb') or table.startswith('fr-bfu'):
+                    continue
+
+                if (not table.lower().startswith(sample.lang + '-') and
+                    not table.lower().startswith(sample.lang + '.')):
+                    continue
+
+                p = sp.Popen(['lou_translate', '-f', 'unicode.dis,' + table],
+                             stdin=sp.PIPE, stdout=sp.PIPE)
+                p.stdin.write((sample.text + '\n').encode('utf8'))
+                p.stdin.close()
+
+                data = p.stdout.read().replace(b'x', b'u').rstrip(b'\n')
+                p.wait()
+                #text = data.decode('unicode_escape')
+                text = data.decode('utf8')
+
+
+                if (not table.endswith('-g1.ctb') and
+                    not table.endswith('-g2.ctb') and
+                    not table.endswith('-g3.ctb')):
+
+                    if re.search(r'[0-9]', table):
+                        continue
+
+                    if re.search(r'(chess|math.*|interline|comp|generic)\.ctb$', table):
+                        continue
+
+
+                    lang = table.rpartition('.')[0].lower()
+                    flags = []
+                    prio = 'PRIO_DEFAULT'
+
+                    if not re.search(r'^[a-z]+(?:-[a-z]+)?$', lang):
+                        continue
+
+                else:
+                    lang = table.rpartition('-')[0].lower()
+
+                    grade = table.rpartition('-')[2].partition('.')[0]
+                    grade = grade.replace('g', 'grade')
+
+                    if grade == 'grade1':
+                        prio = 'PRIO_WITHHOLD'
+                    else:
+                        prio = 'PRIO_PREFER'
+
+                    flags = [grade]
+
+
+
+                print('''
+add_sample({lang!r}, {text!r},
+           original={original!r},
+           english={english!r},
+           script='Brai', flags={flags!r}, prio={prio},
+           sources={sources!r})
+'''.format(lang=lang, text=text, original=sample.text,
+           english=sample.english,
+           sources=list(sample.sources),
+           flags=flags, prio=prio))
+
+
+def main():
+    args = main_parser.parse_args()
+    args.func(main_parser, args)
+
+if __name__ == '__main__':
+    main()
