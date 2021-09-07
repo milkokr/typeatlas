@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 #    TypeAtlas Setup Script
-#    Written in 2018-2021 by Milko Krachounov
+#    Written in 2021 by Milko Krachounov
 #
 #    This file is part of TypeAtlas.
 #
@@ -17,13 +17,19 @@
 from typeatlas import proginfo
 from distutils.core import setup
 
+with open('README.md', 'r', encoding='utf8') as readme:
+    long_description = readme.read()
+
 setup(
-    name=proginfo.PROGRAM_SHORT_NAME,
+    name=proginfo.PROGRAM_CANON_NAME,
     version=proginfo.VERSION,
-    #url='https://example.com/',
+    url='https://gitlab.com/milkok/typeatlas',
     description='TypeAtlas font explorer',
+    long_description=long_description,
     author=proginfo.AUTHOR,
     author_email=proginfo.EMAIL,
+    license='GPLv3',
+    platforms=['GNU/Linux', 'POSIX'],
     packages=['typeatlas', 'typeatlas.cli', 'typeatlas.data',
               'typeatlas.foreign'],
     package_data={
@@ -33,6 +39,7 @@ setup(
             'icons/dark/*.svgz',
             'icons/16x16/*.svgz',
             'icons/widgets/*.svgz',
+            'icons/flags/README',
             'icons/flags/*.svgz',
             'images/README',
             'images/*.svgz',
@@ -54,7 +61,18 @@ setup(
         ]),
     ],
     requires=[
-        'fonttools', 'PyQt5'
+        'packaging', 'fonttools', 'PyQt5'
     ],
     scripts=['typeatlas-qt', 'glyphatlas-qt', 'glyphatlas-select-qt', 'typefind'],
+    classifiers=[
+        'Programming Language :: Python :: 3',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'Operating System :: OS Independent',
+    ],
+    project_urls={
+        'Bug Tracker': 'https://gitlab.com/milkok/typeatlas/-/issues',
+        'Github Mirror': 'https://github.com/milkokr/typeatlas/',
+        'Screenshots': 'https://imgur.com/a/uoaN94p',
+    },
+    python_requires='>=3.5',
 )
