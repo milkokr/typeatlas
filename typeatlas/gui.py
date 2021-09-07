@@ -1175,8 +1175,14 @@ class FontPreview(QtWidgets.QWidget):
     def _largeSampleText(self, fontItem, multiple: bool=False) -> Mapping:
         """Return one large sample for either one font or multiple
         fonts passed as first argument."""
+
+        if multiple:
+            fonts = fontItem
+        else:
+            fonts = [fontItem]
+
         lang = self.toolbox.preferredLang
-        if lang is None or lang not in fontItem.lang:
+        if lang is None or any(lang not in fi.lang for fi in fonts):
             if multiple:
                 samples = self.langDb.samples_font_intersection(fontItem)
             else:
