@@ -2,6 +2,7 @@
 
 TypeAtlas is a featureful graphical font explorer targeting GNU/Linux, without
 disregarding cross-platform compatibility.
+See [Screenshots](https://imgur.com/a/uoaN94p).
 
 TypeAtlas provides:
 
