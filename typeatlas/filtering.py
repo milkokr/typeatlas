@@ -307,7 +307,7 @@ class BranchChange(object):
         the new one.
         """
         if previous and self.replacing is not None:
-            yield self.previous
+            yield self.replacing
         else:
             yield self.filter
 
