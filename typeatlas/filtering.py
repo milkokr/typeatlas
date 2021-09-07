@@ -200,6 +200,9 @@ def register_cmdline(*options: str, **kwargs):
 def set_cmdline_processor(func: Callable):
     """Set which function to use to process command line arguments. This can
     be called after register_cmdline has been called."""
+
+    global _cmdline_processor
+
     _cmdline_processor = func
     for cls, options, kwargs in _cmdline_queue:
         _cmdline_processor(cls, *options, **kwargs)
