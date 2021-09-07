@@ -142,7 +142,7 @@ KeyTupleType = TupleOf[Optional[str], ...]
 ## are checked.
 SLOW_FILTERS = False
 
-if os.environ.get('TYPEATLAS_DEBUG_TYPECHECK'):
+if os.environ.get('TYPEATLAS_DEBUG_SLOW_FILTERS'):
     SLOW_FILTERS = True
 
 
