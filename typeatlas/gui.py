@@ -1310,7 +1310,7 @@ class FontPreview(QtWidgets.QWidget):
 
                     language = self.langDb.language_name(sample.code, AUTO_LOCALE_NAME)
                     script = self.langDb.script_name(sample.script, AUTO_LOCALE_NAME)
-                    label = _("Sample for {language} in {script}").format(
+                    label = _("Sample for {language} using the {script} script").format(
                                 language=language,
                                 script=script)
 
