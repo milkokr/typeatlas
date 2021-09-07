@@ -1390,7 +1390,7 @@ class SelectWritingSystemDialog(QtWidgets.QScrollArea):
             stylesheet = ''
         else:
             stylesheet = includeExcludeCheckboxCss()
-        for checkbox in self.writingSystemCheckbox.values(stylesheet):
+        for checkbox in self.writingSystemCheckbox.values():
             checkbox.setStyleSheet(stylesheet)
 
 
