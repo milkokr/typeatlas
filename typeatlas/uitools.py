@@ -2203,7 +2203,7 @@ class ListItemModel(CallMapItemModel):
         return len(self.items)
 
     def removeRows(self, row, count, parent=QtCore.QModelIndex()):
-        if self.rowsRemovable:
+        if not self.rowsRemovable:
             return False
         if parent.isValid():
             return False
