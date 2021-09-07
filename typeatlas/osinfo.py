@@ -68,7 +68,8 @@ import platform
 import traceback
 import configparser
 from operator import attrgetter
-from packaging.version import parse as parse_version
+from distutils.version import LooseVersion as version_key
+#from packaging.version import parse as version_key
 
 from typeatlas.util import warnmsgf, generic_type
 from typeatlas.langutil import _, N_
@@ -199,16 +200,16 @@ def layered_fonts_supported() -> bool:
         return _layered_fonts_supported
 
     if is_windows:
-        _layered_fonts_supported = (parse_version(platform.version()) >=
-                                    parse_version(WINDOWS_COLR_VERSION_MIN))
+        _layered_fonts_supported = (version_key(platform.version()) >=
+                                    version_key(WINDOWS_COLR_VERSION_MIN))
     elif is_darwin:
-        _layered_fonts_supported = (parse_version(platform.release()) >=
-                                    parse_version(DARWIN_COLR_VERSION_MIN))
+        _layered_fonts_supported = (version_key(platform.release()) >=
+                                    version_key(DARWIN_COLR_VERSION_MIN))
     elif is_posix:
         # FIXME: Check features?
         version = freetype_version()
-        _layered_fonts_supported = (parse_version(version) >=
-                                    parse_version(FREETYPE_COLR_VERSION_MIN))
+        _layered_fonts_supported = (version_key(version) >=
+                                    version_key(FREETYPE_COLR_VERSION_MIN))
     else:
         _layered_fonts_supported = False
 
@@ -227,11 +228,11 @@ def svg_fonts_supported() -> bool:
         return _svg_fonts_supported
 
     if is_windows:
-        _svg_fonts_supported = (parse_version(platform.version()) >=
-                                parse_version(WINDOWS_SVG_VERSION_MIN))
+        _svg_fonts_supported = (version_key(platform.version()) >=
+                                version_key(WINDOWS_SVG_VERSION_MIN))
     elif is_darwin:
-        _svg_fonts_supported = (parse_version(platform.release()) >=
-                                parse_version(DARWIN_SVG_VERSION_MIN))
+        _svg_fonts_supported = (version_key(platform.release()) >=
+                                version_key(DARWIN_SVG_VERSION_MIN))
     elif is_posix:
         # FreeType does not yet support SVG fonts
         _svg_fonts_supported = False
