@@ -59,9 +59,9 @@ N_ = lambda s: s
 PROGRAM_NAME = N_('Type Atlas')
 PROGRAM_SHORT_NAME = 'TypeAtlas'
 PROGRAM_CANON_NAME = 'typeatlas'
-VERSION = '0.96.173'
-VERSION_HUMAN_SHORT = "1.0b1"
-VERSION_HUMAN_LONG = "1.0 (Beta 1)"
+VERSION = '0.96.175'
+VERSION_HUMAN_SHORT = "1.0b2"
+VERSION_HUMAN_LONG = "1.0 (Beta 2)"
 
 AUTHOR = 'Milko Krachounov'
 EMAIL = 'typeatlas@milko.3mhz.net'
