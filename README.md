@@ -51,15 +51,24 @@ TypeAtlas can be used as a feature-heavy GUI frontend for fontconfig's `fc-list`
 Before you install TypeAtlas, you need to install **PyQt** and **fontTools**:
 
 On Ubuntu, Debian or other Debian-based, this can be done with:
-    sudo apt-get install python3-pyqt5 python3-fonttools
+
+    sudo apt-get install python3-pyqt5 python3-fonttools python3-pip
 
 On Fedora, this can be done with
-    sudo dnf install PyQt5 fonttools
 
-You can test TypeAtlas directly from the source tree:
+    sudo dnf install python3 PyQt5 fonttools
+
+You can install it in your home directory using pip:
+
+    pip3 install --user typeatlas
+
+If you have downloaded the source, you can run TypeAtlas directly from
+the source tree:
+
     ./typeatlas-qt
 
-...or install it in your user's home directory:
+...or install it in your user's home directory from there, too:
+
     ./setup.py install --user
 
 On the first run, TypeAtlas will perform a slow scan the fonts on your
