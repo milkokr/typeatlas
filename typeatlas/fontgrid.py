@@ -1838,7 +1838,7 @@ class FontGrid(QtWidgets.QWidget):
         view.setModel(self.filterModel)
         view.selectionModel().currentChanged.connect(self._currentChanged)
 
-        view.setHorizontalHeader(RotatedHeaderView(Qt.Horizontal, angle=90))
+        view.setHorizontalHeader(RotatedHeaderView(Qt.Horizontal, angle=0))
 
         setResizeMode(view.verticalHeader(),
                       QtWidgets.QHeaderView.ResizeToContents)
