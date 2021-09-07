@@ -61,7 +61,7 @@ setup(
         ]),
     ],
     requires=[
-        'packaging', 'fonttools', 'PyQt5'
+        'fonttools', 'PyQt5'
     ],
     scripts=['typeatlas-qt', 'glyphatlas-qt', 'glyphatlas-select-qt', 'typefind'],
     classifiers=[
