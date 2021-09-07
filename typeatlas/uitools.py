@@ -270,10 +270,11 @@ def getIconUrl(name: str, ext: str='.svgz') -> str:
                 prefix = prefixDark
                 iconpath = pathDark
 
-        return iconurl
+        return iconpath
 
-    #elif os.path.exists(name):
-    #    return QtCore.QUrl.fromLocalFile(name).toString()
+    elif os.path.exists(name):
+        #return QtCore.QUrl.fromLocalFile(name).toString()
+        return name
 
     else:
         raise OSError(errno.ENOENT, os.strerror(errno.ENOENT), iconpath)
@@ -291,10 +292,11 @@ def getImageUrl(name: str, ext: str='.svgz') -> str:
         iconurl = 'typeatlas/images/' + name + ext
 
     if os.path.exists(iconpath):
-        return iconurl
+        return iconpath
 
-    #elif os.path.exists(name):
-    #    return QtCore.QUrl.fromLocalFile(name)
+    elif os.path.exists(name):
+        #return QtCore.QUrl.fromLocalFile(name)
+        return name
 
     else:
         raise OSError(errno.ENOENT, os.strerror(errno.ENOENT), iconpath)
