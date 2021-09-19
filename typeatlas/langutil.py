@@ -859,8 +859,18 @@ class LanguageDatabase(object):
         common_charset = None
         charset_supported = True
         for font in fonts:
+
+            charset = font.get_charset()
+            if charset is None:
+                charset_supported = False
+            elif common_charset is None:
+                common_charset = charset
+            else:
+                common_charset = common_charset & charset
+
             if font.lang_unknown():
                 continue
+
             known_langs = True
 
             langs = OrderedSet()
@@ -877,15 +887,6 @@ class LanguageDatabase(object):
                 common_langs = langs
             else:
                 common_langs &= langs
-
-            charset = font.get_charset()
-
-            if charset is None:
-                charset_supported = False
-            elif common_charset is None:
-                common_charset = charset
-            else:
-                common_charset = common_charset & charset
 
         if not common_langs:
             common_langs = []
