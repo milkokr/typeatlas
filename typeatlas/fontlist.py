@@ -109,6 +109,8 @@ LOAD_CHARSET_EARLY = False
 FONT_LIMIT = None
 
 ## Tests and debug
+if os.environ.get('TYPEATLAS_DEBUG_LOAD_CHARSET_EARLY'):
+    LOAD_CHARSET_EARLY = True
 if os.environ.get('TYPEATLAS_DEBUG_DISABLE_FONTCONFIG'):
     DISABLE_FC_LIST = True
 if os.environ.get('TYPEATLAS_DEBUG_DISABLE_FONTTOOLS'):
