@@ -62,7 +62,7 @@
 from __future__ import unicode_literals
 
 from collections import namedtuple, defaultdict, OrderedDict
-from itertools import chain
+from itertools import chain, count
 import sys
 from typeatlas.util import OrderedSet, N_, warnmsgf, generic_type
 # RFC 3066 code pangrams
@@ -139,6 +139,7 @@ class SampleType(object):
 
 
 CHARACTER = SampleType(N_('Character'), multichar=False)
+SYMBOLS = SampleType(N_('Symbols'), multichar=True)
 PHRASE = SampleType(N_('Phrase'), phrase=True)
 PANGRAM = PHRASE.variant(N_('Pangram'),
                          all_characters=True,
@@ -206,6 +207,8 @@ class LanguageSamples(object):
         self.display_scripts = OrderedDict()
         self.sample_fallbacks = OrderedDict()
         self.unsorted_samples = []
+
+        self._zxx_number = count()
 
     normalize_code = staticmethod(normalize_langcode)
     sample_factory = staticmethod(SampleInfo)
@@ -395,6 +398,9 @@ class LanguageSamples(object):
                 english = text
 
         code = self.normalize_code(code)
+
+        if code == 'zxx':
+            code = 'zxx-' + str(next(self._zxx_number))
 
         #code_scripts_with_pangrams.add((code, script))
         #codes_with_pangrams.add(code)
