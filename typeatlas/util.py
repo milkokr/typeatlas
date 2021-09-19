@@ -47,10 +47,11 @@
 
 """Various utility function."""
 
-from collections import OrderedDict
+from collections import OrderedDict, deque
 from collections.abc import MutableSet, MutableMapping, Mapping, Hashable
-from collections.abc import Set, Sequence
+from collections.abc import Set, Sequence, Iterable, Iterator
 from operator import itemgetter, attrgetter
+from itertools import islice, chain
 import re
 import os
 import io
@@ -440,6 +441,111 @@ class OrderedSet(MutableSet):
 
     def __repr__(self):
         return '%s(%r)' % (type(self).__name__, list(self._values))
+
+
+class ManagedIter:
+
+    """An iterator with lookahead(), peek(), extend() and append().
+
+    Takes the same arguments as iter()"""
+
+    _sentinel = object()
+
+    def __init__(self, *args):
+        self._iterator = iter(*args)
+        self._chained = None
+        self._lookahead = deque()
+        self._deficit = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._lookahead:
+            return self._lookahead.popleft()
+        return next(self._iterator)
+
+    def _needs_lookahead(self, length: int=0):
+        """Fetch items from the iterator up to the given position,
+        without consuming them."""
+
+        if length > len(self._lookahead):
+            if self._deficit:
+                self._deficit = max(self._deficit,
+                                    length - len(self._lookahead))
+                return
+
+            self._lookahead.extend(islice(self._iterator,
+                                          length - len(self._lookahead)))
+            self._deficit = length - len(self._lookahead)
+
+    def lookahead(self, pos: int=0, default=_sentinel):
+        """Look up an item forward at a given position
+        in the iterator, without consuming those items.
+
+        This method takes O(pos) time to complete.
+
+        Throw StopIteration if there are no unless item
+        at the given postion.
+        """
+
+        self._needs_lookahead(pos + 1)
+        try:
+            return self._lookahead[pos]
+        except IndexError:
+            raise StopIteration
+
+    def peek(self, default=_sentinel):
+        """Return the next item of the iterator if there's one,
+        otherwise raise StopIteration or return the default."""
+
+        return self.lookahead(0, default=default)
+
+    def head(self, stop: int=1, start: int=0) -> Iterator:
+        """Yield the first items of the iterator, without consuming
+        them."""
+        self._needs_lookahead(stop)
+        return islice(self._lookahead, start, stop)
+
+    def empty(self) -> bool:
+        """Return True if the iterable is empty."""
+        try:
+            self.peek()
+        except StopIteration:
+            return True
+        else:
+            return False
+
+    def appendleft(self, value):
+        """Add an item at the head of the iterator."""
+        self._lookahead.appendleft(value)
+
+    def extendleft(self, iterable: Iterable):
+        """Add an iterable at the head of the iterator, reversed."""
+        self._lookahead.extendleft(iterable)
+
+    def append(self, value):
+        """Add an item at the tail of the iterator."""
+        self.extend((value, ))
+
+    def extend(self, iterable: Iterable):
+        """Add an iterable at the tail of the iterator."""
+        if self._deficit or self.empty():
+            self._iterator = iter(iterable)
+            self._chained = None
+            self._deficit = 0
+            return
+
+        if self._chained is None:
+            self._chained = chained = deque([self._iterator])
+
+            def chainiter():
+                while chained:
+                    yield chained.popleft()
+
+            self._iterator = chain.from_iterable(chainiter())
+
+        self._chained.append(iter(iterable))
 
 
 AUTO = object()
