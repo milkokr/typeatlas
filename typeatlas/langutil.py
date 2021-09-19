@@ -868,7 +868,23 @@ class LanguageDatabase(object):
             else:
                 common_charset = common_charset & charset
 
-            if font.lang_unknown():
+            # Single-font mode uses charset only for color fonts (as they
+            # are emoji fonts whose language information better be ignored).
+            # For consistency, mirror the logic - this avoids some strange
+            # results, and provides good results when only Emoji fonts are
+            # passed to this method.
+            #
+            # This does not help with the tricky case where both types of
+            # fonts are selected at the same time, which will always be
+            # inconsistent. Either the Emoji samples will not show up at
+            # all (even if the non-Emoji fonts support them), or they will
+            # show up only when one of the selected fonts is a color font
+            # (which will be inconsistent and confusing for the user).
+            #
+            # For now, choose the former behaviour, as it would give the
+            # appearance that TypeAtlas does the right thing (even if it does
+            # not).
+            if font.lang_unknown() or font.color:
                 continue
 
             known_langs = True
