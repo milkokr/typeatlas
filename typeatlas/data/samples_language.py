@@ -227,7 +227,7 @@ from typeatlas.samples import add_sample, use_fallback, use_display_scripts
 from typeatlas.samples import PHRASE, PANGRAM, PANGRAM_PARTIAL_ACCENTS
 from typeatlas.samples import PANGRAM_LIMITED_ACCENTS, PARTIAL_PANGRAM, PERFECT_PANGRAM
 from typeatlas.samples import KOREAN_PANGRAM, KOREAN_CONSONANT_PANGRAM
-from typeatlas.samples import YONG_CHARACTER, SYLLABLE_PANGRAM
+from typeatlas.samples import YONG_CHARACTER, SYLLABLE_PANGRAM, SYMBOLS
 from typeatlas.samples import PRIO_PREFER, PRIO_WITHHOLD
 
 
@@ -1992,4 +1992,29 @@ add_sample('or', 'ଆମ୍ବ ମୁରବା ଭାରତର ଓଡ଼ିଶ�
 add_sample('or', 'ଜୀବ ବିଜ୍ଞାନର ଅନ୍ୟ ଅର୍ଦ୍ଧେକ ଅଂଶ ହେଉଛି ପ୍ରାଣୀମାନଙ୍କ ଉପରେ ଆଧାରିତ ପ୍ରାଣୀ ବିଜ୍ଞାନ।',
            script='Orya',
            sources=['ବିଜ୍ଞାନ - ଉଇକିପିଡ଼ିଆ, ୦୦:୩୭, ୨୩ ଅକ୍ଟୋବର ୨୦୧୭ <https://or.wikipedia.org/w/index.php?title=%E0%AC%AC%E0%AC%BF%E0%AC%9C%E0%AD%8D%E0%AC%9E%E0%AC%BE%E0%AC%A8&oldid=294714>'])
+
+
+add_sample('zxx', '■▲▼◆●◗★ ☎☛☞ ♠♣♥♦ ✁✂✃✄ ✆✇✈✉✌✍✎✏✐✑✒ ✓✔✕✖✗✘ ✙✚✛✜✢✣✤✥ ✦✧✩✪✫✬✭✮✯✰ ✱✲✳✴✵ ✶✷✸✹✺ ✻✼✽✾✿❀❁❂❃❄❅❆❇❈❉❊❋ ❍❏❐❑❒ ❖ ❘❙❚❛❜❝❞ ❡❢❣❤❥❦❧ ❨❩❪❫❬❭❮❯❰❱❲❳❴❵ ➔➘➙➚➛➜➝➞➟➠➡➢➣➤➥➦➧➨ ➩➪➫➬➭➮➯➱➲ ➳➴➵➶➷➸➹➺➻➼➽➾',
+           type=SYMBOLS, script='Zsym',
+           english='Various dingbats',
+           sources=[],
+           origin=None,
+           langpos=0, langscriptpos=0,
+           flags=['dingbats'])
+
+add_sample('zxx', '⏳☃☺☂☀✒🌜🌰🍄🍟🍰🎁🎓🎩🎮🏀🏁🏠🏰👏👉🏿🐂🐙🐝🐧🐲🐺👒👿💀👧💣💶💾📜📭🔐🔥😂😈😖😽😊🏻😊🏿😱🚉🚜🚦🚸',
+           type=SYMBOLS, script='Zsye',
+           english='Various emoji',
+           sources=[],
+           origin=None,
+           langpos=0, langscriptpos=0,
+           flags=['emoji'])
+
+add_sample('zxx', '∑∮≝⊂≨⊱⋿⋡⊰⊛⊗≋≶∢∥',
+           type=SYMBOLS, script='Zmth',
+           english='Various mathematical symbols',
+           sources=[],
+           origin=None,
+           langpos=0, langscriptpos=0,
+           flags=['math'])
 
