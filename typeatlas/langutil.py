@@ -69,7 +69,7 @@ from html import escape as htesc
 import typeatlas
 from typeatlas import proginfo, charinfo
 from typeatlas.util import OrderedSet, N_, U_, gettext_tag_regex, errmsgf
-from typeatlas.util import generic_type
+from typeatlas.util import generic_type, ManagedIter
 from typeatlas.samples import has_sample, get_sample, get_samples, ANY, ALL
 from typeatlas.samples import available_language_codes, SampleInfo
 from typeatlas.samples import LangListType, ScriptListType, ScriptType
@@ -758,6 +758,7 @@ class LanguageDatabase(object):
 
     def samples_langs(self, langs: LangListType, alternative: int=0,
                             long: bool=False, charset: SetOf[int]=None,
+                            exhaustive_search: bool=True,
                             **kwargs) -> IteratorOf[SampleInfo]:
         """Yield language samples for font testing. They can be selected by
         a list of languages (or ANY if unknown), or font-supported
@@ -772,35 +773,40 @@ class LanguageDatabase(object):
         If multiple samples are supported for the same language, you can
         pass alternative=1, 2, 3, etc. to get an alternative one. This can
         be used to vary the result to e.g. build longer text.
+
+        If exhaustive_search=False is passed, and samples are not found,
+        we will not try to find *some* samples.
         """
         if langs is ANY:
+            exhaustive_search = False
             langs = available_language_codes(long=long)
 
         langcodes = self.sort_languages(langs)
         result = get_samples(langcodes, exact=True, fallbacks=False, long=long,
                              alternative=alternative, **kwargs)
+
         if charset is not None:
             has_braille = charinfo.BRAILLE_RANGE <= charset
 
-            result = (sample for sample in result
-                      if all(ord(c) in charset for c in sample.text))
+            result = ManagedIter(sample for sample in result
+                                 if all(ord(c) in charset for c in sample.text))
+
+            if result.empty() and exhaustive_search and charset:
+                result.extend(
+                    sample
+                    for sample in get_samples(ANY, exact=True, fallbacks=False,
+                                              long=long, alternative=alternative,
+                                              **kwargs)
+                    if all(ord(c) in charset for c in sample.text))
 
             if has_braille:
-                prepend = []
-                braille_sample = None
                 for lang in chain(langorder):
                     if has_sample(lang, script='Brai', long=long):
                         braille_sample = get_sample(lang, script='Brai',
                                                     long=long,
                                                     alternative=alternative)
-                        prepend.append(braille_sample)
+                        result.append(braille_sample)
                         break
-
-                if braille_sample is not None:
-                    #first_sample = next(result, None)
-                    #prepend.insert(0, first_sample)
-                    #result = chain(iter(prepend), result)
-                    result = chain(result, [braille_sample])
 
         return result
 
