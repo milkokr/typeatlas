@@ -1831,6 +1831,9 @@ class _NoEmbeddingInfo(EmbeddingInfo):
     def __init__(self):
         self.flags = 0
 
+    def __bool__(self):
+        return False
+
     def __getattr__(self, attr):
         return getattr(self.wrapped, attr)
 
