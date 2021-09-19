@@ -847,7 +847,7 @@ class LanguageDatabase(object):
                 alternative = 0
 
         return self.samples_langs(langs, alternative, long=long,
-                                  charset=font.charset)
+                                  charset=font.get_charset())
 
     def samples_font_intersection(self,
                                   fonts: 'IterableOf[typeatlas.fontlist.FontLike]',
@@ -878,12 +878,14 @@ class LanguageDatabase(object):
             else:
                 common_langs &= langs
 
-            if font.charset is None:
+            charset = font.get_charset()
+
+            if charset is None:
                 charset_supported = False
             elif common_charset is None:
-                common_charset = font.charset
+                common_charset = charset
             else:
-                common_charset = common_charset & font.charset
+                common_charset = common_charset & charset
 
         if not common_langs:
             common_langs = []
