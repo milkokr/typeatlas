@@ -1285,6 +1285,9 @@ class _NoIbmClass(object):
     def __getitem__(self, pos):
         return self.wrapped[pos]
 
+    def __getattr__(self, attr):
+        return getattr(self.wrapped, attr)
+
     def __len__(self):
         return len(self.wrapped)
 
@@ -1628,6 +1631,9 @@ class _NoPanoseClass(object):
 
         return self.wrapped[pos]
 
+    def __getattr__(self, attr):
+        return getattr(self.wrapped, attr)
+
     def __len__(self):
         #return 10
 
@@ -1646,6 +1652,9 @@ class _NoPanoseClass(object):
 
     subclass_id = class_id
     genericfamily = subclass_name = class_name
+
+    def monospace(self):
+        return None
 
     @property
     def family(self):
@@ -1821,6 +1830,9 @@ class _NoEmbeddingInfo(EmbeddingInfo):
 
     def __init__(self):
         self.flags = 0
+
+    def __getattr__(self, attr):
+        return getattr(self.wrapped, attr)
 
     def texts(self):
         yield N_("No information embedding restrictions")
