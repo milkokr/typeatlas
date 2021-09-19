@@ -82,6 +82,9 @@ FilterRole = Qt.UserRole + 1
 
 ENABLE_COMPLEX_FILTERS = True
 
+if os.environ.get('TYPEATLAS_DEBUG_DISABLE_COMPLEX_FILTERS'):
+    ENABLE_COMPLEX_FILTERS = False
+
 
 _NOTHING = object()
 
