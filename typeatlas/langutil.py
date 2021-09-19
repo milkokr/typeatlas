@@ -825,7 +825,10 @@ class LanguageDatabase(object):
                            long: bool=False,
                            alternative: int=ANY) -> IteratorOf[SampleInfo]:
         """Get suitable samples for a given font."""
-        if font.lang_unknown():
+
+        # Colour fonts are emoji fonts, and language samples for them
+        # are not the most suitable
+        if font.lang_unknown() or font.color:
             langs = ANY
         else:
             langs = OrderedSet()
