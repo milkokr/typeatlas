@@ -1576,6 +1576,10 @@ class PanoseFontClass2(tuple):
 
         return False
 
+    def symbol(self) -> bool:
+        """Return True if this is a symbol font."""
+        return self.family.value == PANOSE_SYMBOL
+
     def string(self) -> str:
         """Convert to hex string"""
         return ''.join(('%X' % (p.value,))[-1:] for p in self)
@@ -1654,6 +1658,9 @@ class _NoPanoseClass(object):
     genericfamily = subclass_name = class_name
 
     def monospace(self):
+        return None
+
+    def symbol(self):
         return None
 
     @property

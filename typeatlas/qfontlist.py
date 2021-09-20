@@ -196,6 +196,7 @@ def updateFamilyInfo(fontDb: QtGui.QFontDatabase, family: fontlist.FontFamily):
         for style in family.styles:
             style.genericfamily = 'symbol'
             style.genericfamily_source = fontlist.SOURCE_QT
+            style.symbol = True
 
 
 def _fillDetailedInfo(font: fontlist.Font, qfont: QtGui.QFont,
@@ -559,12 +560,19 @@ class QtFontFinder(fontlist.FontFinder):
 
         if self.metadata_cache is not None:
             if self.metadata_cache.fill_classes(font):
+                if (font.panoseclass.symbol() or
+                    font.ibmclass.class_id == opentype.IBM_SYMBOLIC):
+                        font.symbol = True
                 return
 
         if qfont is None:
             qfont = self.fontDb.font(font.family, font.style, 16)
 
         fillDetailedInfo(font, qfont, rawfont)
+
+        if (font.panoseclass.symbol() or
+            font.ibmclass.class_id == opentype.IBM_SYMBOLIC):
+                font.symbol = True
 
         if (self.metadata_cache is not None and
             font.panoseclass is not opentype.NO_PANOSE_DATA and

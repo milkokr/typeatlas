@@ -853,6 +853,7 @@ class Font(object):
     sfnt = False
 
     color = False
+    symbol = False
 
     #panoseclass = None
     #ibmclass = None
@@ -1721,6 +1722,10 @@ class FontFinder(object):
         if font.monospace is None:
             # PANOSE lies
             font.monospace = font.panoseclass.monospace()
+
+        if (font.panoseclass.symbol() or
+            font.ibmclass.class_id == opentype.IBM_SYMBOLIC):
+                font.symbol = True
 
         if cache is not None:
             if not cached_classes:
