@@ -699,23 +699,34 @@ class FontDelegate(QtWidgets.QStyledItemDelegate):
     """
 
     def __init__(self, view: QtWidgets.QAbstractItemView=None,
-                       fontDb: QtGui.QFontDatabase=None, *args, **kwargs):
+                       fontDb: QtGui.QFontDatabase=None,
+                       fontItemRole: int=FontItemRole,
+                       *args, **kwargs):
         super(FontDelegate, self).__init__(*args, **kwargs)
         self.view = view
         if fontDb is None:
             fontDb = QtGui.QFontDatabase()
         self.fontDb = fontDb
+        self.fontItemRole = fontItemRole
 
     def paint(self, painter, option, index):
         self.initStyleOption(option, index)
 
         font = option.font
+        item = None
+        if self.fontItemRole is not None:
+            item = index.data(self.fontItemRole)
+
         if not font:
             return super(FontDelegate, self).paint(painter, option, index)
 
-        writingSystems = self.fontDb.writingSystems(font.family())
+        writingSystems = getattr(item, 'writingSystems', None)
+        if writingSystems is None:
+            writingSystems = self.fontDb.writingSystems(font.family())
 
         changeFont = QtGui.QFontDatabase.Latin not in writingSystems
+        if getattr(item, 'symbol', False):
+            changeFont = True
 
         excludeWs = set([])
         if not changeFont:
