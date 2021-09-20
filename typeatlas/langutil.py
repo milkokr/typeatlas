@@ -827,8 +827,8 @@ class LanguageDatabase(object):
         """Get suitable samples for a given font."""
 
         # Colour fonts are emoji fonts, and language samples for them
-        # are not the most suitable
-        if font.lang_unknown() or font.color:
+        # are not the most suitable. Symbol fonts are also special.
+        if font.lang_unknown() or font.color or font.symbol:
             langs = ANY
         else:
             langs = OrderedSet()
@@ -884,7 +884,7 @@ class LanguageDatabase(object):
             # For now, choose the former behaviour, as it would give the
             # appearance that TypeAtlas does the right thing (even if it does
             # not).
-            if font.lang_unknown() or font.color:
+            if font.lang_unknown() or font.color or font.symbol:
                 continue
 
             known_langs = True
