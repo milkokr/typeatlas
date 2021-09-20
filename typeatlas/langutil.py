@@ -799,6 +799,10 @@ class LanguageDatabase(object):
                                               **kwargs)
                     if all(ord(c) in charset for c in sample.text))
 
+            # If we're still empty, generate one
+            if result.empty() and charset and not has_braille:
+                result.append(generate_sample(charset))
+
             if has_braille:
                 for lang in chain(langorder):
                     if has_sample(lang, script='Brai', long=long):

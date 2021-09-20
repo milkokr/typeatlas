@@ -62,8 +62,9 @@
 from __future__ import unicode_literals
 
 from collections import namedtuple, defaultdict, OrderedDict
-from itertools import chain, count
+from itertools import chain, count, cycle
 import sys
+import random
 from typeatlas.util import OrderedSet, N_, warnmsgf, generic_type
 # RFC 3066 code pangrams
 
@@ -372,6 +373,51 @@ class LanguageSamples(object):
 
                 yield sample
 
+    def generate_sample(self, charset: SetOf[int]=None, size: int=None,
+                              alternative: int=0, long: bool=False,
+                              group_sizes: SequenceOf[int]=None) -> SampleInfo:
+        """Generate a sample from a character set."""
+
+        if size is None:
+            size = 490 if long else 49
+        if group_sizes is None:
+            group_sizes = [3, 5, 5, 3, 6, 4, 3, 4, 4, 3]
+
+        group_sizes = iter(cycle(group_sizes))
+
+        charset = list(charset)
+
+        if len(charset) <= size:
+            sample_chars = charset
+
+        else:
+            seed = 365896026
+
+            rand = random.Random(seed)
+
+            seed ^= len(charset)
+            for char in rand.choices(charset, k=40):
+                seed ^= char
+
+            rand.seed(seed)
+
+            sample_chars = sorted(rand.sample(charset, size))
+
+        sample_text = ''.join(map(chr, sample_chars))
+
+        i = 0
+        words = []
+        while i < len(sample_text):
+            size = next(group_sizes)
+            words.append(slice(i, i + size))
+            i += size
+
+        sample_text = ' '.join(sample_text[w] for w in words)
+
+        return SampleInfo('zxx', sample_text, 'Zyyy', 'Auto-generated', [],
+                          'Random', '', '', DEFAULT,
+                          SYMBOLS, "Random", ['random'], PRIO_DEFAULT)
+
     def add_sample(self, code: str, text: str, script: ScriptType=ANY,
                          origin: str=None, sources: SequenceOf[str]=(),
                          english: str=None, translit: str=None, original: str=None,
@@ -461,6 +507,7 @@ add_sample = main_samples.add_sample
 has_sample = main_samples.has_sample
 get_sample = main_samples.get_sample
 get_samples = main_samples.get_samples
+generate_sample = main_samples.generate_sample
 use_fallback = main_samples.use_fallback
 use_display_scripts = main_samples.use_display_scripts
 available_language_codes = main_samples.available_language_codes
