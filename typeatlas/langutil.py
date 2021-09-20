@@ -71,6 +71,7 @@ from typeatlas import proginfo, charinfo
 from typeatlas.util import OrderedSet, N_, U_, gettext_tag_regex, errmsgf
 from typeatlas.util import generic_type, ManagedIter
 from typeatlas.samples import has_sample, get_sample, get_samples, ANY, ALL
+from typeatlas.samples import generate_sample
 from typeatlas.samples import available_language_codes, SampleInfo
 from typeatlas.samples import LangListType, ScriptListType, ScriptType
 from collections import namedtuple
