@@ -214,3 +214,73 @@ class TestManagedIter:
         it2.extend([4])
 
         assert_equal(list(it1), list(it2))
+        assert_raises(StopIteration, next, it1)
+        assert_raises(StopIteration, next, it2)
+
+        it = ManagedIter(range(3))
+        it.append(3)
+        it.append(4)
+        it.append(5)
+        it.append(6)
+        it.append(7)
+
+        assert_equal(list(it), list(range(0, 8)))
+        assert_raises(StopIteration, next, it)
+
+        it = ManagedIter(range(3))
+        assert_equal(list(it), list(range(0, 3)))
+        it.append(3)
+        it.append(4)
+        it.append(5)
+        it.append(6)
+        it.append(7)
+
+        assert_equal(list(it), list(range(3, 8)))
+        assert_raises(StopIteration, next, it)
+
+        it = ManagedIter(range(3))
+        assert_equal(next(it), 0)
+        assert_equal(next(it), 1)
+        assert_equal(next(it), 2)
+        it.append(3)
+        it.append(4)
+        it.append(5)
+        it.append(6)
+        it.append(7)
+
+        assert_equal(list(it), list(range(3, 8)))
+        assert_raises(StopIteration, next, it)
+
+    def test_head(self):
+        it = ManagedIter(range(3))
+        assert_equal(list(it.head(6)), list(range(3)))
+        it.append(3)
+        it.append(4)
+        it.append(5)
+        it.append(6)
+        it.append(7)
+
+        assert_equal(list(it), list(range(0, 8)))
+        assert_raises(StopIteration, next, it)
+
+        it = ManagedIter(range(3))
+        it.append(3)
+        it.append(4)
+        assert_equal(list(it.head(6)), list(range(5)))
+        it.append(5)
+        it.append(6)
+        it.append(7)
+
+        assert_equal(list(it), list(range(0, 8)))
+        assert_raises(StopIteration, next, it)
+
+        it = ManagedIter(range(3))
+        it.append(3)
+        it.append(4)
+        it.append(5)
+        it.append(6)
+        assert_equal(list(it.head(6)), list(range(6)))
+        it.append(7)
+
+        assert_equal(list(it), list(range(0, 8)))
+        assert_raises(StopIteration, next, it)
