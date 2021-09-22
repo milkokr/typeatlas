@@ -428,7 +428,21 @@ class CompareFontModel(QtCore.QAbstractItemModel):
         if orientation == Qt.Horizontal:
             if role in [Qt.DisplayRole, Qt.DecorationRole, Qt.FontRole]:
                 index = self.fontModel.index(section, 0, QtCore.QModelIndex())
-                return index.data(role)
+                data = index.data(role)
+                if role == Qt.FontRole:
+
+                    item = index.data(FontItemRole)
+
+                    # Symbol font, can't use it for headers
+                    if getattr(item, 'symbol', False):
+                        return None
+                    writingSystems = getattr(item, 'writingSystems', None)
+                    if writingSystems is not None:
+                        if QtGui.QFontDatabase.Latin not in writingSystems:
+                            return None
+
+                return data
+
         elif orientation == Qt.Vertical:
             if role == Qt.DisplayRole:
                 name = self.tableRows[section].name
