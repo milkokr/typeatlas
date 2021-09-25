@@ -493,6 +493,8 @@ class ManagedIter:
         try:
             return self._lookahead[pos]
         except IndexError:
+            if default is not self._sentinel:
+                return default
             raise StopIteration
 
     def peek(self, default=_sentinel):

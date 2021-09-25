@@ -115,6 +115,11 @@ class TestManagedIter:
         assert_equal(next(it, 616), 616)
         assert_equal(it.empty(), True)
 
+        assert_equal(next(it, None), None)
+        assert_equal(it.peek(None), None)
+        assert_equal(it.lookahead(0, None), None)
+        assert_equal(it.lookahead(10000000, None), None)
+
         L = list(reversed(range(4, 30)))
         it = ManagedIter(lambda: L.pop() if L else -1, -1)
 
@@ -130,6 +135,9 @@ class TestManagedIter:
         assert_equal(list(it), list(range(8, 30)))
         assert_raises(StopIteration, next, it)
         assert_equal(next(it, 616), 616)
+        assert_equal(it.peek(616), 616)
+        assert_equal(it.lookahead(0, 616), 616)
+        assert_equal(it.lookahead(101, 616), 616)
 
     def test_appendleft(self):
         L = list(reversed(range(4, 30)))
@@ -153,8 +161,8 @@ class TestManagedIter:
         assert_equal(next(it), 7)
         assert_equal(list(it), list(range(8, 30)))
         assert_raises(StopIteration, next, it)
+        assert_equal(it.peek(616), 616)
         assert_equal(next(it, 616), 616)
-
 
         L = list(reversed(range(4, 30)))
         it = ManagedIter(lambda: L.pop() if L else -1, -1)
@@ -163,30 +171,35 @@ class TestManagedIter:
         assert_equal(list(it), list(range(0, 30)))
         assert_raises(StopIteration, next, it)
         assert_equal(next(it, 616), 616)
+        assert_equal(it.peek(616), 616)
 
     def test_extend_head(self):
         it = ManagedIter(range(30))
         it.extend(range(30, 60))
         assert_equal(list(it), list(range(0, 60)))
         assert_raises(StopIteration, next, it)
+        assert_equal(list(it.head(100)), [])
 
         it = ManagedIter(range(30))
         assert_equal(list(it.head(15)), list(range(0, 15)))
         it.extend(range(30, 60))
         assert_equal(list(it), list(range(0, 60)))
         assert_raises(StopIteration, next, it)
+        assert_equal(list(it.head(100)), [])
 
         it = ManagedIter(range(30))
         assert_equal(list(it.head(30)), list(range(0, 30)))
         it.extend(range(30, 60))
         assert_equal(list(it), list(range(0, 60)))
         assert_raises(StopIteration, next, it)
+        assert_equal(list(it.head(100)), [])
 
         it = ManagedIter(range(30))
         assert_equal(list(it.head(60)), list(range(0, 30)))
         it.extend(range(30, 60))
         assert_equal(list(it), list(range(0, 60)))
         assert_raises(StopIteration, next, it)
+        assert_equal(list(it.head(100)), [])
 
         it = ManagedIter(range(30))
         assert_equal(list(it.head(60)), list(range(0, 30)))
@@ -194,17 +207,20 @@ class TestManagedIter:
         assert_equal(list(it.head(60)), list(range(0, 60)))
         assert_equal(list(it), list(range(0, 60)))
         assert_raises(StopIteration, next, it)
+        assert_equal(list(it.head(100)), [])
 
         it = ManagedIter([])
         it.extend(range(0, 60))
         assert_equal(list(it), list(range(0, 60)))
         assert_raises(StopIteration, next, it)
+        assert_equal(list(it.head(100)), [])
 
         it = ManagedIter([])
         assert_raises(StopIteration, next, it)
         it.extend(range(0, 60))
         assert_equal(list(it), list(range(0, 60)))
         assert_raises(StopIteration, next, it)
+        assert_equal(list(it.head(100)), [])
 
     def test_append(self):
         it1 = ManagedIter(range(3))
@@ -250,6 +266,9 @@ class TestManagedIter:
 
         assert_equal(list(it), list(range(3, 8)))
         assert_raises(StopIteration, next, it)
+        assert_raises(StopIteration, it.peek)
+        assert_equal(it.peek(-1), -1)
+        assert_equal(it.lookahead(100, -1), -1)
 
     def test_head(self):
         it = ManagedIter(range(3))
