@@ -471,7 +471,7 @@ def find_icons(theme_name: str=None,
         if parse_theme and os.path.exists(theme_index):
             parser = configparser.RawConfigParser(strict=False)
             try:
-                parser.read_file(open(theme_index))
+                parser.read_file(open(theme_index, encoding='utf8'))
                 for section in parser.sections():
                     if section == 'Icon Theme':
                         if 'inherits' in parser.options(section):

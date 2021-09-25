@@ -263,7 +263,7 @@ def debugmsg(*args, **kwargs):
 
     if debug_memory:
         try:
-            for line in open('/proc/self/status'):
+            for line in open('/proc/self/status', encoding='utf8'):
                 if 'VmRSS' not in line:
                     continue
                 args = ('[' + ' '.join(line.split()[1:]) + ']', ) + args
@@ -696,7 +696,7 @@ def get_umask() -> int:
         # changes the umask (which TypeAtlas shouldn't do)
         path = '/proc/%d/status' % (os.getpid(), )
         try:
-            with open(path) as f:
+            with open(path, encoding='utf8') as f:
                 for line in f:
                     parts = line.split()
                     if (len(parts) == 2 and parts[0] == 'Umask:' and

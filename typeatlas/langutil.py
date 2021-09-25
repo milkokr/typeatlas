@@ -343,7 +343,7 @@ def _autofill_extra_locales():
     """On GNU/Linux and other potential Unix-like operating systems,
     do some detection of known extra locales."""
     if os.path.exists('/etc/locale.gen'):
-        for line in sorted(open('/etc/locale.gen'),
+        for line in sorted(open('/etc/locale.gen', encoding='utf8'),
                         key=lambda line: line.startswith('en')):
             line = line.strip()
             if line.startswith('#') or not line:
@@ -620,26 +620,26 @@ class LanguageDatabase(object):
         for dirname in self.iso_codes_json_search_path:
             filepath = os.path.join(dirname, ISO_639_2_JSON_NAME + '.json')
             if os.access(filepath, os.R_OK):
-                with open(filepath) as file:
+                with open(filepath, encoding='utf8') as file:
                     data = json.load(file)
                 update_lang_dict(self.language_names, data['639-2'])
 
             filepath = os.path.join(dirname, ISO_639_3_JSON_NAME + '.json')
             if os.access(filepath, os.R_OK):
-                with open(filepath) as file:
+                with open(filepath, encoding='utf8') as file:
                     data = json.load(file)
                 update_lang_dict(self.language_names, data['639-3'])
 
             filepath = os.path.join(dirname, ISO_3166_1_JSON_NAME + '.json')
             if os.access(filepath, os.R_OK):
-                with open(filepath) as file:
+                with open(filepath, encoding='utf8') as file:
                     data = json.load(file)
                 update_lang_dict(self.country_names, data['3166-1'],
                                  split=False)
 
             filepath = os.path.join(dirname, ISO_15924_JSON_NAME + '.json')
             if os.access(filepath, os.R_OK):
-                with open(filepath) as file:
+                with open(filepath, encoding='utf8') as file:
                     data = json.load(file)
 
                 for record in data['15924']:

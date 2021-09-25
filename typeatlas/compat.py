@@ -68,7 +68,7 @@ def _get_qt(order=DEFAULT_ORDER):
     filename = os.path.join(proginfo.CONFIG_DIR, proginfo.MAIN_CONFIG)
     if os.path.exists(filename):
         parser = configparser.RawConfigParser()
-        parser.read_file(open(filename))
+        parser.read_file(open(filename, encoding='utf8'))
         if parser.has_option('Runtime', 'qt_version'):
             ver = parser.get('Runtime', 'qt_version')
             if ver.isdigit() and ver.isascii():
