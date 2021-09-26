@@ -26,6 +26,7 @@ setup(
     url='https://gitlab.com/milkok/typeatlas',
     description='TypeAtlas font explorer',
     long_description=long_description,
+    long_description_content_type="text/markdown",
     author=proginfo.AUTHOR,
     author_email=proginfo.EMAIL,
     license='GPLv3',
