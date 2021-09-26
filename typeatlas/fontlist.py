@@ -189,11 +189,13 @@ def guess_file_format(filename: str, *, mimetype: str=None) -> FileFormat:
 
 FILE_TTF = add_file_format(
                 'ttf', 'TrueType', N_('TrueType Font'), 'ttf', False,
-                ['font/ttf', 'application/x-font-ttf'],
+                ['font/ttf', 'application/x-font-ttf',
+                 'font/sfnt', 'application/font-sfnt'],
                 fontformat='TrueType', annotation=annotations.TRUETYPE_FILE)
 FILE_TTC = add_file_format(
                 'ttc', 'TrueType', N_('TrueType Collection'), 'ttf', False,
-                ['font/ttf', 'application/x-font-ttf'],
+                ['font/ttf', 'application/x-font-ttf',
+                 'font/sfnt', 'application/font-sfnt'],
                 fontformat='TrueType', annotation=annotations.TRUETYPE_FILE)
 FILE_OTF = add_file_format(
                 'otf', 'OpenType', N_('OpenType Font'), 'otf', True,
