@@ -22,11 +22,13 @@
 import os.path
 import re
 import sys
+import io
 import urllib.parse
 import textwrap
 import time
 import datetime
 import binascii
+import traceback
 from typeatlas.compat import QtCore, QtGui, QtWidgets, QtModelProxies
 from typeatlas.compat import Qt, Slot, Signal, setResizeMode
 from typeatlas.compat import configuredStyle, qtGetBytes
@@ -66,11 +68,13 @@ from typeatlas.osinfo import StorageLocations
 from typeatlas.options import Options, OptionsWidget
 from typeatlas.datastore import Categorization, MetadataCache
 from typeatlas import datastore, filtering, uitools, fontmodels
+from typeatlas import archiving
 from itertools import chain, zip_longest, count
 from functools import partial
 from collections import OrderedDict, defaultdict, namedtuple
 from collections.abc import Sequence, Mapping, Iterator, Callable
 from typeatlas.util import OrderedSet, debugmsg, errmsg, generic_type
+from typeatlas.util import errmsgf, warnmsgf
 
 from typeatlas.langutil import _, N_, H_, textlang
 from html import escape as htesc
@@ -1995,7 +1999,7 @@ class TypeAtlas(QtWidgets.QMainWindow):
         self.fileFontBrowser.setDragDropMode(self.browser.DragOnly)
         self.renderingChoice.listChanged.connect(self.fileFontBrowser.reset)
         self.fileBrowser.layout.addWidget(self.fileFontBrowser)
-        self.fileFontId = None
+        self.fileFontIds = {}
 
         if fontlist.FontFinder.remote_supported():
             remoteLayout = QtWidgets.QVBoxLayout()
@@ -2703,41 +2707,93 @@ class TypeAtlas(QtWidgets.QMainWindow):
         if os.path.isdir(path):
             return
 
-        if self.fileFontId is not None:
-            self.fontDb.removeApplicationFont(self.fileFontId)
-            self.fileFontId = None
+        for fontid in self.fileFontIds:
+            self.fontDb.removeApplicationFont(fontid)
+        self.fileFontIds = {}
+        self.fileFontModel.setFamilies([])
 
-        fontid = self.fontDb.addApplicationFont(path)
-        if fontid == -1:
-            self.fileFontModel.setFamilies([])
+        # Skip unreadable files early, we don't want exceptions if those are hit
+        if not os.access(path, os.R_OK):
             return
 
-        self.fileFontId = fontid
-
         fonts = []
-
         fontFiles = {}
 
-        try:
-            fontlist.crawl_font_file(path, fontFiles)
-        except fontlist.NotSupportedError:
-            pass
+        # If this is an archive, load the fonts from it
+        if archiving.is_known_archive(path):
+            try:
+                for member in archiving.archive_iterate(path):
+                    if not member.isfile():
+                        continue
+
+                    if not fontlist.guess_file_format(member.name).is_opentype():
+                        continue
+
+                    try:
+                        data = member.getdata()
+                    except archiving.MemberTooBigError as exc:
+                        warnmsgf("Can't read font: %s", exc)
+                        continue
+
+                    fontid = self.fontDb.addApplicationFontFromData(
+                                        QtCore.QByteArray(data))
+                    if fontid == -1:
+                        continue
+
+                    fakePath = os.path.join(path, member.name)
+
+                    self.fileFontIds[fontid] = fakePath
+
+                    try:
+                        fontlist.crawl_font_file(fakePath, fontFiles,
+                                                 fileobj=io.BytesIO(data))
+
+                    except fontlist.NotSupportedError:
+                        pass
+
+                    del data
+
+            except Exception as exc:
+                errmsgf("Fatal error reading fonts from %r: %s: %s",
+                        path, type(exc).__name__, exc)
+                traceback.print_exc()
+
+        else:
+            fontid = self.fontDb.addApplicationFont(path)
+            if fontid == -1:
+                return
+
+            self.fileFontIds[fontid] = path
+
+            try:
+                fontlist.crawl_font_file(path, fontFiles)
+            except fontlist.NotSupportedError:
+                pass
 
         hints = dict((fi.file, fi.formathint)
                      for famnam, famfiles in fontFiles.items()
                      for stynam, styfiles in famfiles.items()
                      for fi in styfiles)
 
-        for familyName in self.fontDb.applicationFontFamilies(fontid):
-            for styleName in self.fontDb.styles(familyName):
-                filenames = fontFiles.get(familyName, {}).get(styleName)
-                if not filenames:
-                    filenames = [fontlist.FontFileDetectInfo(path, 0,
-                                                             hints.get(path))]
 
-                fonts.append(qfontlist.getFont(self.fontDb,
-                                               familyName, styleName,
-                                               filenames))
+        seen = set()
+
+        for fontid, fontpath in self.fileFontIds.items():
+            for familyName in self.fontDb.applicationFontFamilies(fontid):
+
+                if familyName in seen:
+                    continue
+
+                seen.add(familyName)
+
+                for styleName in self.fontDb.styles(familyName):
+                    filenames = fontFiles.get(familyName, {}).get(styleName)
+                    if not filenames:
+                        filenames = [fontlist.FontFileDetectInfo(
+                                            fontpath, 0, hints.get(fontpath))]
+                    fonts.append(qfontlist.getFont(self.fontDb,
+                                                   familyName, styleName,
+                                                   filenames))
         families = list(fontlist.get_families(fonts))
         for family in families:
             qfontlist.updateFamilyInfo(self.fontDb, family)
