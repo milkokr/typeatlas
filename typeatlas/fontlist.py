@@ -64,8 +64,9 @@ import weakref
 import urllib.parse
 import random
 import string
+import io
 import typeatlas
-from typeatlas.util import OrderedSet, N_, U_, debugmsg, generic_type
+from typeatlas.util import OrderedSet, N_, U_, debugmsg, warnmsgf, generic_type
 from typeatlas.util import MaybeLazy
 from typeatlas import opentype, external, proginfo, annotations
 from typeatlas import rangemath
@@ -2020,14 +2021,19 @@ FamilyFilePathType = MutableMappingOf[str, StyleFilePathType]
 FontCountType = MutableMappingOf[str, int]
 
 
-def crawl_font_file(filepath: str,
+def crawl_font_file(filepath: str=None,
                     font_file_by_name: FamilyFilePathType=None,
-                    font_counts: FontCountType=None):
+                    font_counts: FontCountType=None,
+                    fileobj: io.BytesIO=None, strict: bool=True):
     """Crawl a given font, and fill the first dictionary with the files for
     each family and style, providing a dictionary for the families, pointing
     to a dictionary of styles, pointing to a set of files.
 
     The second dictionary is filled with the number of fonts per file.
+
+    You can provide a file object with the fileobj arguments, which needs
+    to be seekable if more than one font can be found in the file. If
+    strict=False is not passed, not-seekable files are a fatal error.
     """
 
     if ttLib is None:
@@ -2037,6 +2043,8 @@ def crawl_font_file(filepath: str,
         font_file_by_name = {}
     if font_counts is None:
         font_counts = {}
+    if filepath is None:
+        filepath = fileobj.name
 
     numfonts = 1
 
@@ -2045,8 +2053,24 @@ def crawl_font_file(filepath: str,
         if i >= numfonts:
             break
 
+        if fileobj is not None:
+            fontfile = fileobj
+            if strict or i > 0:
+                try:
+                    fileobj.seek(0)
+                except io.UnsupportedOperation:
+                    if strict:
+                        raise
+
+                    warnmsgf("%r is not seekable, but has %d fonts",
+                             fileobj, numfonts)
+                    break
+
+        else:
+            fontfile = filepath
+
         try:
-            fontdata = ttLib.TTFont(filepath, fontNumber=i)
+            fontdata = ttLib.TTFont(fontfile, fontNumber=i)
         except (ttLib.TTLibError, EnvironmentError, ImportError):
             break
 
