@@ -167,6 +167,26 @@ def add_file_format(ext: str, name: str, description: str, icon: str=None,
     return file_format
 
 
+def guess_file_format(filename: str, *, mimetype: str=None) -> FileFormat:
+    """Return a guess of the file format."""
+
+    if mimetype is not None:
+        if mimetype in file_mimetypes:
+            return file_mimetypes[mimetype]
+
+    base, ext = os.path.splitext(filename)
+    ext = ext.lstrip('.')
+    while ext in compression_extensions:
+        compression = ext
+        base, ext = os.path.splitext(base)
+        ext = ext.lstrip('.')
+
+    if ext in file_extensions:
+        return file_extensions[ext]
+
+    return FILE_UNKNOWN_FORMAT
+
+
 FILE_TTF = add_file_format(
                 'ttf', 'TrueType', N_('TrueType Font'), 'ttf', False,
                 ['font/ttf', 'application/x-font-ttf'],
