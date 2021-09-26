@@ -142,6 +142,13 @@ class FileFormat(object):
         self.fontformat = fontformat
         self.annotation = annotation
 
+    def is_opentype(self) -> bool:
+        """Return True if this is an OpenType file."""
+        if self.annotation is None:
+            return False
+        return any(annotation is annotations.OPENTYPE_FILE
+                   for annotation in self.annotation.annotations())
+
     def __repr__(self):
         return '%s(%r, %s, <...>)' % (type(self).__name__,
                                       self.ext, self.name)
