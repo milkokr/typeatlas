@@ -3214,7 +3214,7 @@ class TypeAtlas(QtWidgets.QMainWindow):
         fileFormat = item.file_format_info
         fontFormat = item.font_format_info
 
-        if packages is None:
+        if packages is None and not self._viewingRemoteFont:
             self._getInfoPackages(item, files=files)
 
         text = []
