@@ -816,6 +816,24 @@ def modelIterateChildrenRect(model: QtCore.QAbstractItemModel,
             yield subrect
 
 
+def selectionDataChanged(selModel: QtCore.QItemSelectionModel,
+                         roles: SequenceOf[int]=None):
+    """Emit data changed for all selected indices in the model."""
+    model = selModel.model()
+    current = selModel.currentIndex()
+    selected = selModel.selectedIndexes()
+    for index in selected:
+        if roles is None:
+            model.dataChanged.emit(index, index)
+        else:
+            model.dataChanged.emit(index, index, roles)
+
+    if roles is None:
+        model.dataChanged.emit(current, current)
+    else:
+        model.dataChanged.emit(current, current, roles)
+
+
 def mimeDataCopy(mime: QtCore.QMimeData) -> QtCore.QMimeData:
     """Return a copy of the mime data."""
     copy = QtCore.QMimeData()
