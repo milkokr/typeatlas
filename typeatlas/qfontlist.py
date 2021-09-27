@@ -49,6 +49,7 @@ from __future__ import absolute_import, division
 
 import os
 import re
+import io
 import struct
 import os.path
 import typeatlas.fontlist as fontlist
@@ -546,12 +547,13 @@ class QtFontFinder(fontlist.FontFinder):
 
     def fill_detailed_info(self, font: fontlist.Font,
                                  qfont: QtGui.QFont=None,
-                                 rawfont: 'QtGui.QRawFont'=None):
+                                 rawfont: 'QtGui.QRawFont'=None, *,
+                                 fileobj: io.BufferedIOBase=None):
         if font.monospace is None:
             font.monospace = self.fontDb.isFixedPitch(font.family, font.style)
 
         try:
-            return super().fill_detailed_info(font)
+            return super().fill_detailed_info(font, fileobj=fileobj)
         except fontlist.NotSupportedError:
             pass
 
