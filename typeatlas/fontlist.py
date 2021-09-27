@@ -926,13 +926,16 @@ class Font(object):
             self.finder.fill_charset(self)
         return self.charset
 
-    def extended(self) -> 'FontExtended':
+    def extended(self, fileobj: io.BufferedIOBase=None) -> 'FontExtended':
         """Return extended information about the font. That may
         perform slow parsing of the font file using fontTools.
 
         The value is cached until you keep a reference to it, so
         if you want to avoid multiple parsings, keep it. But it is
         deleted to preserve memory, as the extended memory is big.
+
+        If this is a remote font, you can provide the file object
+        containing the data of the font.
         """
         extended = getattr(self, '_extended', lambda: None)()
         if extended is not None:
@@ -940,12 +943,16 @@ class Font(object):
 
         extended = FontExtended()
 
-        if ttLib is None or not self.file or not os.path.exists(self.file):
+        if ttLib is None or (fileobj is None and
+                             (not self.file or not os.path.exists(self.file))):
             self._extended = weakref.ref(extended)
             return extended
 
         try:
-            fontdata = ttLib.TTFont(self.file, fontNumber=self.index)
+            if fileobj is None:
+                fontdata = ttLib.TTFont(self.file, fontNumber=self.index)
+            else:
+                fontdata = ttLib.TTFont(fileobj, fontNumber=self.index)
 
         # ttLib can throw ImportError
         except (ttLib.TTLibError, EnvironmentError, ImportError):
@@ -1626,16 +1633,19 @@ class FontFinder(object):
             return "font index wrong"
         return None
 
-    def fill_detailed_info(self, font: Font):
+    def fill_detailed_info(self, font: Font, *, fileobj: io.BufferedIOBase=None):
 
         """Fill detailed information about the font parsing the PANOSE
         information or extracting it from cache. This is to be called
-        manually at the moment."""
+        manually at the moment.
 
-        if hasattr(font, 'panoseclass'):
+        If this is a remote font, you can provide the file object
+        containing the data of the font."""
+
+        if hasattr(font, 'panoseclass') and fileobj is None:
             return
 
-        if self.remote_server:
+        if self.remote_server and fileobj is None:
             font.ibmclass = opentype.NO_IBM_CLASS_DATA
             font.panoseclass = opentype.NO_PANOSE_DATA
             font.embedding = opentype.NO_EMBEDDING_INFO
@@ -1664,9 +1674,12 @@ class FontFinder(object):
         if cached_classes and color_format:
             pass
 
-        elif font.file and os.path.exists(font.file):
+        elif fileobj is not None or (font.file and os.path.exists(font.file)):
             try:
-                fontdata = ttLib.TTFont(font.file, fontNumber=font.index)
+                if fileobj is None:
+                    fontdata = ttLib.TTFont(font.file, fontNumber=font.index)
+                else:
+                    fontdata = ttLib.TTFont(fileobj, fontNumber=font.index)
 
             except (ttLib.TTLibError, EnvironmentError, ImportError):
                 pass
@@ -1761,7 +1774,7 @@ class FontFinder(object):
             if not cached_classes:
                 cache.cache_classes(font)
 
-    def fill_charset(self, font: Font):
+    def fill_charset(self, font: Font, fileobj: io.BufferedIOBase=None):
 
         """Fill charset information about the font by parsing the file with
         fonttools or from cache if it is available, in case fontconfig has
@@ -1777,11 +1790,15 @@ class FontFinder(object):
             if self.metadata_cache.fill_charset(font):
                 return True
 
-        if ttLib is None or not font.file or not os.path.exists(font.file):
+        if ttLib is None or (fileobj is None and
+                             (not font.file or not os.path.exists(font.file))):
             return False
 
         try:
-            fontdata = ttLib.TTFont(font.file, fontNumber=font.index)
+            if fileobj is None:
+                fontdata = ttLib.TTFont(font.file, fontNumber=font.index)
+            else:
+                fontdata = ttLib.TTFont(fileobj, fontNumber=font.index)
         # ttLib can throw ImportError
         except (ttLib.TTLibError, EnvironmentError, ImportError):
             return False
