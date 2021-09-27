@@ -59,6 +59,7 @@ from typeatlas.uitools import QtExecutor, Downloader, DragDropLabel
 from typeatlas.uitools import generalWidth, generalHeight
 from typeatlas.uitools import setDefaultFontFamilies
 from typeatlas.uitools import layoutIterate, matchingInverseColor
+from typeatlas.uitools import selectionDataChanged
 from typeatlas.uitools import ItemItemRole
 from typeatlas.guicommon import FontRenderingChoice, FontInfoWidget
 from typeatlas.guicommon import CustomComboBox, GroupNameDialog
@@ -2000,6 +2001,8 @@ class TypeAtlas(QtWidgets.QMainWindow):
         self.renderingChoice.listChanged.connect(self.fileFontBrowser.reset)
         self.fileBrowser.layout.addWidget(self.fileFontBrowser)
         self.fileFontIds = {}
+        self.remoteFontIds = {}
+        self.remoteFinder = None
 
         if fontlist.FontFinder.remote_supported():
             remoteLayout = QtWidgets.QVBoxLayout()
@@ -2140,6 +2143,7 @@ class TypeAtlas(QtWidgets.QMainWindow):
 
         self._currentItem = None
         self._selectedItems = []
+        self._viewingRemoteFont = False
 
         self.interfaceArrangementName = None
         self.arrangementEnableAutosave = False
@@ -2820,9 +2824,12 @@ class TypeAtlas(QtWidgets.QMainWindow):
         model = self.sender()
         selection = model.selection()
 
+        remote = model.model() is getattr(self, 'remoteFontModel', None)
+
         self._selectionOrCurrentChanged(current, selection,
                                         previous=previous,
-                                        changed='current')
+                                        changed='current',
+                                        remote=remote)
 
     @Slot(QtModelProxies.QItemSelection, QtModelProxies.QItemSelection)
     def _selectionChanged(self, selected, deselected):
@@ -2835,15 +2842,19 @@ class TypeAtlas(QtWidgets.QMainWindow):
         # The signal only gives us the newly selected
         selected = model.selection()
 
+        remote = model.model() is getattr(self, 'remoteFontModel', None)
+
         self._selectionOrCurrentChanged(current, selected,
                                         deselected=deselected,
-                                        changed='selection')
+                                        changed='selection',
+                                        remote=remote)
 
     def _selectionOrCurrentChanged(self, current: QtCore.QModelIndex,
                                          selected: QtModelProxies.QItemSelection,
                                          previous: QtCore.QModelIndex=None,
                                          deselected: QtModelProxies.QItemSelection=None,
-                                         changed: str=None):
+                                         changed: str=None,
+                                         remote: bool=False):
         """The current or the selected font changed. Update all the panes.
 
         What changed is specified with the changed arguemnt ('selection'
@@ -2853,11 +2864,11 @@ class TypeAtlas(QtWidgets.QMainWindow):
                                 if current.isValid() else None,
                             [idx.data(FontItemRole)
                              for idx in selected.indexes()],
-                            changed=changed)
+                            changed=changed, remote=remote)
 
     def _showFontsInfo(self, item: Optional[fontlist.FontLike],
                              selected: SequenceOf[fontlist.FontLike]=[],
-                             changed: str=None):
+                             changed: str=None, remote: bool=False):
         """Show the info for the given current and selected fonts,
         updating all the panes. Called when the selection or current has
         changed.
@@ -2886,6 +2897,7 @@ class TypeAtlas(QtWidgets.QMainWindow):
 
         self._currentItem = item
         self._selectedItems = selected
+        self._viewingRemoteFont = remote
 
         # Using a timer to call _showFontsInfoPerform, as Qt would
         # send two separate signals for every change, and we need
@@ -2901,9 +2913,12 @@ class TypeAtlas(QtWidgets.QMainWindow):
 
         item = self._currentItem
         selected = self._selectedItems
+        remote = self._viewingRemoteFont
 
         self.rememberDockSizes()
         extended = item.extended()
+
+        self._loadRemoteFonts(item, selected)
 
         fileFormat = item.file_format_info
         fontFormat = item.font_format_info
@@ -3018,6 +3033,58 @@ class TypeAtlas(QtWidgets.QMainWindow):
 
         self._updateInfoPane(files=files)
         self.fixDockSizes()
+
+    def _loadRemoteFonts(self, item: Optional[fontlist.FontLike],
+                               selected: SequenceOf[fontlist.FontLike]=[]):
+        """Load any remote fonts."""
+
+        changed = False
+
+        # Load remote fonts
+        for fontid in self.remoteFontIds:
+            changed = True
+            self.fontDb.removeApplicationFont(fontid)
+        self.remoteFontIds = {}
+
+        if not self._viewingRemoteFont:
+            if changed:
+                selectionDataChanged(self.remoteFontBrowser.selectionModel())
+            return
+
+        fontFiles = {}
+
+        seen = set()
+        for curItem in chain([item], selected):
+            style = curItem if curItem.is_style else curItem.main
+
+            if style in seen:
+                continue
+            seen.add(style)
+
+            data = style.get_font_data()
+            if data is None:
+                continue
+
+            fontid = self.fontDb.addApplicationFontFromData(
+                                        QtCore.QByteArray(data))
+            if fontid is not None:
+                changed = True
+                fileobj = io.BytesIO(data)
+
+                self.remoteFinder.fill_detailed_info(style, fileobj=fileobj)
+                if not style.charset:
+                    style.charset = None
+                    fileobj.seek(0)
+                    self.remoteFinder.fill_charset(style, fileobj)
+
+                fileobj.seek(0)
+                self.remoteFontIds[fontid] = style.extended(fileobj)
+                for familyName in self.fontDb.applicationFontFamilies(fontid):
+                    if familyName == style.family:
+                        qfontlist.updateFamilyInfo(self.fontDb, style)
+
+        if changed:
+            selectionDataChanged(self.remoteFontBrowser.selectionModel())
 
     @Slot()
     def _repopulateSearches(self):
@@ -3427,6 +3494,7 @@ class TypeAtlas(QtWidgets.QMainWindow):
         debugmsg("Loading remote fonts...")
         finder = fontlist.FontFinder(remote_server=server,
                                      executor=self.executor)
+        self.remoteFinder = finder
         families = list(finder.families())
         debugmsg("Filling detailed font info...")
         for family in families:
