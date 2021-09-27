@@ -1138,6 +1138,29 @@ class Font(object):
                     else:
                         yield FontMetrics(filename, 0)
 
+    def get_font_data(self) -> Optional[bytes]:
+        """Return a file object reading the font file. Returns None if the
+        file cannot be read."""
+        if not self.file:
+            return None
+
+        if not self.remote:
+            if not os.access(self.file, os.R_OK):
+                return None
+            return open(self.file, 'rb').read()
+
+        else:
+            callbacks =  external.CallCallbacks.single(
+                lambda exitcode, stdout: None if exitcode else stdout,
+                line_mode=False, chunked=False,
+                require_blocking=True)
+
+            url = urllib.parse.urlparse(self.file)
+            remote_path = urllib.parse.unquote(url.path)
+
+            return self.finder.cat_cmd.custom(['--', remote_path],
+                                              callbacks=callbacks, wait=True)
+
     def __getattr__(self, attr):
         try:
             default = property_default_getters[attr]
@@ -1209,6 +1232,9 @@ class FontFinder(object):
         if remote_server is not None:
             ssh = external.command_providing(executor, 'ssh-executor', None)
             executor = ssh.get_ssh_executor(remote_server)
+            self.cat_cmd = external.CustomCommand(executor, 'cat')
+        else:
+            self.cat_cmd = None
 
         self.fc_list = external.command_providing(executor, 'fc-list', None)
         self.fc_match = external.command_providing(executor, 'fc-match', None)
