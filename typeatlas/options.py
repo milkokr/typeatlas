@@ -130,13 +130,15 @@ class Option(object):
                        unit: str=None, attribute: str=None,
                        signalAttribute: str=None,
                        fromString: Callable=None, parseString: Callable=None,
-                       toString: Callable=None):
+                       toString: Callable=None,
+                       description: str=None):
 
         if hasDefault is None:
             #hasDefault = True if choices oeelse False
             hasDefault = True
         self.name = name
         self.section = section
+        self.description = description
         self.type = type
         self.choices = choices
         self.label = label
@@ -370,12 +372,17 @@ class Option(object):
                         parent: QtWidgets.QWidget=None) -> QtWidgets.QWidget:
         """Return a widget to edit this option."""
         if self.choices:
-            return self.getComboBox(options, parent)
+            result = self.getComboBox(options, parent)
         elif issubclass(self.type, bool):
-            return self.getCheckbox(options, parent)
+            result = self.getCheckbox(options, parent)
         else:
             # TODO: LineEdit?
-            return self.getComboBox(options, parent)
+            result = self.getComboBox(options, parent)
+
+        if self.description:
+            result.setWhatsThis(_(self.description))
+
+        return result
 
 
 FONT_SIZES = lambda: QtGui.QFontDatabase.standardSizes()
