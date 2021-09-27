@@ -35,7 +35,7 @@ from collections.abc import Callable
 from collections import OrderedDict
 from typeatlas.util import OrderedSet, Overwriter, generic_type
 from typeatlas.util import MaybeLazy
-from typeatlas import external, proginfo
+from typeatlas import external, proginfo, util
 import configparser
 import shutil
 import io
@@ -448,6 +448,54 @@ options = [
     Option('standard-checkboxes', 'display',
            N_("Use standard OS style for all checkboxes"),
            type=bool, default=False),
+
+    Option('file-load-enabled', 'security',
+           N_('Enable font file loading'),
+           description=N_('Allow fonts to be loaded from these files. '
+                          'These can be a potential security risk if '
+                          'vulnerabilities are found in font or archive '
+                          'libraries on your system.'),
+           type=bool, default=True),
+    Option('file-load-auto', 'security',
+           N_('Load automatically when clicked'),
+           description=N_('Do not require the user to explicitly load '
+                          'double-click the font file to load it'),
+           type=bool, default=True),
+    Option('file-allow-fonttools', 'security',
+           N_('Allow metadata discovery using fontTools'),
+           type=bool, default=True),
+
+    Option('zip-load-enabled', 'security',
+           N_('Enable font file loading from archives'),
+           description=N_('Allow fonts to be loaded from these files. '
+                          'These can be a potential security risk if '
+                          'vulnerabilities are found in font or archive '
+                          'libraries on your system.'),
+           type=bool, default=True),
+    Option('zip-bomb-limit', 'security',
+           N_('Zip bomb protection limit'),
+           type=int, default=64 * 1024 * 1024,
+           parseString=util.parse_size, toString=util.format_size),
+
+    Option('remote-enabled', 'security',
+           N_('Enable browsing of remote fonts'),
+           type=bool, default=True),
+    Option('remote-load-enabled', 'security',
+           N_('Enable remote font loading'),
+           description=N_('Allow fonts to be loaded from remote servers. '
+                          'These can be a potential security risk if '
+                          'vulnerabilities are found in font or archive '
+                          'libraries on your system.'),
+           type=bool, default=True),
+    Option('remote-load-auto', 'security',
+           N_('Load automatically when clicked'),
+           description=N_('Do not require the user to explicitly load '
+                          'double-click the font file to load it'),
+           type=bool, default=True),
+    Option('remote-allow-fonttools', 'security',
+           N_('Allow metadata discovery using fontTools'),
+           type=bool, default=True),
+
 
     Option('qt-version', 'runtime', N_('Preferred Qt version'),
             choices=[
