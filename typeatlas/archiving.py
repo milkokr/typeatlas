@@ -65,7 +65,7 @@ extension_factories = {}
 mimetype_factories = {}
 
 
-def get_factory(filename: str=None, fileobj: io.BytesIO=None, *,
+def get_factory(filename: str=None, fileobj: io.BufferedIOBase=None, *,
                 mimetype: str=None) -> type:
 
     """Return the archive factory for the given archive type."""
@@ -114,7 +114,7 @@ def is_known_archive(filename: str, *, mimetype: str=None) -> bool:
     return False
 
 
-def get_archive(filename: str=None, fileobj: io.BytesIO=None, *,
+def get_archive(filename: str=None, fileobj: io.BufferedIOBase=None, *,
                 mimetype: str=None) -> 'Archive':
 
     """Return the archive object that can iterate over the files
@@ -124,7 +124,7 @@ def get_archive(filename: str=None, fileobj: io.BytesIO=None, *,
     return factory(filename, fileobj)
 
 
-def archive_iterate(filename: str=None, fileobj: io.BytesIO=None, *,
+def archive_iterate(filename: str=None, fileobj: io.BufferedIOBase=None, *,
                     mimetype: str=None) -> Iterator:
     """Iterate over the provided archive filename or object."""
     return get_archive(filename, fileobj, mimetype=mimetype).iterate()
@@ -156,7 +156,7 @@ class Archive:
     mimetypes = ()
     compressions = ()
 
-    def __init__(self, filename: str=None, fileobj: io.BytesIO=None):
+    def __init__(self, filename: str=None, fileobj: io.BufferedIOBase=None):
         self.filename = filename
         self.fileobj = fileobj
 

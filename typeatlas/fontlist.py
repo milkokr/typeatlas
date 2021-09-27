@@ -2024,7 +2024,7 @@ FontCountType = MutableMappingOf[str, int]
 def crawl_font_file(filepath: str=None,
                     font_file_by_name: FamilyFilePathType=None,
                     font_counts: FontCountType=None,
-                    fileobj: io.BytesIO=None, strict: bool=True):
+                    fileobj: io.BufferedIOBase=None, strict: bool=True):
     """Crawl a given font, and fill the first dictionary with the files for
     each family and style, providing a dictionary for the families, pointing
     to a dictionary of styles, pointing to a set of files.
