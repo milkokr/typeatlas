@@ -53,6 +53,7 @@ import os
 import os.path
 import sys
 import traceback
+import posixpath
 
 import typeatlas
 from collections.abc import Callable
@@ -940,3 +941,17 @@ class FontyPythonCommand(ExternalCommand):
         """View the directory with fontypython."""
         return [self.executable_path, os.path.abspath(path)]
 
+
+class CustomCommand(ExternalCommand):
+
+    """Execute custom commands on the remote server."""
+
+    def __init___(self, executor: Executor, executable_path: str):
+        self.executable = posixpath.basename(executable_path)
+        self.provides = [self.executable]
+        super().__init__(executor, executable_path)
+
+    @CallDefinition.make(wait=ON_DEMAND)
+    def custom(self, args: IterableOf[AnyStr]):
+        """Run the custom command with any arguments."""
+        return [self.executable_path] + list(args)
