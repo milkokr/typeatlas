@@ -2011,6 +2011,8 @@ class TypeAtlas(QtWidgets.QMainWindow):
             self.remoteFontBrowser = self.remoteFontModel.treeView = \
                     QtWidgets.QTreeView()
             self.remoteFontBrowser.setModel(self.remoteFontModel)
+            self.remoteFontBrowser.setSelectionMode(QtWidgets.QTreeView.ExtendedSelection)
+            self.renderingChoice.listChanged.connect(self.remoteFontBrowser.reset)
             remoteLayout.addWidget(self.remoteServer)
             remoteLayout.addWidget(self.remoteFontBrowser)
             self.remoteServer.setPlaceholderText(_('Enter server name...'))
