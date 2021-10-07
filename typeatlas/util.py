@@ -932,12 +932,11 @@ class Overwriter(object):
                 else:
                     raise
 
-        if self._keep_perms:
-            # That wouldn't preserve ACLs and fancy stuff like that
-            if os.path.exists(self._path):
-                shutil.copymode(self._path, self._temppath)
-            else:
-                os.chmod(self._temppath, self._create_mode & ~get_umask())
+        # That wouldn't preserve ACLs and fancy stuff like that
+        if self._keep_perms and os.path.exists(self._path):
+            shutil.copymode(self._path, self._temppath)
+        else:
+            os.chmod(self._temppath, self._create_mode & ~get_umask())
 
         os.rename(self._temppath, self._path)
         self._fsync_path(os.path.dirname(self._path))
@@ -981,12 +980,11 @@ class Overwriter(object):
             # certain how to handle it. Rethink.
             os.rename(self._path, backuppath)
 
-        if self._keep_perms:
-            # That wouldn't preserve ACLs and fancy stuff like that
-            if os.path.exists(self._path):
-                shutil.copymode(self._path, self._temppath)
-            else:
-                os.chmod(self._temppath, self._create_mode & ~get_umask())
+        # That wouldn't preserve ACLs and fancy stuff like that
+        if self._keep_perms and os.path.exists(self._path):
+            shutil.copymode(self._path, self._temppath)
+        else:
+            os.chmod(self._temppath, self._create_mode & ~get_umask())
 
         os.rename(self._temppath, self._path)
         # self._fsync_path(os.path.dirname(self._path))
