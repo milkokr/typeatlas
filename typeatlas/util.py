@@ -957,15 +957,22 @@ class Overwriter(object):
         if os.path.exists(self._path):
             if self._backup:
                 backuppath = self._path + self._backup
+
+                try:
+                    os.unlink(backuppath)
+                except EnvironmentError as exc:
+                    if exc.errno != errno.ENOENT:
+                        raise
+
             else:
                 dirpath, filename = os.path.split(self._path)
-                backuppath = tempfile.mktemp('old', filename, dirpath)
 
-            try:
-                os.unlink(backuppath)
-            except EnvironmentError as exc:
-                if exc.errno != errno.ENOENT:
-                    raise
+                while True:
+                    # There is a race here, but os.rename() will fail should
+                    # we hit it. Generate a name that does not exist, at least.
+                    backuppath = tempfile.mktemp('old', filename, dirpath)
+                    if os.path.exists(backuppath):
+                        break
 
             # No atomic rename is supported in Python on Windows, so
             # save the file to a backup name, and remove the backup if
@@ -975,16 +982,17 @@ class Overwriter(object):
             os.rename(self._path, backuppath)
 
         if self._keep_perms:
-            shutil.copymode(self._path, self._temppath)
+            # That wouldn't preserve ACLs and fancy stuff like that
+            if os.path.exists(self._path):
+                shutil.copymode(self._path, self._temppath)
+            else:
+                os.chmod(self._temppath, self._create_mode & ~get_umask())
 
         os.rename(self._temppath, self._path)
         # self._fsync_path(os.path.dirname(self._path))
 
         if backuppath and not self._backup:
-            if os.path.exists(self._path):
-                shutil.copymode(self._path, self._temppath)
-            else:
-                os.chmod(self._temppath, self._create_mode & ~get_umask())
+            os.unlink(backuppath)
 
     def __repr__(self):
         return '<%s for %r at %x>' % (type(self).__name__,
