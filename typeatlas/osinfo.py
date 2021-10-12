@@ -121,7 +121,7 @@ is_linux = False
 is_darwin = False
 
 if sys.platform.startswith('linux'):
-    if platform.dist()[0].lower() == 'ubuntu':
+    if hasattr(platform, 'dist') and platform.dist()[0].lower() == 'ubuntu':
         oslogo = OsLogo(None, 'Ubuntu', u'\uE0FF')
     #oslogo = OsLogo('distributor-logo', None, None)
     oslogo = OsLogo(None, 'Linux Libertine O', u'\uE000')

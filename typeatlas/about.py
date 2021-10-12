@@ -213,9 +213,11 @@ class SystemAbout(QtWidgets.QDialog):
         text.append(' '.join(platform.system_alias(platform.system(),
                                                    platform.release(),
                                                    platform.version())))
-        distname, version, distid = platform.dist()
-        if distname:
-            text.append(' '.join([distname.capitalize(), version, distid]))
+
+        if hasattr(platform, 'dist'):
+            distname, version, distid = platform.dist()
+            if distname:
+                text.append(' '.join([distname.capitalize(), version, distid]))
 
         text.append(_('System: %s') % (platform.machine(), ))
 
