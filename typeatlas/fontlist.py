@@ -541,7 +541,7 @@ def fromutf8(value: bytes) -> str:
     try:
         return value.decode('utf8')
     except ValueError:
-        return value.encode('string_escape').decode('ascii')
+        return value.decode('ascii', 'backslashreplace')
 
 
 def maybebool(value: bytes) -> Union[bool, str]:
