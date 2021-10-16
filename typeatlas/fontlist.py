@@ -1394,6 +1394,11 @@ class FontFinder(object):
         return self.fc_list.custom(['-f', self._fc_req_format(), '--'],
                                    callbacks=callbacks)
 
+    def families(self, *args, **kwargs) -> 'IteratorOf[FontFamily]':
+        """Get the fonts grouped by family, otherwise do the same
+        as fonts()."""
+        return get_families(self.fonts(*args, **kwargs))
+
     def _parse_fontdirs(self, stdout: bytes) -> SetOf[str]:
         """Parse the fontdirs from fc-list's output"""
         filepaths = stdout.split(self.sep)
@@ -1488,11 +1493,6 @@ class FontFinder(object):
             require_blocking=True)
 
         return self.fc_match.custom(cmdline, callbacks=callbacks)
-
-    def families(self, *args, **kwargs) -> 'IteratorOf[FontFamily]':
-        """Get the fonts grouped by family, otherwise do the same
-        as fonts()."""
-        return get_families(self.fonts(*args, **kwargs))
 
     def fill_generic_families(self, elements: 'IterableOf[Union[Font, FontFamily]]'):
         """Fill the generic families for the provided fonts and families.
