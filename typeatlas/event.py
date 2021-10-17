@@ -104,6 +104,35 @@ SIGNAL_DEBUG = SIGNAL_TRACE
 _empty_dict = {}
 
 
+class _FakeMethod:
+
+    """A method called by name. This just provides __get__ that accesses
+    the given name of the given object. This is used to unpack builtin
+    methods, which are special descriptors that can only be created
+    through access of the attribute, not directly."""
+
+    __slots__ = ('name', )
+
+    def __init__(self, name: str):
+
+        self.name = name
+
+        #def __get__(instance, owner=None):
+        #    return getattr(instance, name)
+        #self.__get__ = __get__
+
+    def __eq__(self, other):
+        if isinstance(other, _FakeMethod):
+            return self.name == other.name
+        return NotImplemented
+
+    def __hash__(self):
+        return hash(self.name)
+
+    def __get__(self, instance, owner=None):
+        return getattr(instance, self.name)
+
+
 def _unpack_method(func: Callable) -> tuple:
 
     """Extract method as a tuple. If this is a method, this
@@ -112,9 +141,25 @@ def _unpack_method(func: Callable) -> tuple:
     and None."""
 
     try:
-        return func.__self__, func.__func__
+        instance = func.__self__
     except AttributeError:
         return func, None
+
+    try:
+        return instance, func.__func__
+
+    except AttributeError:
+
+        # If this is a named builtin method, try to access it by
+        # name instead
+        try:
+            name = func.__name__
+
+        except AttributeError:
+            return func, None
+
+        else:
+            return instance, _FakeMethod(name)
 
 
 class ObWeakRef(weakref.ref):
