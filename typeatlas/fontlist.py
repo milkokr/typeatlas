@@ -2289,7 +2289,8 @@ class FontFinder(object):
             if not cached_classes:
                 cache.cache_classes(font)
 
-    def fill_charset(self, font: Font, fileobj: io.BufferedIOBase=None):
+    def fill_charset(self, font: Font,
+                           fileobj: io.BufferedIOBase=None) -> bool:
 
         """Fill charset information about the font by parsing the file with
         fonttools or from cache if it is available, in case fontconfig has

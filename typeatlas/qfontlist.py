@@ -581,10 +581,10 @@ class QtFontFinder(fontlist.FontFinder):
             font.ibmclass is not opentype.NO_IBM_CLASS_DATA):
                 self.metadata_cache.cache_classes(font)
 
-    def fill_charset(self, font: fontlist.Font, *args, **kwargs):
+    def fill_charset(self, font: fontlist.Font, *args, **kwargs) -> bool:
         super().fill_charset(font, *args, **kwargs)
         if font.charset is not None:
-            return
+            return True
 
         if not hasattr(QtGui, 'QRawFont'):
             return False
