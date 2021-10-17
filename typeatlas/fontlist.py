@@ -68,7 +68,7 @@ import io
 import contextlib
 import typeatlas
 from typeatlas.util import OrderedSet, N_, U_, debugmsg, warnmsgf, generic_type
-from typeatlas.util import MaybeLazy
+from typeatlas.util import MaybeLazy, ManagedIter, AttributeSequence
 from typeatlas import opentype, external, proginfo, annotations
 from typeatlas import rangemath, event
 from collections import OrderedDict, namedtuple, defaultdict
@@ -83,6 +83,7 @@ except ImportError:
 SequenceOf = generic_type('Sequence')
 TupleOf = generic_type('Tuple')
 Union = generic_type('Union')
+Literal = generic_type('Literal')
 Optional = generic_type('Optional')
 SetOf = generic_type('Set')
 IterableOf = generic_type('Iterable')
@@ -1222,6 +1223,31 @@ class FontExtended(object):
     version = None
 
 
+class FontResult(AttributeSequence):
+
+    """Result from a FontFinder.fetchall().
+
+    Can be unpacked as families, featuresets = finder.fetchall(), too.
+    """
+
+    sequence_attributes = ['families', 'featuresets']
+
+    def __init__(self, families: 'SequenceOf[FontFamily]',
+                       featuresets: 'FeatureSets', *,
+                       finder: 'FontFinder'=None):
+
+        super().__init__()
+
+        if finder is None:
+            for family in families:
+                finder = family.finder
+                break
+
+        self.finder = finder
+        self.families = families
+        self.featuresets = featuresets
+
+
 MERGE_NOTHING = None
 MERGE_BY_STYLE = attrgetter('family', 'style')
 MERGE_BY_FULLNAME = attrgetter('fullname')
@@ -1231,6 +1257,8 @@ class FontFinder(object):
     """Discover all the fonts on the system, though fontconfig. Subclasses
     may discover fonts from other facilities (e.g. Qt), or enrich the
     font information from these facilities.
+
+    The high-level API for getting all fonts is fetchall().
 
     You can provide a cache for the metadata, and an executor (e.g. a
     remote SSH executor for fonts on a remote server) to use to
@@ -1248,6 +1276,7 @@ class FontFinder(object):
                        remote_server: str=None,
                        executor: external.Executor=None,
                        metadata_cache: 'typeatlas.datastore.MetadataCache'=None, *,
+                       debug_messages: bool=True,
                        zip_bomb_limit: Optional[int]=16777216,
                        forbid_fonttools: bool=False):
 
@@ -1277,9 +1306,103 @@ class FontFinder(object):
         self.propreq = propreq
         self.remote_server = remote_server
         self.metadata_cache = metadata_cache
+        self.debug_messages = debug_messages
+        self.translate_string = N_
 
         self.zip_bomb_limit = zip_bomb_limit
         self.forbid_fonttools = forbid_fonttools
+
+    def fetchall(self, *args,
+                       fontsource: Union[str, Callable]='families',
+                       group_families: Union[bool, Literal[AUTO]]=AUTO,
+                       guess_generic_families: bool=AUTO,
+                       **kwargs) -> FontResult:
+
+        """Get all the fonts on the system, grouped as families.
+
+        You can specify the source with fontsource= (either 'families',
+        or 'standard' or a callable), providing the arguments for the
+        font factory that will then be called. E.g. 'standard' has
+        one positional which= argument.
+
+        Fonts registered with load*() or register() can be listed
+        by providing 'registered' as the font source, and the list of
+        LoadedFontFile objects returned by those methods.
+
+        If you're requesting only a part of the fonts, you can,
+        and probably should, disable guessing of generic families
+        with guess_generic_families=False.
+        """
+        _ = self.translate_string
+
+        first_run = not self.metadata_cache
+
+        self._started(N_('Loading font list...'))
+
+        if fontsource == 'standard':
+            fontsource = 'standard_families'
+        if fontsource == 'registered':
+            fontsource = 'registered_families'
+
+        if fontsource in ['families', 'standard_families',
+                          'registered_families']:
+            fonts = getattr(self, fontsource)(*args, **kwargs)
+        else:
+            fonts = fontsource(*args, **kwargs)
+
+        if guess_generic_families is AUTO:
+            if self.remote_server:
+                guess_generic_families = False
+            elif fontsource in ['fonts', 'families']:
+                guess_generic_families = True
+            else:
+                guess_generic_families = False
+
+        if group_families is AUTO:
+            if isinstance(fontsource, str):
+                group_families = fontsource in ['fonts', 'standard_fonts',
+                                                'registered_fonts']
+
+            else:
+                fonts = ManagedIter(fonts)
+                first = fonts.peek(default=None)
+                group_families = first is None or not first.is_family
+
+        if group_families:
+            fonts = get_families(fonts)
+
+        families = list(fonts)
+
+        self._started(N_('Filling detailed font info...'))
+
+        for i, family in enumerate(families):
+            if first_run:
+                self.progress(
+                    i, len(families),
+                    message=_('First run: Parsing detailed font information: '
+                              '{} out of {}').format(i, len(families)))
+
+            self.fill_extra_family_info(family)
+            for style in family.styles:
+                self.fill_detailed_info(style)
+
+        self.ended()
+
+        self._started(N_('Building global feature table...'))
+        featuresets = FeatureSets(families)
+        self.ended()
+
+        if guess_generic_families:
+            self._started(N_('Attempting to guess family type...'))
+            self.fill_generic_families(families)
+            self.ended()
+
+        if self.metadata_cache is not None:
+            if self.debug_messages:
+                debugmsg("Saving metadata cache...")
+            self.metadata_cache.autosave()
+
+        return FontResult(families, featuresets, finder=self)
 
     @contextlib.contextmanager
     def progress_observer(self, started: Callable=None,
@@ -1317,6 +1440,23 @@ class FontFinder(object):
 
         finally:
             self.forbid_fonttools, self.zip_bomb_limit = previous
+
+    def enable_translations(self, translate: Callable=None):
+        """Enable the translation of messages produced by e.g.
+        fetchall()."""
+        if translate is None:
+            from typeatlas.langutil import _ as translate
+        if not callable(translate):
+            raise TypeError("%r not callable" % (translate, ))
+        self.translate_string = translate
+
+    def _started(self, message: str):
+        """Emit started(), translating the message if needed, and sending
+        printing a debug line."""
+
+        if self.debug_messages:
+            debugmsg(message)
+        self.started(self.translate_string(message))
 
     def _check_fontconfig_supported(self, ignore_disablement: bool=False):
         """Raise NotSupportedError if we don't support fontconfig.
