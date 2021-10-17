@@ -665,8 +665,13 @@ class QtFontFinder(fontlist.FontFinder):
                     if not filenames:
                         filenames = [fontlist.FontFileDetectInfo(
                                             fontpath, 0, hints.get(fontpath))]
-                    yield getFont(self.fontDb, familyName, styleName,
-                                  filenames)
+                    font = getFont(self.fontDb, familyName, styleName,
+                                   filenames)
+
+                    font.external = True
+                    font.loaded_in_finder = self
+
+                    yield font
 
 
 _wsToKey = None

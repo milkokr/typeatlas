@@ -912,6 +912,10 @@ class Font(object):
     file_format_info = FILE_UNKNOWN_FORMAT
     font_format_info = FONT_UNKNOWN_FORMAT
 
+    # If the font is external or loaded in a different finder.
+    external = False
+    loaded_in_finder = None
+
     #def get_file_format(self):
     #    return file_extensions.get(self.ext, FILE_UNKNOWN_FORMAT)
 
@@ -1255,12 +1259,16 @@ class LoadedFontFile:
     def __init__(self, finder: 'FontFinder',
                        path: str=None,
                        fontid: Any=None,
+                       font: 'FontLike'=None,
                        fontfiles: 'FamilyFilePathType'=None,
                        fontcounts: 'FontCountType'=None):
 
         self.finder = finder
+
         self.path = path
         self.fontid = fontid
+        self.font = font
+
         self.fontfiles = fontfiles
         self.fontcounts = fontcounts
 
@@ -1517,6 +1525,9 @@ class FontFinder(object):
         #       if familyName == style.family:
         #           qfontlist.updateFamilyInfo(self.fontDb, style)
 
+        loaded.font = font
+        font.loaded_in_finder = self
+
         self.complete(font, force_fill=True,
                       path=path, data=data, fileobj=fileobj)
 
@@ -1586,6 +1597,9 @@ class FontFinder(object):
 
     def unload(self, loaded: LoadedFontFile):
         """Unload a font loaded with loadfont() or loadfile()."""
+        if loaded.font is not None:
+            loaded.font.external = False
+            loaded.font.loaded_in_finder = None
         self.unregister(loaded)
 
     def _started(self, message: str):
@@ -1869,6 +1883,9 @@ class FontFinder(object):
                         font.fontformat = formathint
 
                     autofill_font_info(font)
+
+                    font.external = True
+                    font.loaded_in_finder = self
 
                     yield font
 
