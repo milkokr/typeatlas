@@ -1282,6 +1282,19 @@ class FontFinder(object):
         self.forbid_fonttools = forbid_fonttools
 
     @contextlib.contextmanager
+    def progress_observer(self, started: Callable=None,
+                                ended: Callable=None,
+                                progress: Callable=None):
+        """Return a context manager connecting the started, ended,
+        and progress signals to the provided callbacks (see their
+        signature), and disconnecting them when done."""
+
+        with self.started.connected(started):
+            with self.ended.connected(ended):
+                with self.progress.connected(progress):
+                    yield
+
+    @contextlib.contextmanager
     def security_options(self, *,
                          forbid_fonttools: bool=AUTO,
                          zip_bomb_limit: Optional[int]=AUTO):
