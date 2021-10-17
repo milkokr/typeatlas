@@ -548,24 +548,25 @@ class QtFontFinder(fontlist.FontFinder):
     def fill_detailed_info(self, font: fontlist.Font,
                                  qfont: QtGui.QFont=None,
                                  rawfont: 'QtGui.QRawFont'=None, *,
-                                 fileobj: io.BufferedIOBase=None):
+                                 fileobj: io.BufferedIOBase=None) -> bool:
         if font.monospace is None:
             font.monospace = self.fontDb.isFixedPitch(font.family, font.style)
 
         try:
-            return super().fill_detailed_info(font, fileobj=fileobj)
+            if super().fill_detailed_info(font, fileobj=fileobj):
+                return
         except fontlist.NotSupportedError:
             pass
 
         if hasattr(font, 'panoseclass'):
-            return
+            return True
 
         if self.metadata_cache is not None:
             if self.metadata_cache.fill_classes(font):
                 if (font.panoseclass.symbol() or
                     font.ibmclass.class_id == opentype.IBM_SYMBOLIC):
                         font.symbol = True
-                return
+                return True
 
         if qfont is None:
             qfont = self.fontDb.font(font.family, font.style, 16)
@@ -580,6 +581,8 @@ class QtFontFinder(fontlist.FontFinder):
             font.panoseclass is not opentype.NO_PANOSE_DATA and
             font.ibmclass is not opentype.NO_IBM_CLASS_DATA):
                 self.metadata_cache.cache_classes(font)
+
+        return True
 
     def fill_charset(self, font: fontlist.Font, *args, **kwargs) -> bool:
         super().fill_charset(font, *args, **kwargs)

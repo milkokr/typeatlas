@@ -2146,28 +2146,33 @@ class FontFinder(object):
             return "font index wrong"
         return None
 
-    def fill_detailed_info(self, font: Font, *, fileobj: io.BufferedIOBase=None):
+    def fill_detailed_info(self, font: Font, *,
+                                 fileobj: io.BufferedIOBase=None) -> bool:
 
         """Fill detailed information about the font parsing the PANOSE
         information or extracting it from cache. This is to be called
         manually at the moment.
 
         If this is a remote font, you can provide the file object
-        containing the data of the font."""
+        containing the data of the font.
+
+        Return True if we filled the information, even with e.g.
+        NO_IBM_CLASS_DATA
+        """
 
         if hasattr(font, 'panoseclass') and fileobj is None:
-            return
+            return True
 
         if self.remote_server and fileobj is None:
             font.ibmclass = opentype.NO_IBM_CLASS_DATA
             font.panoseclass = opentype.NO_PANOSE_DATA
             font.embedding = opentype.NO_EMBEDDING_INFO
-            return
+            return True
 
         if self.forbid_fonttools:
             # FIXME: fontTools is disabled, not missing, the exception
             #        would break more then it would achieve
-            return
+            return False
 
         if ttLib is None:
             raise NotSupportedError("fonttools not installed")
@@ -2267,7 +2272,7 @@ class FontFinder(object):
                 font.ibmclass = opentype.NO_IBM_CLASS_DATA
                 font.panoseclass = opentype.NO_PANOSE_DATA
                 font.embedding = opentype.NO_EMBEDDING_INFO
-                return
+                return True
 
             font.ibmclass = opentype.extract_ibm_class(os2)
             font.panoseclass = opentype.extract_panose_class(os2)
@@ -2291,6 +2296,8 @@ class FontFinder(object):
         if cache is not None:
             if not cached_classes:
                 cache.cache_classes(font)
+
+        return True
 
     def fill_charset(self, font: Font,
                            fileobj: io.BufferedIOBase=None) -> bool:
