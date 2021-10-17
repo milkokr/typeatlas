@@ -317,7 +317,7 @@ class QtFontFinder(fontlist.FontFinder):
 
         def progress(num: int=0):
             """Tick the progress."""
-            self.fontprogress(
+            self.progress(
                     num, len(knownFamilies),
                     message=_('First run: Discovering font files: '
                               '{} out of {}').format(num, len(knownFamilies)))
@@ -361,7 +361,7 @@ class QtFontFinder(fontlist.FontFinder):
         autoabort = False
 
         if not hasattr(QtGui, 'QRawFont') or abort:
-            self.fontprogressdone()
+            self.ended()
             return fontFiles
 
         for location in locations:
@@ -404,7 +404,7 @@ class QtFontFinder(fontlist.FontFinder):
                                                 filepath, 0, formathint))
 
 
-        self.fontprogressdone()
+        self.ended()
         return fontFiles
 
     def fontdirs(self) -> SetOf[str]:

@@ -1293,12 +1293,12 @@ class FontFinder(object):
         """Return True if we can lookup remote fonts."""
         return shutil.which('ssh') is not None
 
-    def fontprogress(self, num: int, total: int=None, *, message: str=None):
+    def progress(self, num: int, total: int=None, *, message: str=None):
         """Replace this with a callable of a compatible signature to support
         progress bar for slow processes. The first two arguments are only
         passed positionally, so the names do not need to match."""
 
-    def fontprogressdone(self):
+    def ended(self):
         """Replace this with a callable to call when the long-running
         operation is over."""
 

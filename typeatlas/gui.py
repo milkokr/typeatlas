@@ -1509,8 +1509,8 @@ class TypeAtlasLibrary(QtCore.QObject):
                                              metadata_cache=self.metadataCache)
 
         if splash is not None:
-            self.finder.fontprogress = splash.setProgressStatus
-            self.finder.fontprogressdone = splash.setProgressDone
+            self.finder.progress = splash.setProgressStatus
+            self.finder.ended = splash.setProgressDone
 
         self.fontFamilies = list(self.finder.families())
         setDefaultFontFamilies(self.fontFamilies)
