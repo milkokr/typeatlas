@@ -1873,6 +1873,13 @@ class FontFinder(object):
 
         return False
 
+    def fill_extra_family_info(self, family: 'FontFamily'):
+        """Fill any extra family info. The base implementation does
+        not do anything at the moment, but child classes, such as
+        the Qt one, may fill e.g. writing systems supported by the
+        family."""
+        pass
+
     #def match_families(self, *args):
     #    return get_families(self.match(*args, **kwargs))
 

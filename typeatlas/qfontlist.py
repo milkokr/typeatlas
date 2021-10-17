@@ -188,7 +188,7 @@ def getFont(fontDb: QtGui.QFontDatabase,
 
 def updateFamilyInfo(fontDb: QtGui.QFontDatabase, family: fontlist.FontFamily):
     """Fill any family information, particularly writing system
-    and generic family. This is to be called manually at the moment."""
+    and generic family."""
 
     family.writingSystems = fontDb.writingSystems(family.family)
     for style in family.styles:
@@ -600,6 +600,10 @@ class QtFontFinder(fontlist.FontFinder):
             self.metadata_cache.cache_charset(font)
 
         return True
+
+    def fill_extra_family_info(self, family: fontlist.FontFamily):
+        super().fill_extra_family_info(family)
+        updateFamilyInfo(self.fontDb, family)
 
 
 _wsToKey = None
