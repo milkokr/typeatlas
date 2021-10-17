@@ -775,7 +775,23 @@ def fontclass(cls):
             except (KeyError, AttributeError):
                 propcls = Any
 
+        if isinstance(propcls, str):
+            alts_cls = 'SequenceOf[' + propcls + ']'
+            by_lang_cls = 'MappingOf[str, ' + propcls + ']'
+            alts_by_lang_cls = 'MappingOf[str, ' + alts_cls + ']'
+        else:
+            alts_cls = SequenceOf[propcls]
+            by_lang_cls = MappingOf[str, propcls]
+            alts_by_lang_cls = MappingOf[str, alts_cls]
+
         annotations[prop.propname] = propcls
+        if prop.multiple:
+            annotations[prop.propname + '_alts'] = alts_cls
+
+        if prop.localized:
+            annotations[prop.propname + '_by_lang'] = by_lang_cls
+        if prop.localized and prop.multiple:
+            annotations[prop.propname + '_alts_by_lang'] = alts_by_lang_cls
 
     return cls
 
