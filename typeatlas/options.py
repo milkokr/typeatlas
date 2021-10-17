@@ -102,6 +102,7 @@ parsers = {
     object: json.loads,
     dict: json.loads,
     list: json.loads,
+    bool: lambda v: v.lower() in ['on', 'yes', 'true', 'enabled'],
 }
 
 
@@ -115,6 +116,7 @@ dumpers = {
     object: partial(json.dumps, ensure_ascii=False),
     dict: partial(json.dumps, ensure_ascii=False),
     list: partial(json.dumps, ensure_ascii=False),
+    bool: lambda v: 'on' if v else 'off',
 }
 
 
