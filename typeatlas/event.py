@@ -238,8 +238,7 @@ class SignalMethod(object):
         not been timed).
         """
 
-        self = args[0]
-        args = args[1:]
+        self, *args = args
 
         if SIGNAL_TRACE:
             owner = type(self.instance)
@@ -489,8 +488,7 @@ class Signal(object):
         optimizing this module by stripping that code out (it has
         not been timed).
         """
-        self, instance = args[0:2]
-        args = args[2:]
+        self, instance, *args = args
 
         instanceref = ObWeakRef(instance)
 
