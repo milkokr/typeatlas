@@ -69,7 +69,7 @@ import typeatlas
 from typeatlas.util import OrderedSet, N_, U_, debugmsg, warnmsgf, generic_type
 from typeatlas.util import MaybeLazy
 from typeatlas import opentype, external, proginfo, annotations
-from typeatlas import rangemath
+from typeatlas import rangemath, event
 from collections import OrderedDict, namedtuple, defaultdict
 from collections.abc import Callable, Set, MutableSet
 from operator import attrgetter
@@ -1293,14 +1293,22 @@ class FontFinder(object):
         """Return True if we can lookup remote fonts."""
         return shutil.which('ssh') is not None
 
+    @event.Signal.from_function()
+    def started(self, message: str):
+        """Connect to this or replace it with a callable to call a long-running
+        operation or operation concerning all fonts is started.
+        The argument is always passed positionally."""
+
+    @event.Signal.from_function()
     def progress(self, num: int, total: int=None, *, message: str=None):
-        """Replace this with a callable of a compatible signature to support
-        progress bar for slow processes. The first two arguments are only
+        """Connect to this or replace with a callable of a compatible signature
+        to support progress bar for slow processes. The first two arguments are only
         passed positionally, so the names do not need to match."""
 
+    @event.Signal.from_function()
     def ended(self):
-        """Replace this with a callable to call when the long-running
-        operation is over."""
+        """Connect to this or replace it with a callable to call when the
+        long-running operation is over."""
 
     def fontconfig_version(self) -> str:
         """Return the version of fontconfig."""
