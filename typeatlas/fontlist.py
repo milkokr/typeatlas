@@ -65,6 +65,7 @@ import urllib.parse
 import random
 import string
 import io
+import contextlib
 import typeatlas
 from typeatlas.util import OrderedSet, N_, U_, debugmsg, warnmsgf, generic_type
 from typeatlas.util import MaybeLazy
