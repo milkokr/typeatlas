@@ -404,6 +404,27 @@ def namespace_resolve(namespace: Mapping, attribute: str) -> object:
     return attrgetter(attribute)(Struct._bound(namespace))
 
 
+class AttributeSequence(Sequence):
+
+    """A sequence whose attributes, specified in the atrribute
+    sequence_attributes, can be unpacked."""
+
+    sequence_attributes = []
+
+    def __len__(self):
+        return len(self.sequence_attributes)
+
+    def __getitem__(self, item):
+        attr = self.sequence_attributes[item]
+        if isinstance(item, slice):
+            return [getattr(self, x) for x in attr]
+        return getattr(self, attr)
+
+    def __iter__(self):
+        for attr in self.sequence_attributes:
+            yield getattr(self, attr)
+
+
 class OrderedSet(MutableSet):
 
     __slots__ = ('_values', )
