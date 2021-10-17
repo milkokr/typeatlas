@@ -641,8 +641,12 @@ class QtFontFinder(fontlist.FontFinder):
             fontid = font.fontid
             fontpath = font.path or os.devnull
 
+            fontfiles = font.fontfiles
+            if fontfiles is None:
+                fontfiles = {}
+
             hints = {fi.file: fi.formathint
-                     for famnam, famfiles in font.fontfiles.items()
+                     for famnam, famfiles in fontfiles.items()
                      for stynam, styfiles in famfiles.items()
                      for fi in styfiles}
 
@@ -654,7 +658,7 @@ class QtFontFinder(fontlist.FontFinder):
                 seen.add(familyName)
 
                 for styleName in self.fontDb.styles(familyName):
-                    filenames = font.fontfiles.get(familyName, {}).get(styleName)
+                    filenames = fontfiles.get(familyName, {}).get(styleName)
                     if not filenames:
                         filenames = [fontlist.FontFileDetectInfo(
                                             fontpath, 0, hints.get(fontpath))]
