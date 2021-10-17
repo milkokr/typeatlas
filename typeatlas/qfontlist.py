@@ -605,6 +605,62 @@ class QtFontFinder(fontlist.FontFinder):
         super().fill_extra_family_info(family)
         updateFamilyInfo(self.fontDb, family)
 
+    def register(self, path: str=None,
+                       fileobj: io.BufferedIOBase=None,
+                       data: bytes=None) -> fontlist.LoadedFontFile:
+
+        if data is not None:
+            fontid = self.fontDb.addApplicationFontFromData(
+                                        QtCore.QByteArray(data))
+        elif fileobj is not None:
+            data = fileobj.read()
+            fontid = self.fontDb.addApplicationFontFromData(
+                                        QtCore.QByteArray(data))
+        elif path is not None:
+            fontid = self.fontDb.addApplicationFont(path)
+
+        else:
+            raise TypeError("One of path, fileobj or data needs to be passed")
+
+        if fontid == -1:
+            raise fontlist.InvalidFontDataError("Qt refused the font")
+
+        result = super().register(path, fileobj, data)
+        result.fontid = fontid
+        return result
+
+    def unregister(self, loaded: fontlist.LoadedFontFile):
+        super().unregister(loaded)
+        self.fontDb.removeApplicationFont(loaded.fontid)
+
+    def registered_fonts(self, loaded: IterableOf[fontlist.LoadedFontFile]=None
+                         ) -> IteratorOf[fontlist.Font]:
+        seen = set()
+
+        for font in loaded:
+            fontid = font.fontid
+            fontpath = font.path or os.devnull
+
+            hints = {fi.file: fi.formathint
+                     for famnam, famfiles in font.fontfiles.items()
+                     for stynam, styfiles in famfiles.items()
+                     for fi in styfiles}
+
+            for familyName in self.fontDb.applicationFontFamilies(fontid):
+
+                if familyName in seen:
+                    continue
+
+                seen.add(familyName)
+
+                for styleName in self.fontDb.styles(familyName):
+                    filenames = font.fontfiles.get(familyName, {}).get(styleName)
+                    if not filenames:
+                        filenames = [fontlist.FontFileDetectInfo(
+                                            fontpath, 0, hints.get(fontpath))]
+                    yield getFont(self.fontDb, familyName, styleName,
+                                  filenames)
+
 
 _wsToKey = None
 _keyToWs = None
