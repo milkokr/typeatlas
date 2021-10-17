@@ -1238,6 +1238,10 @@ class FontFinder(object):
 
     If a remote_server is provided, the ssh executor is initialized
     automatically. This is the preferred form.
+
+    Security options such as forbidding fontTools or setting the
+    ZIP bomb limit are provided, and can be changed temporarily with
+    the security_options() context manager.
     """
 
     def __init__(self, automerge_fonts_by: Callable=MERGE_BY_FULLNAME,
