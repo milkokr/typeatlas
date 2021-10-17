@@ -982,6 +982,9 @@ class MetadataCache(DataStore):
         or pass type and convert=True to convert it - then it can be any callable.
         """
         if not isinstance(font, str):
+            # FIXME: Not here!
+            if font.external or font.loaded_in_finder is not None:
+                return None
             key = font.cachekey()
         else:
             key = font
@@ -1016,6 +1019,9 @@ class MetadataCache(DataStore):
     def set_field(self, font: 'typeatlas.fontlist.Font', field: str, value):
         """Set the cache of a specific field for a font."""
         if not isinstance(font, str):
+            # FIXME: Not here!
+            if font.external or font.loaded_in_finder is not None:
+                return
             key = font.cachekey()
         else:
             key = font
