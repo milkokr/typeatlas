@@ -1494,7 +1494,7 @@ class FontFinder(object):
 
         return self.fc_match.custom(cmdline, callbacks=callbacks)
 
-    def fill_generic_families(self, elements: 'IterableOf[Union[Font, FontFamily]]'):
+    def fill_generic_families(self, elements: 'IterableOf[FontLike]'):
         """Fill the generic families for the provided fonts and families.
 
         This uses the cache, and attempts to make multiple slow queries
