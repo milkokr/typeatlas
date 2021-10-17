@@ -606,6 +606,34 @@ class OptionsWidget(QtWidgets.QDialog):
         checkbox.setDisabled(True)
         colorFontLayout.addWidget(checkbox)
 
+        self.security = QtWidgets.QWidget()
+        self.securityLayout = layout = QtWidgets.QVBoxLayout()
+        self.security.setLayout(self.securityLayout)
+
+        extFontLayout = QtWidgets.QVBoxLayout()
+        extFontBox = QtWidgets.QGroupBox(_('External font files'))
+        extFontBox.setLayout(extFontLayout)
+        extFontLayout.addWidget(options.getWidget('file-load-enabled'))
+        extFontLayout.addWidget(options.getWidget('file-load-auto'))
+        extFontLayout.addWidget(options.getWidget('file-allow-fonttools'))
+        self.securityLayout.addWidget(extFontBox)
+
+        zipFontLayout = QtWidgets.QVBoxLayout()
+        zipFontBox = QtWidgets.QGroupBox(_('Archived font files'))
+        zipFontBox.setLayout(zipFontLayout)
+        zipFontLayout.addWidget(options.getWidget('zip-load-enabled'))
+        zipFontLayout.addWidget(options.getWidget('zip-bomb-limit'))
+        self.securityLayout.addWidget(zipFontBox)
+
+        remoteFontLayout = QtWidgets.QVBoxLayout()
+        remoteFontBox = QtWidgets.QGroupBox(_('Remote fonts'))
+        remoteFontBox.setLayout(remoteFontLayout)
+        remoteFontLayout.addWidget(options.getWidget('remote-enabled'))
+        remoteFontLayout.addWidget(options.getWidget('remote-load-enabled'))
+        #remoteFontLayout.addWidget(options.getWidget('remote-load-auto'))
+        remoteFontLayout.addWidget(options.getWidget('remote-allow-fonttools'))
+        self.securityLayout.addWidget(remoteFontBox)
+
         self._executableForEdit = {}
 
         self.externalBox = QtWidgets.QWidget()
@@ -646,6 +674,7 @@ class OptionsWidget(QtWidgets.QDialog):
         self.tabs = QtWidgets.QTabWidget()
         self.tabs.addTab(self.general, _('Interface'))
         self.tabs.addTab(self.behaviour, _('Behaviour'))
+        self.tabs.addTab(self.security, _('Security'))
         self.tabs.addTab(self.externalBox, _('Dependencies'))
 
         self.buttonBox = QtWidgets.QDialogButtonBox()
