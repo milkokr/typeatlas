@@ -2050,6 +2050,7 @@ class TypeAtlas(QtWidgets.QMainWindow):
 
         selModel = self.fileBrowser.tree.selectionModel()
         selModel.currentChanged.connect(self._fileChanged)
+        self.fileBrowser.tree.doubleClicked.connect(self._fileDoubleClicked)
 
         self.pile = QtWidgets.QVBoxLayout()
 
@@ -2702,10 +2703,27 @@ class TypeAtlas(QtWidgets.QMainWindow):
 
         self.statusBar().showMessage(message)
 
+
+    @Slot(QtCore.QModelIndex)
+    def _fileDoubleClicked(self, index):
+        """A file has been double clicked in the file browser."""
+        if not self.options.fileLoadAuto:
+            self._fileChanged(index, userExplicit=True)
+
     @Slot(QtCore.QModelIndex, QtCore.QModelIndex)
-    def _fileChanged(self, current, previous):
+    def _fileChanged(self, current, previous=None, userExplicit: bool=False):
         """The current file changed in the file browser. If a font, add it
-        in the application, and display it."""
+        in the application, and display it.
+
+        If userExplicit=True is passed, it means the user explicitly requested
+        the action.
+        """
+
+        if not self.options.fileLoadEnabled:
+            return
+
+        if not self.options.fileLoadAuto and not userExplicit:
+            return
 
         if not current.isValid():
             return
@@ -2722,11 +2740,14 @@ class TypeAtlas(QtWidgets.QMainWindow):
         if not os.access(path, os.R_OK):
             return
 
+        disableFontTools = not self.options.fileAllowFonttools
+        allowZip = self.options.zipLoadEnabled
+
         fonts = []
         fontFiles = {}
 
         # If this is an archive, load the fonts from it
-        if archiving.is_known_archive(path):
+        if allowZip and archiving.is_known_archive(path):
             try:
                 for member in archiving.archive_iterate(path):
                     if not member.isfile():
@@ -2736,7 +2757,7 @@ class TypeAtlas(QtWidgets.QMainWindow):
                         continue
 
                     try:
-                        data = member.getdata()
+                        data = member.getdata(limit=self.options.zipBombLimit)
                     except archiving.MemberTooBigError as exc:
                         warnmsgf("Can't read font: %s", exc)
                         continue
@@ -2749,6 +2770,10 @@ class TypeAtlas(QtWidgets.QMainWindow):
                     fakePath = os.path.join(path, member.name)
 
                     self.fileFontIds[fontid] = fakePath
+
+                    if disableFontTools:
+                        del data
+                        continue
 
                     try:
                         fontlist.crawl_font_file(fakePath, fontFiles,
@@ -3038,6 +3063,9 @@ class TypeAtlas(QtWidgets.QMainWindow):
                                selected: SequenceOf[fontlist.FontLike]=[]):
         """Load any remote fonts."""
 
+        if not self.options.remoteLoadEnabled:
+            return
+
         changed = False
 
         # Load remote fonts
@@ -3051,6 +3079,7 @@ class TypeAtlas(QtWidgets.QMainWindow):
                 selectionDataChanged(self.remoteFontBrowser.selectionModel())
             return
 
+        disableFontTools = not self.options.fileAllowFonttools
         fontFiles = {}
 
         seen = set()
@@ -3071,6 +3100,13 @@ class TypeAtlas(QtWidgets.QMainWindow):
                 changed = True
                 fileobj = io.BytesIO(data)
 
+                for familyName in self.fontDb.applicationFontFamilies(fontid):
+                    if familyName == style.family:
+                        qfontlist.updateFamilyInfo(self.fontDb, style)
+
+                if disableFontTools:
+                    continue
+
                 self.remoteFinder.fill_detailed_info(style, fileobj=fileobj)
                 if not style.charset:
                     style.charset = None
@@ -3079,9 +3115,6 @@ class TypeAtlas(QtWidgets.QMainWindow):
 
                 fileobj.seek(0)
                 self.remoteFontIds[fontid] = style.extended(fileobj)
-                for familyName in self.fontDb.applicationFontFamilies(fontid):
-                    if familyName == style.family:
-                        qfontlist.updateFamilyInfo(self.fontDb, style)
 
         if changed:
             selectionDataChanged(self.remoteFontBrowser.selectionModel())
@@ -3487,6 +3520,15 @@ class TypeAtlas(QtWidgets.QMainWindow):
     @Slot()
     def _serverChanged(self):
         """User requested a remote server. Connect and get fonts from it."""
+
+        if not self.options.remoteEnabled:
+            QtWidgets.QMessageBox.information(
+                self, _("Remote fonts disabled by user"),
+                      _("The browsing of remote fonts has been disabled "
+                        "for security reasons by the user. You can re-enable "
+                        "it in the options."))
+            return
+
         server = self.remoteServer.text()
         if not server:
             self.remoteFontModel.setFamilies([])
