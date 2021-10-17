@@ -1841,6 +1841,9 @@ class FontFinder(object):
         seen_files = set()
 
         for loaded_file in loaded:
+            if loaded_file.fontfiles is None:
+                continue
+
             for family, styles in loaded_file.fontfiles.items():
                 for style, fileinfos in styles.items():
                     if (style, family) in seen_fonts:
