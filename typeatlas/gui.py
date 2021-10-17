@@ -1509,15 +1509,18 @@ class TypeAtlasLibrary(QtCore.QObject):
                                              metadata_cache=self.metadataCache)
 
         if splash is not None:
-            self.finder.progress = splash.setProgressStatus
-            self.finder.ended = splash.setProgressDone
+            self.finder.started.connect(splash.showMessage)
+            self.finder.progress.connect(splash.setProgressStatus)
+            self.finder.completed.connect(splash.setProgressDone)
+            #self.finder.started = splash.showMessage
+            #self.finder.progress = splash.setProgressStatus
+            #self.finder.completed = splash.setProgressDone
 
         self.fontFamilies = list(self.finder.families())
         setDefaultFontFamilies(self.fontFamilies)
         self.categorization.load()
 
-        if splash is not None:
-            splash.showMessage(_('Filling detailed font info...'))
+        self.finder.started(_('Filling detailed font info...'))
         debugmsg("Filling detailed font info list...")
 
         for i, family in enumerate(self.fontFamilies):
@@ -1534,26 +1537,22 @@ class TypeAtlasLibrary(QtCore.QObject):
         if firstRun:
             splash.setProgressDone()
 
-        if splash is not None:
-            splash.showMessage(_('Building global feature table...'))
+        self.finder.started(_('Building global feature table...'))
         debugmsg("Building global feature table...")
         self.fontFeatureSets = fontlist.FeatureSets(self.fontFamilies)
 
-        if splash is not None:
-            splash.showMessage(_('Attempting to guess family type...'))
+        self.finder.started(_('Attempting to guess family type...'))
         debugmsg("Attempting to guess family type...")
         self.finder.fill_generic_families(self.fontFamilies)
 
         debugmsg("Saving metadata cache...")
         self.metadataCache.autosave()
 
-        if splash is not None:
-            splash.showMessage(_('Populating unicode info...'))
+        self.finder.started(_('Populating unicode info...'))
         debugmsg("Populating unicode info...")
         self.charDb.add_registries()
         self.charDb.populate(download=False, deep=True)
-        if splash is not None:
-            splash.showMessage(_('Populating language info...'))
+        self.finder.started(_('Populating language info...'))
         debugmsg("Populating language info...")
         self.langDb.populate()
 
