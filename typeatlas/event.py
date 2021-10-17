@@ -80,6 +80,7 @@ import types
 import weakref
 import traceback
 import functools
+import contextlib
 from collections import defaultdict, OrderedDict
 from collections.abc import MutableMapping, MutableSequence
 from collections.abc import Mapping, Callable, Hashable
@@ -89,6 +90,11 @@ try:
     from typing import Optional
 except ImportError:
     Optional = None
+
+try:
+    from contextlib import AbstractContextManager
+except ImportError:
+    AbstractContextManager = None
 
 
 SIGNAL_TRACE = bool(os.environ.get('TYPEATLAS_DEBUG_SIGNAL_TRACE'))
@@ -221,6 +227,11 @@ class SignalMethod(object):
     def disconnect(self, *args, **kwargs):
         """Disconnect a callable from the instance's signal."""
         self.signal.disconnect(self.instance, *args, **kwargs)
+
+    def connected(self, *args, **kwargs) -> AbstractContextManager:
+        """Return a context manager connecting a callable to the
+        instance's signal, and disconnecting it on exit."""
+        return self.signal.connected(self.instance, *args, **kwargs)
 
     def __call__(*args, **kwargs):
         """Emit the signal with the given arguments. This can be
@@ -468,6 +479,31 @@ class Signal(object):
         del cbs[obref, method, pass_self]
         if not cbs:
             del self.callbacks[instanceref]
+
+    @contextlib.contextmanager
+    def connected(self, instance: object, callback: Callable=None,
+                        pass_self: bool=False, hardref: bool=True,
+                        *args, **kwargs):
+        """Return a context manager connecting a callable to the
+        instance's signal, and disconnecting it on exit.
+
+        For shorter code, this accept None as the callable, which
+        returns a null context manager, which does not connect
+        anything.
+        """
+
+        if callback is None:
+            yield
+            return
+
+        self.connect(instance, callback, pass_self, hardref,
+                     *args, **kwargs)
+        try:
+            yield
+
+        finally:
+            self.disconnect(instance, callback, pass_self,
+                            *args, **kwargs)
 
     def __call__(*args, **kwargs):
         """Emit the signal with the given arguments. This can be
