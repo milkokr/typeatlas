@@ -1499,60 +1499,30 @@ class TypeAtlasLibrary(QtCore.QObject):
 
         firstRun = not self.metadataCache.metadata
 
-        if splash is not None:
-            splash.showMessage(_('Loading font list...'))
-        debugmsg("Loading font list...")
-
         self.executor = executor = QtExecutor(self.options.executablePaths,
                                               parent=self)
         self.finder = qfontlist.QtFontFinder(self.fontDb, executor=executor,
                                              metadata_cache=self.metadataCache)
+        self.finder.enable_translations()
 
         if splash is not None:
-            self.finder.started.connect(splash.showMessage)
-            self.finder.progress.connect(splash.setProgressStatus)
-            self.finder.completed.connect(splash.setProgressDone)
-            #self.finder.started = splash.showMessage
-            #self.finder.progress = splash.setProgressStatus
-            #self.finder.completed = splash.setProgressDone
+            started, ended, progress = (splash.showMessage,
+                                        splash.setProgressDone,
+                                        splash.setProgressStatus)
+        else:
+            started = ended = progress = None
 
-        self.fontFamilies = list(self.finder.families())
+        with self.finder.progress_observer(started, ended, progress):
+            self.fontFamilies, self.fontFeatureSets = self.finder.fetchall()
+
         setDefaultFontFamilies(self.fontFamilies)
         self.categorization.load()
 
-        self.finder.started(_('Filling detailed font info...'))
-        debugmsg("Filling detailed font info list...")
-
-        for i, family in enumerate(self.fontFamilies):
-            if firstRun and splash is not None:
-                splash.setProgressStatus(
-                    i, len(self.fontFamilies),
-                    message=_('First run: Parsing detailed font information: '
-                              '{} out of {}').format(i, len(self.fontFamilies)))
-
-            qfontlist.updateFamilyInfo(self.fontDb, family)
-            for style in family.styles:
-                self.finder.fill_detailed_info(style)
-
-        if firstRun:
-            splash.setProgressDone()
-
-        self.finder.started(_('Building global feature table...'))
-        debugmsg("Building global feature table...")
-        self.fontFeatureSets = fontlist.FeatureSets(self.fontFamilies)
-
-        self.finder.started(_('Attempting to guess family type...'))
-        debugmsg("Attempting to guess family type...")
-        self.finder.fill_generic_families(self.fontFamilies)
-
-        debugmsg("Saving metadata cache...")
-        self.metadataCache.autosave()
-
-        self.finder.started(_('Populating unicode info...'))
+        splash.showMessage(_('Populating unicode info...'))
         debugmsg("Populating unicode info...")
         self.charDb.add_registries()
         self.charDb.populate(download=False, deep=True)
-        self.finder.started(_('Populating language info...'))
+        splash.showMessage(_('Populating language info...'))
         debugmsg("Populating language info...")
         self.langDb.populate()
 
@@ -3501,20 +3471,11 @@ class TypeAtlas(QtWidgets.QMainWindow):
             self.standardModel.setFamilies([])
             return
 
-        debugmsg("Loading standard font substitutions...")
-        standardFamilies = list(self.finder.standard_families(chosen))
-
-        debugmsg("Filling detailed font info...")
-        for family in standardFamilies:
-            qfontlist.updateFamilyInfo(self.fontDb, family)
-            for style in family.styles:
-                self.finder.fill_detailed_info(style)
-
-        debugmsg("Loading feature sets...")
-        standardFeatureSets = fontlist.FeatureSets(standardFamilies)
+        standard = self.finder.fetchall(fontsource='standard',
+                                        guess_generic_families=False)
         debugmsg("DONE.")
 
-        self.standardModel.setFamilies(standardFamilies, standardFeatureSets)
+        self.standardModel.setFamilies(standard.families, standard.featuresets)
 
     @Slot()
     def _serverChanged(self):
@@ -3532,21 +3493,13 @@ class TypeAtlas(QtWidgets.QMainWindow):
         if not server:
             self.remoteFontModel.setFamilies([])
             return
-        debugmsg("Loading remote fonts...")
+
         finder = fontlist.FontFinder(remote_server=server,
                                      executor=self.executor)
         self.remoteFinder = finder
-        families = list(finder.families())
-        debugmsg("Filling detailed font info...")
-        for family in families:
-            for style in family.styles:
-                self.finder.fill_detailed_info(style)
 
-        debugmsg("Loading feature sets...")
-        remoteFeatureSets = fontlist.FeatureSets(families)
-        debugmsg("DONE.")
-
-        self.remoteFontModel.setFamilies(families, remoteFeatureSets)
+        remote = finder.fetchall()
+        self.remoteFontModel.setFamilies(remote.families, remote.featuresets)
 
     @Slot(QtCore.QModelIndex, object)
     def _activeFilterGroupChanged(self, index: QtCore.QModelIndex,
