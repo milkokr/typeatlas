@@ -1969,8 +1969,8 @@ class TypeAtlas(QtWidgets.QMainWindow):
         self.fileFontBrowser.setDragDropMode(self.browser.DragOnly)
         self.renderingChoice.listChanged.connect(self.fileFontBrowser.reset)
         self.fileBrowser.layout.addWidget(self.fileFontBrowser)
-        self.fileFontIds = {}
-        self.remoteFontIds = {}
+        self.fileFontLoaded = {}
+        self.remoteLoaded = {}
         self.remoteFinder = None
 
         if fontlist.FontFinder.remote_supported():
@@ -2700,9 +2700,9 @@ class TypeAtlas(QtWidgets.QMainWindow):
         if os.path.isdir(path):
             return
 
-        for fontid in self.fileFontIds:
-            self.fontDb.removeApplicationFont(fontid)
-        self.fileFontIds = {}
+        for loaded in self.fileFontLoaded:
+            self.finder.unload(loaded)
+        self.fileFontLoaded = []
         self.fileFontModel.setFamilies([])
 
         # Skip unreadable files early, we don't want exceptions if those are hit
@@ -2711,94 +2711,17 @@ class TypeAtlas(QtWidgets.QMainWindow):
 
         disableFontTools = not self.options.fileAllowFonttools
         allowZip = self.options.zipLoadEnabled
+        bombLimit = self.options.zipBombLimit
 
-        fonts = []
-        fontFiles = {}
+        with self.finder.security_options(forbid_fonttools=disableFontTools,
+                                          zip_bomb_limit=bombLimit):
+            loaded = list(self.finder.loadpath(path, unpack=allowZip))
 
-        # If this is an archive, load the fonts from it
-        if allowZip and archiving.is_known_archive(path):
-            try:
-                for member in archiving.archive_iterate(path):
-                    if not member.isfile():
-                        continue
+            self.fileFontLoaded.extend(loaded)
 
-                    if not fontlist.guess_file_format(member.name).is_opentype():
-                        continue
+            families, featsets = self.finder.fetchall(loaded,
+                                                      fontsource='registered')
 
-                    try:
-                        data = member.getdata(limit=self.options.zipBombLimit)
-                    except archiving.MemberTooBigError as exc:
-                        warnmsgf("Can't read font: %s", exc)
-                        continue
-
-                    fontid = self.fontDb.addApplicationFontFromData(
-                                        QtCore.QByteArray(data))
-                    if fontid == -1:
-                        continue
-
-                    fakePath = os.path.join(path, member.name)
-
-                    self.fileFontIds[fontid] = fakePath
-
-                    if disableFontTools:
-                        del data
-                        continue
-
-                    try:
-                        fontlist.crawl_font_file(fakePath, fontFiles,
-                                                 fileobj=io.BytesIO(data))
-
-                    except fontlist.NotSupportedError:
-                        pass
-
-                    del data
-
-            except Exception as exc:
-                errmsgf("Fatal error reading fonts from %r: %s: %s",
-                        path, type(exc).__name__, exc)
-                traceback.print_exc()
-
-        else:
-            fontid = self.fontDb.addApplicationFont(path)
-            if fontid == -1:
-                return
-
-            self.fileFontIds[fontid] = path
-
-            try:
-                fontlist.crawl_font_file(path, fontFiles)
-            except fontlist.NotSupportedError:
-                pass
-
-        hints = dict((fi.file, fi.formathint)
-                     for famnam, famfiles in fontFiles.items()
-                     for stynam, styfiles in famfiles.items()
-                     for fi in styfiles)
-
-
-        seen = set()
-
-        for fontid, fontpath in self.fileFontIds.items():
-            for familyName in self.fontDb.applicationFontFamilies(fontid):
-
-                if familyName in seen:
-                    continue
-
-                seen.add(familyName)
-
-                for styleName in self.fontDb.styles(familyName):
-                    filenames = fontFiles.get(familyName, {}).get(styleName)
-                    if not filenames:
-                        filenames = [fontlist.FontFileDetectInfo(
-                                            fontpath, 0, hints.get(fontpath))]
-                    fonts.append(qfontlist.getFont(self.fontDb,
-                                                   familyName, styleName,
-                                                   filenames))
-        families = list(fontlist.get_families(fonts))
-        for family in families:
-            qfontlist.updateFamilyInfo(self.fontDb, family)
-            for style in family.styles:
-                self.finder.fill_detailed_info(style)
         self.fileFontModel.setFamilies(families)
         self.fileFontBrowser.expandAll()
 
@@ -3038,10 +2961,10 @@ class TypeAtlas(QtWidgets.QMainWindow):
         changed = False
 
         # Load remote fonts
-        for fontid in self.remoteFontIds:
+        for loaded in self.remoteLoaded:
             changed = True
-            self.fontDb.removeApplicationFont(fontid)
-        self.remoteFontIds = {}
+            self.finder.unload(loaded)
+        self.remoteLoaded = []
 
         if not self._viewingRemoteFont:
             if changed:
@@ -3049,41 +2972,25 @@ class TypeAtlas(QtWidgets.QMainWindow):
             return
 
         disableFontTools = not self.options.fileAllowFonttools
-        fontFiles = {}
-
         seen = set()
-        for curItem in chain([item], selected):
-            style = curItem if curItem.is_style else curItem.main
 
-            if style in seen:
-                continue
-            seen.add(style)
+        with self.finder.security_options(forbid_fonttools=disableFontTools):
+            for curItem in chain([item], selected):
 
-            data = style.get_font_data()
-            if data is None:
-                continue
+                style = curItem if curItem.is_style else curItem.main
 
-            fontid = self.fontDb.addApplicationFontFromData(
-                                        QtCore.QByteArray(data))
-            if fontid is not None:
-                changed = True
-                fileobj = io.BytesIO(data)
+                if style in seen:
+                    continue
+                seen.add(style)
 
-                for familyName in self.fontDb.applicationFontFamilies(fontid):
-                    if familyName == style.family:
-                        qfontlist.updateFamilyInfo(self.fontDb, style)
-
-                if disableFontTools:
+                try:
+                    loaded = self.finder.loadfont(style, autofetch=True,
+                                                  extended=True)
+                except fontlist.FontDataError:
                     continue
 
-                self.remoteFinder.fill_detailed_info(style, fileobj=fileobj)
-                if not style.charset:
-                    style.charset = None
-                    fileobj.seek(0)
-                    self.remoteFinder.fill_charset(style, fileobj)
-
-                fileobj.seek(0)
-                self.remoteFontIds[fontid] = style.extended(fileobj)
+                changed = True
+                self.remoteLoaded.append(loaded)
 
         if changed:
             selectionDataChanged(self.remoteFontBrowser.selectionModel())
