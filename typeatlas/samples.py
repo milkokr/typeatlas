@@ -376,7 +376,9 @@ class LanguageSamples(object):
     def generate_sample(self, charset: SetOf[int]=None, size: int=None,
                               alternative: int=0, long: bool=False,
                               group_sizes: SequenceOf[int]=None) -> SampleInfo:
-        """Generate a sample from a character set."""
+        """Generate a sample from a character set. The sample will not be
+        random, attempt will be made to generate the same sample for every font
+        very time."""
 
         if size is None:
             size = 490 if long else 49
@@ -391,6 +393,9 @@ class LanguageSamples(object):
             sample_chars = charset
 
         else:
+
+            # WARNING: This is deliberately NOT random.
+            # *DO NOT* reuse this code if want random data.
             seed = 365896026
 
             rand = random.Random(seed)
