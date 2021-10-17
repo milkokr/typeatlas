@@ -70,7 +70,7 @@ import typeatlas
 from typeatlas.util import OrderedSet, N_, U_, debugmsg, warnmsgf, generic_type
 from typeatlas.util import MaybeLazy, ManagedIter, AttributeSequence
 from typeatlas import opentype, external, proginfo, annotations
-from typeatlas import rangemath, event
+from typeatlas import rangemath, event, archiving
 from collections import OrderedDict, namedtuple, defaultdict
 from collections.abc import Callable, Set, MutableSet
 from operator import attrgetter
@@ -1248,6 +1248,27 @@ class FontResult(AttributeSequence):
         self.featuresets = featuresets
 
 
+class LoadedFontFile:
+
+    """The loaded font file."""
+
+    def __init__(self, finder: 'FontFinder',
+                       path: str=None,
+                       fontid: Any=None,
+                       fontfiles: 'FamilyFilePathType'=None,
+                       fontcounts: 'FontCountType'=None):
+
+        self.finder = finder
+        self.path = path
+        self.fontid = fontid
+        self.fontfiles = fontfiles
+        self.fontcounts = fontcounts
+
+    def __repr__(self):
+        return '<%s %r at 0x%x>' % (type(self).__name__, self.path,
+                                    id(self))
+
+
 MERGE_NOTHING = None
 MERGE_BY_STYLE = attrgetter('family', 'style')
 MERGE_BY_FULLNAME = attrgetter('fullname')
@@ -1259,6 +1280,13 @@ class FontFinder(object):
     font information from these facilities.
 
     The high-level API for getting all fonts is fetchall().
+    The high-level API for registering fonts is loadpath()/loadfont(),
+    which allows application fonts to be added and their information loaded
+    as registered fonts.
+    The high-level API for loading additional font information for a
+    remote file is complete()/complete_style()/complete_family(). If
+    debug_messages=True is passed, those high-level APIs may log
+    to the terminal, so terminal programs may choose to pass False.
 
     You can provide a cache for the metadata, and an executor (e.g. a
     remote SSH executor for fonts on a remote server) to use to
@@ -1449,6 +1477,116 @@ class FontFinder(object):
         if not callable(translate):
             raise TypeError("%r not callable" % (translate, ))
         self.translate_string = translate
+
+    def loadfont(self, font: 'FontLike', *,
+                       path: str=None,
+                       fileobj: io.BufferedIOBase=None,
+                       data: bytes=None,
+                       autofetch: bool=False,
+                       extended: bool=False) -> LoadedFontFile:
+
+        """Load a font from another finder (e.g. remote font) into this
+        finder (e.g. local system fonts currently in use), potentially
+        allowing it to be displayed by registering it as an application
+        font (if Qt finder is used).
+
+        This fills any extra information about the font that the remote
+        fontconfig did not provide, if fontTools is allowed, or if Qt
+        provides such new information.
+
+        If data or fileobj are provided, the path can be invalid
+        as respect to the local computer / this method, so the caller can
+        include a path that is valid in their context.
+
+        If a fileobj is provided instead of data, it needs to be seekable.
+
+        If extended=True is passed, the extended information about the
+        font is also loaded.
+        """
+
+        if fileobj is None and data is None and autofetch and font.remote:
+            data = font.get_font_data()
+            if data is None:
+                raise NoFontDataError("could not load the font data")
+
+        loaded = self.register(path, fileobj, data)
+
+        # FIXME: The ad-hoc code was checking if the family was correctly
+        # registered using:
+        #   for familyName in self.fontDb.applicationFontFamilies(fontid):
+        #       if familyName == style.family:
+        #           qfontlist.updateFamilyInfo(self.fontDb, style)
+
+        self.complete(font, force_fill=True,
+                      path=path, data=data, fileobj=fileobj)
+
+        if extended:
+            if data is None:
+                passed_fileobj = io.BytesIO(data)
+            elif fileobj is not None:
+                fileobj.seek(0)
+                passed_fileobj = fileobj
+            loaded._extended = font.extended(fileobj)
+
+        return loaded
+
+    def loadpath(self, path: str, *,
+                       unpack: bool=False) -> IteratorOf[LoadedFontFile]:
+        """Load fonts from a local path, whether a font file, or if unpack=True
+        is passed, then archives as well.
+
+        The fonts can be queried with  self.fetchall('registered', loaded), where
+        loaded is the result from this method.
+
+        This ignores invalid font files, loadfile() does not.
+        """
+
+        if unpack and archiving.is_known_archive(path):
+            yield from self.loadarchive(path)
+
+        else:
+            try:
+                yield self.loadfile(path)
+            except InvalidFontDataError as exc:
+                warnmsgf("Can't read font: %s", exc)
+
+    def loadfile(self, path: str=None,
+                       fileobj: io.BufferedIOBase=None,
+                       data: bytes=None) -> LoadedFontFile:
+        """Load a single font file from a local file, font path or
+        file object."""
+
+        return self.register(path, fileobj, data)
+
+    def loadarchive(self, path: str=None) -> IteratorOf[LoadedFontFile]:
+        """Load fonts from an archive. Loads only OpenType fonts."""
+
+        for member in archiving.archive_iterate(path):
+            if not member.isfile():
+                continue
+
+            if not guess_file_format(member.name).is_opentype():
+                continue
+
+            try:
+                data = member.getdata(limit=self.zip_bomb_limit)
+
+            except archiving.MemberTooBigError as exc:
+                warnmsgf("Can't read font: %s", exc)
+                continue
+
+            fakepath = os.path.join(path, member.name)
+
+            try:
+                yield self.loadfile(fakepath, data=data)
+
+            except InvalidFontDataError as exc:
+                warnmsgf("Can't read font: %s", exc)
+                continue
+
+    def unload(self, loaded: LoadedFontFile):
+        """Unload a font loaded with loadfont() or loadfile()."""
+        self.unregister(loaded)
 
     def _started(self, message: str):
         """Emit started(), translating the message if needed, and sending
@@ -1685,6 +1823,139 @@ class FontFinder(object):
         return get_families(self.standard_fonts(which),
                             key=lambda font:
                                    (font.substitutingfamily or font.family))
+
+    def registered_families(self, loaded: IterableOf[LoadedFontFile]=None
+                            ) -> 'IteratorOf[FontFamily]':
+        """Get the families registered with register(), load*(), etc."""
+        return get_families(self.registered_fonts(loaded))
+
+    def registered_fonts(self, loaded: IterableOf[LoadedFontFile]=None
+                         ) -> IteratorOf[Font]:
+        """Get the fonts registered with register(), load*(), etc.
+
+        This is only useful with the QtFontFinder, the default tries
+        to yield *something*, but not that much to do with it.
+        """
+
+        seen_fonts = set()
+        seen_files = set()
+
+        for loaded_file in loaded:
+            for family, styles in loaded_file.fontfiles.items():
+                for style, fileinfos in styles.items():
+                    if (style, family) in seen_fonts:
+                        continue
+                    seen_fonts.add((style, family))
+                    if any (fi in seen_files for fi in fileinfos):
+                        continue
+                    seen_files.update(fileinfos)
+
+                    font = Font()
+                    font.family = family
+                    font.style = style
+
+                    font.file_alts = [FontFile(fi.file, fi.index)
+                                      for fi in fileinfos]
+                    if fileinfos:
+                        font.file, font.index, formathint = next(iter(fileinfos))
+
+                    if formathint == 'SFNT':
+                        font.sfnt = True
+
+                    elif formathint:
+                        font.fontformat = formathint
+
+                    autofill_font_info(font)
+
+                    yield font
+
+    def register(self, path: str=None,
+                       fileobj: io.BufferedIOBase=None,
+                       data: bytes=None) -> LoadedFontFile:
+        """Register the font data as an application font (e.g. to allow
+        it to be displayed in the UI). Will raise InvalidFontDataError if
+        the file does not contain a font.
+
+        If data or fileobj are provided, the path can be invalid
+        as respect to the local computer / this method, so the caller can
+        include a path that is valid in their context."""
+
+        result = LoadedFontFile(self, path=path)
+
+        if self.forbid_fonttools:
+            return
+
+        fontfiles = {}
+        fontcounts = {}
+
+        try:
+
+            if data is not None:
+                passed_fileobj = io.BytesIO(data)
+            elif fileobj is not None:
+                passed_fileobj = fileobj
+            else:
+                passed_fileobj = None
+
+            if path is None:
+                path = getattr(fileobj, 'name', '<unknown>')
+
+            crawl_font_file(path, fontfiles, fontcounts,
+                            fileobj=passed_fileobj)
+
+        except NotSupportedError:
+            return result
+
+        result.fontfiles = fontfiles
+        result.fontcounts = fontcounts
+
+        return result
+
+    def unregister(self, loaded: LoadedFontFile):
+        """Unregister a font registered with register()."""
+        pass
+
+    def complete(self, font: 'FontLike', *args, force_fill=False, **kwargs):
+        """Complete the font information inside the font-like object,
+        filling anything necessary. You can provide path, fileobj or
+        data to extract the information from.
+
+        For families, it fills family information and information for the
+        main style.
+        For styles, it fills only the style information, unless
+        force_fill=True is passed.
+        """
+        if font.is_style:
+            if force_fill:
+                self.complete_family(font)
+            self.complete_style(font, *args, **kwargs)
+        else:
+            self.complete_family(font)
+            self.complete_style(font.main, *args, **kwargs)
+
+    def complete_style(self, style: Font, *,
+                       path: str=None,
+                       fileobj: io.BufferedIOBase=None,
+                       data: bytes=None,
+                       autofetch: bool=False):
+        """Complete the font information about a style."""
+        if data is not None:
+            fileobj = io.BytesIO(data)
+        elif fileobj is None:
+            if path is not None:
+                fileobj = open(path, 'rb')
+        elif fileobj is not None:
+            fileobj.seek(0)
+
+        self.fill_detailed_info(style, fileobj=fileobj)
+        if fileobj is not None and not style.charset:
+            fileobj.seek(0)
+            style.charset = None
+            self.fill_charset(style, fileobj)
+
+    def complete_family(self, family: 'FontFamily', *, force: bool=False):
+        """Complete the font information about a family."""
+        self.fill_extra_family_info(family)
 
     def fcmatch(self, *args, many=False, all=False):
 
@@ -2606,6 +2877,21 @@ class FeatureSets(object):
 
 class NotSupportedError(Exception):
     """Feature not supported."""
+    pass
+
+
+class FontDataError(ValueError):
+    """Problem with the font data."""
+    pass
+
+
+class InvalidFontDataError(FontDataError):
+    """An invalid font data was attempted to be loaded."""
+    pass
+
+
+class NoFontDataError(FontDataError):
+    """No font data available for font."""
     pass
 
 
