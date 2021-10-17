@@ -2098,7 +2098,8 @@ FontCountType = MutableMappingOf[str, int]
 def crawl_font_file(filepath: str=None,
                     font_file_by_name: FamilyFilePathType=None,
                     font_counts: FontCountType=None,
-                    fileobj: io.BufferedIOBase=None, strict: bool=True):
+                    fileobj: io.BufferedIOBase=None, strict: bool=True
+                    ) -> TupleOf[FontCountType, FamilyFilePathType]:
     """Crawl a given font, and fill the first dictionary with the files for
     each family and style, providing a dictionary for the families, pointing
     to a dictionary of styles, pointing to a set of files.
@@ -2109,6 +2110,10 @@ def crawl_font_file(filepath: str=None,
     to be seekable if more than one font can be found in the file. If
     strict=False is not passed, not-seekable files are a fatal error.
     """
+
+    # FIXME: This function is broken, partially, as we don't properly
+    # read the names from the fontTools results. Pending is to read
+    # the documentation and fix that.
 
     if ttLib is None:
         raise NotSupportedError("fontTools not found")
@@ -2237,12 +2242,20 @@ def crawl_font_file(filepath: str=None,
     if i:
         font_counts[filepath] = i
 
+    ## FIXME: This returns defaultdict(), but some callers abuse us
+    ## by passing a noisy dictionary and count the amount of keys set
+    ## for debugging reasons.
+    # Clear defaultdict() from the result
+    for key, values in list(font_file_by_name.items()):
+        font_file_by_name[key] = dict(values)
+
     return font_counts, font_file_by_name
 
 
 def crawl_font_directories(locations: IterableOf[str],
                            font_file_by_name: FamilyFilePathType=None,
-                           font_counts: FontCountType=None):
+                           font_counts: FontCountType=None
+                           ) -> TupleOf[FontCountType, FamilyFilePathType]:
     """Crawl a set of locations, and fill the first dictionary with the files for
     each family and style, providing a dictionary for the families, pointing
     to a dictionary of styles, pointing to a set of files.
