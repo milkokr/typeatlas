@@ -1883,7 +1883,7 @@ class FontFinder(object):
         result = LoadedFontFile(self, path=path)
 
         if self.forbid_fonttools:
-            return
+            return result
 
         fontfiles = {}
         fontcounts = {}
