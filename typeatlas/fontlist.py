@@ -109,6 +109,8 @@ DISABLE_FC_LIST = False
 LOAD_CHARSET_EARLY = False
 FONT_LIMIT = None
 
+AUTO = object()
+
 ## Tests and debug
 if os.environ.get('TYPEATLAS_DEBUG_LOAD_CHARSET_EARLY'):
     LOAD_CHARSET_EARLY = True
@@ -1240,7 +1242,9 @@ class FontFinder(object):
     def __init__(self, automerge_fonts_by: Callable=MERGE_BY_FULLNAME,
                        remote_server: str=None,
                        executor: external.Executor=None,
-                       metadata_cache: 'typeatlas.datastore.MetadataCache'=None):
+                       metadata_cache: 'typeatlas.datastore.MetadataCache'=None, *,
+                       zip_bomb_limit: Optional[int]=16777216,
+                       forbid_fonttools: bool=False):
 
         if executor is None:
             executor = external.Executor()
@@ -1268,6 +1272,33 @@ class FontFinder(object):
         self.propreq = propreq
         self.remote_server = remote_server
         self.metadata_cache = metadata_cache
+
+        self.zip_bomb_limit = zip_bomb_limit
+        self.forbid_fonttools = forbid_fonttools
+
+    @contextlib.contextmanager
+    def security_options(self, *,
+                         forbid_fonttools: bool=AUTO,
+                         zip_bomb_limit: Optional[int]=AUTO):
+
+        """Return a context manager setting the security options
+        for a given block of code.
+
+        You can forbid fonttools, and alter the limit on zip bombs.
+        """
+
+        previous = self.forbid_fonttools, self.zip_bomb_limit
+
+        try:
+            if forbid_fonttools is not AUTO:
+                self.forbid_fonttools = forbid_fonttools
+            if zip_bomb_limit is not None:
+                self.zip_bomb_limit = zip_bomb_limit
+
+            yield
+
+        finally:
+            self.forbid_fonttools, self.zip_bomb_limit = previous
 
     def _check_fontconfig_supported(self, ignore_disablement: bool=False):
         """Raise NotSupportedError if we don't support fontconfig.
@@ -1701,6 +1732,11 @@ class FontFinder(object):
             font.embedding = opentype.NO_EMBEDDING_INFO
             return
 
+        if self.forbid_fonttools:
+            # FIXME: fontTools is disabled, not missing, the exception
+            #        would break more then it would achieve
+            return
+
         if ttLib is None:
             raise NotSupportedError("fonttools not installed")
 
@@ -1839,6 +1875,9 @@ class FontFinder(object):
         if self.metadata_cache is not None:
             if self.metadata_cache.fill_charset(font):
                 return True
+
+        if self.forbid_fonttools:
+            return False
 
         if ttLib is None or (fileobj is None and
                              (not font.file or not os.path.exists(font.file))):
