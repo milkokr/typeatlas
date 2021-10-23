@@ -287,7 +287,7 @@ class EmptyRange(RangeBase):
             return False
         if isinstance(other, EmptyRange):
             return True
-        return super().__le__(other)
+        return super().__eq__(other)
 
     def __le__(self, other):
         if isinstance(other, RangeWrapper):

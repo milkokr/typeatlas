@@ -289,15 +289,28 @@ class TestRange:
         for rg in all_ranges():
             assert_equal(set(rg), set(rg), rg)
             assert_equal(rg, rg, rg)
+            assert_equal(rg, set(rg), rg)
+            assert_equal(set(rg), rg, rg)
 
     def test_eq_others(self):
         for left, right in all_pairs():
             if set(left) == set(right):
                 assert_equal(left, right, [left, right])
                 assert_equal(right, left, [left, right])
+
+                assert_equal(left, set(right), [left, right])
+                assert_equal(right, set(left), [left, right])
+                assert_equal(set(left), right, [left, right])
+                assert_equal(set(right), left, [left, right])
+
             else:
                 assert_not_equal(left, right, [left, right])
                 assert_not_equal(right, left, [left, right])
+
+                assert_not_equal(set(left), right, [left, right])
+                assert_not_equal(set(right), left, [left, right])
+                assert_not_equal(left, set(right), [left, right])
+                assert_not_equal(right, set(left), [left, right])
 
     def test_len(self):
         for rg in all_ranges():
