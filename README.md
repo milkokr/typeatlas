@@ -57,7 +57,7 @@ On Ubuntu, Debian or other Debian-based, this can be done with:
 
 On Fedora, this can be done with
 
-    sudo dnf install python3 PyQt5 fonttools
+    sudo dnf install python3 python3-qt5 python3-fonttools python3-magic
 
 You can install it in your home directory using pip:
 
