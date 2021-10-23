@@ -289,6 +289,15 @@ class EmptyRange(RangeBase):
             return True
         return super().__eq__(other)
 
+    def __ne__(self, other):
+        if isinstance(other, RangeWrapper):
+            other = other.wrapped
+        if isinstance(other, (Range, MultiRange)):
+            return True
+        if isinstance(other, EmptyRange):
+            return False
+        return super().__ne__(other)
+
     def __le__(self, other):
         if isinstance(other, RangeWrapper):
             other = other.wrapped
@@ -348,6 +357,13 @@ class Range(RangeBase):
         if isinstance(other, Range):
             return self.start == other.start and self.end == other.end
         return super().__eq__(other)
+
+    def __ne__(self, other):
+        if isinstance(other, RangeWrapper):
+            other = other.wrapped
+        if isinstance(other, Range):
+            return self.start != other.start or self.end != other.end
+        return super().__ne__(other)
 
     def __le__(self, other):
         if isinstance(other, RangeWrapper):
@@ -841,6 +857,16 @@ class MultiRange(RangeBase):
         if isinstance(other, Range):
             return self.ranges == [other]
         return super().__eq__(other)
+
+    def __ne__(self, other):
+
+        if isinstance(other, RangeWrapper):
+            other = other.wrapped
+        if isinstance(other, MultiRange):
+            return self.ranges != other.ranges
+        if isinstance(other, Range):
+            return self.ranges != [other]
+        return super().__ne__(other)
 
     def __le__(self, other):
 
