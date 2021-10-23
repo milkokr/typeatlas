@@ -239,7 +239,7 @@ class LazyRangeWrapper(RangeWrapper):
             del self.factory, self.args, self.kwargs
             if self.wrapped is None:
                 # non-strict mode
-                self.wrapped = EmptyRange()
+                self.wrapped = EMPTY_RANGE
             return self.wrapped
 
         return super().__getattr__(attr)
