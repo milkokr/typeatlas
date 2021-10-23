@@ -53,7 +53,7 @@ Before you install TypeAtlas, you need to install **PyQt** and **fontTools**:
 
 On Ubuntu, Debian or other Debian-based, this can be done with:
 
-    sudo apt-get install python3-pyqt5 python3-fonttools python3-pip
+    sudo apt-get install python3-pyqt5 python3-fonttools python3-pip python3-magic
 
 On Fedora, this can be done with
 
