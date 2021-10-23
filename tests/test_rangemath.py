@@ -321,7 +321,7 @@ class TestRange:
             if len(set(left)) == len(set(right)):
                 assert_equal(len(left), len(right), [left, right])
             else:
-                assert_not_equal(len(left), (right), [left, right])
+                assert_not_equal(len(left), len(right), [left, right])
 
     def test_lessequal_true(self):
         for rg in all_ranges():
