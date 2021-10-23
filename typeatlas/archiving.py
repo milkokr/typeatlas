@@ -51,7 +51,10 @@ archives."""
 import os
 import zipfile
 import tarfile
-import magic
+try:
+    import magic
+except ImportError:
+    magic = None
 import io
 import re
 from collections.abc import Iterator, Callable
@@ -73,7 +76,7 @@ def get_factory(filename: str=None, fileobj: io.BufferedIOBase=None, *,
     if filename is None and (fileobj is None or mimetype is None):
         raise TypeError("filename or fileobject with mime required")
 
-    if mimetype is None and filename is not None:
+    if mimetype is None and filename is not None and magic is not None:
         if fileobj is None or os.access(filename, os.R_OK):
             mimetype = magic.from_file(filename, mime=True)
 
@@ -97,7 +100,7 @@ def get_factory(filename: str=None, fileobj: io.BufferedIOBase=None, *,
 
 def is_known_archive(filename: str, *, mimetype: str=None) -> bool:
     """Return true if the file is a known archive."""
-    if mimetype is None:
+    if mimetype is None and magic is not None:
         mimetype = magic.from_file(filename, mime=True)
 
     for factory in mimetype_factories.get(mimetype, ()):
@@ -163,7 +166,16 @@ class Archive:
     @classmethod
     def is_known_archive(self, filename: str) -> bool:
         """Return True if we can read this file with this class."""
-        return magic.from_file(filename, mime=True) in self.mimetypes
+        if magic is not None:
+            return magic.from_file(filename, mime=True) in self.mimetypes
+
+        for ext in re.search(r'\.([^\.]+(?:\.([^\.]+))?)$',
+                             filename).groups():
+            if ext:
+                if ext in self.extensions:
+                    return True
+
+        return False
 
     def iterate(self) -> Iterator:
         raise NotImplementedError
