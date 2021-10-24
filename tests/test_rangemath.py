@@ -52,6 +52,7 @@ from nose.tools import assert_equal, assert_not_equal, assert_raises
 from nose.tools import assert_sequence_equal, assert_set_equal
 from nose.tools import assert_less_equal, assert_greater_equal
 from nose.tools import assert_set_equal, assert_in, assert_not_in
+from nose.tools import assert_true, assert_false
 from itertools import chain, product
 
 if os.environ.get('TYPEATLAS_DEBUG_TYPECHECK'):
@@ -181,6 +182,33 @@ class TestRange:
                 if val in s:
                     continue
                 assert_not_in(val, rg)
+
+    def test_contains_various(self):
+        rg1 = OrdinalRange(1,5)
+        rg2 = MultiRange([OrdinalRange(-1,3), OrdinalRange(8,15)])
+
+        assert_true(1 in rg1)
+        assert_true(1 in rg2)
+        assert_true(2 in rg1)
+        assert_true(2 in rg2)
+
+        # Questionable behaviour, but 1.0 in range(0, 30) returns True as well
+        assert_true(1.0 in rg1)
+        assert_true(1.0 in rg2)
+
+        assert_false(1.4 in rg1)
+        assert_false(1.4 in rg2)
+
+        assert_false(7 in rg1)
+        assert_false(7 in rg2)
+
+        assert_false(7.3 in rg1)
+        assert_false(7.3 in rg2)
+
+        assert_false(30 in rg1)
+        assert_false(30 in rg2)
+        assert_false(33.3 in rg1)
+        assert_false(33.3 in rg2)
 
     def test_successor(self):
         int_vals = set(int_members)

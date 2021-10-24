@@ -667,7 +667,7 @@ class OrdinalRange(Range):
     value_type = int
 
     def __contains__(self, value):
-        return self.start <= value <= self.end
+        return self.start <= value <= self.end and value == int(value)
 
     def __iter__(self):
         return iter(range(self.start, self.end + 1))
@@ -708,7 +708,7 @@ class OrdinalRange(Range):
     def index(self, value, start=0, stop=None):
         if start in [0, None] and (stop is None or stop >= len(self)):
             value_int = int(value)
-            if self.start <= value <= self.end:
+            if self.start <= value <= self.end and value == value_int:
                 return value_int - self.start
             else:
                 raise ValueError("%r not in range %r" % (value, self))
