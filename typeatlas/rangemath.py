@@ -954,7 +954,8 @@ class MultiRange(RangeBase):
         self._offsets = None
 
     @property
-    def offsets(self):
+    def offsets(self) -> SequenceOf[int]:
+        """A tuple with the offsets of each range"""
         result = self._offsets
         if result is None:
 
