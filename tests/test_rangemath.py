@@ -202,27 +202,27 @@ class TestRange:
 
         assert_false(1.4 in rg1)
         assert_false(1.4 in rg2)
-        assert_raises(ValueError, lambda: rg1.index(1.4))
-        assert_raises(ValueError, lambda: rg2.index(1.4))
+        assert_raises(ValueError, rg1.index, 1.4)
+        assert_raises(ValueError, rg2.index, 1.4)
 
         assert_false(7 in rg1)
         assert_false(7 in rg2)
-        assert_raises(ValueError, lambda: rg1.index(7))
-        assert_raises(ValueError, lambda: rg2.index(7))
+        assert_raises(ValueError, rg1.index, 7)
+        assert_raises(ValueError, rg2.index, 7)
 
         assert_false(7.3 in rg1)
         assert_false(7.3 in rg2)
-        assert_raises(ValueError, lambda: rg1.index(7.3))
-        assert_raises(ValueError, lambda: rg2.index(7.3))
+        assert_raises(ValueError, rg1.index, 7.3)
+        assert_raises(ValueError, rg2.index, 7.3)
 
         assert_false(30 in rg1)
         assert_false(30 in rg2)
         assert_false(33.3 in rg1)
         assert_false(33.3 in rg2)
-        assert_raises(ValueError, lambda: rg1.index(30))
-        assert_raises(ValueError, lambda: rg2.index(30))
-        assert_raises(ValueError, lambda: rg1.index(33.3))
-        assert_raises(ValueError, lambda: rg2.index(33.3))
+        assert_raises(ValueError, rg1.index, 30)
+        assert_raises(ValueError, rg2.index, 30)
+        assert_raises(ValueError, rg1.index, 33.3)
+        assert_raises(ValueError, rg2.index, 33.3)
 
         # Questionable API: Like builtin set() return False for values of different
         # type, or incompatible with the set
@@ -236,14 +236,14 @@ class TestRange:
             assert_false(33.3 in rg)
             assert_false(-300 in rg)
             assert_false(300 in rg)
-            assert_raises(ValueError, lambda: rg.index('1'))
-            assert_raises(ValueError, lambda: rg.index('1.0'))
-            assert_raises(ValueError, lambda: rg.index('a'))
-            assert_raises(ValueError, lambda: rg.index('abc'))
-            assert_raises(ValueError, lambda: rg.index('ABC'))
-            assert_raises(ValueError, lambda: rg.index(33.3))
-            assert_raises(ValueError, lambda: rg.index(-300))
-            assert_raises(ValueError, lambda: rg.index(300))
+            assert_raises(ValueError, rg.index, '1')
+            assert_raises(ValueError, rg.index, '1.0')
+            assert_raises(ValueError, rg.index, 'a')
+            assert_raises(ValueError, rg.index, 'abc')
+            assert_raises(ValueError, rg.index, 'ABC')
+            assert_raises(ValueError, rg.index, 33.3)
+            assert_raises(ValueError, rg.index, -300)
+            assert_raises(ValueError, rg.index, 300)
 
         assert_true('A' in CharacterRange('A', 'Z'))
 
@@ -625,21 +625,21 @@ class TestRange:
         for rg in all_ranges():
             if rg:
                 first = next(iter(rg))
-                assert_raises(ValueError, lambda: rg.index(rg.predecessor(first)))
+                assert_raises(ValueError, rg.index, rg.predecessor(first))
                 assert rg.predecessor(first) not in rg
 
             for i, value in enumerate(rg):
                 assert_equal(rg.index(value), i)
 
             if rg:
-                assert_raises(ValueError, lambda: rg.index(rg.successor(value)))
+                assert_raises(ValueError, rg.index, rg.successor(value))
                 assert rg.successor(value) not in rg
 
         for left, right in all_pairs():
             for value in left - right:
-                assert_raises(ValueError, lambda: right.index(value))
+                assert_raises(ValueError, right.index, value)
             for value in right - left:
-                assert_raises(ValueError, lambda: left.index(value))
+                assert_raises(ValueError, left.index, value)
 
     def test_index_slice(self):
 
@@ -678,7 +678,7 @@ class TestRange:
                 remaining = rg - chunk
 
                 for v in rand.sample(remaining, min(40, len(remaining))):
-                    assert_raises(ValueError, lambda: rg.index(v, start, stop))
+                    assert_raises(ValueError, rg.index, v, start, stop)
 
                 if rg:
                     assert_raises(ValueError,
