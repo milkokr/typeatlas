@@ -929,7 +929,7 @@ class MultiRange(RangeBase):
     the same operation as the Range() as is returned whenever an operation between
     them would produce a non-contiguous range."""
 
-    __slots__ = ('ranges', 'starts', 'length', '_offsets')
+    __slots__ = ('ranges', 'starts', '_length', '_offsets')
 
     def __init__(self, ranges: IterableOf[RangeBase]=()):
         ranges = sorted(filter(None, ranges),
@@ -943,8 +943,14 @@ class MultiRange(RangeBase):
 
         self.ranges = tuple(new_ranges)
         self.starts = tuple(rg.sortkey(rg.start) for rg in new_ranges)
-        self.length = sum(len(rg) for rg in new_ranges)
 
+        # Lenghts and offsets are only loaded on-demand.
+        # The computation of either increases the font loading time from
+        # 4.3 seconds to 4.8 seconds. Not a big deal, but loading the offsets
+        # increases memory usage from 115 MiB + 157 MiB to 115 MiB + 197 MiB.
+        # Since offsets are used for the sequence API which is rarely used,
+        # skip that.
+        self._length = None
         self._offsets = None
 
     @property
@@ -996,7 +1002,13 @@ class MultiRange(RangeBase):
             yield from reversed(rg)
 
     def __len__(self):
-        return self.length
+        result = self._length
+        if result is None:
+            if self._offsets is not None:
+                result = self._length = self._offsets[-1]
+            else:
+                result = self._length = sum(len(rg) for rg in self.ranges)
+        return result
 
     def __getitem__(self, index):
         if isinstance(index, slice):

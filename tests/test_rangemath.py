@@ -324,6 +324,15 @@ class TestRange:
             else:
                 assert_not_equal(len(left), len(right), [left, right])
 
+        rg1 = MultiRange([OrdinalRange(1,5), OrdinalRange(7,12)])
+        rg2 = MultiRange([OrdinalRange(1,5), OrdinalRange(7,12)])
+
+        # Length is computed on-demand, but if the offsets have already
+        # been computed, it's taken from there. Check that both
+        # implementations give the same result.
+        offsets = rg2.offsets
+        assert_equal(len(rg1), len(rg2))
+
     def test_lessequal_true(self):
         for rg in all_ranges():
             assert_less_equal(set(rg), set(rg), rg)
