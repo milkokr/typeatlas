@@ -707,8 +707,9 @@ class OrdinalRange(Range):
 
     def index(self, value, start=0, stop=None):
         if start in [0, None] and (stop is None or stop >= len(self)):
+            value_int = int(value)
             if self.start <= value <= self.end:
-                return value - self.start
+                return value_int - self.start
             else:
                 raise ValueError("%r not in range %r" % (value, self))
         else:
