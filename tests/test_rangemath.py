@@ -191,24 +191,38 @@ class TestRange:
         assert_true(1 in rg2)
         assert_true(2 in rg1)
         assert_true(2 in rg2)
+        assert_equal(rg1.index(1), 0)
+        assert_equal(rg2.index(1), 2)
 
         # Questionable behaviour, but 1.0 in range(0, 30) returns True as well
         assert_true(1.0 in rg1)
         assert_true(1.0 in rg2)
+        assert_equal(rg1.index(1.0), 0)
+        assert_equal(rg2.index(1.0), 2)
 
         assert_false(1.4 in rg1)
         assert_false(1.4 in rg2)
+        assert_raises(ValueError, lambda: rg1.index(1.4))
+        assert_raises(ValueError, lambda: rg2.index(1.4))
 
         assert_false(7 in rg1)
         assert_false(7 in rg2)
+        assert_raises(ValueError, lambda: rg1.index(7))
+        assert_raises(ValueError, lambda: rg2.index(7))
 
         assert_false(7.3 in rg1)
         assert_false(7.3 in rg2)
+        assert_raises(ValueError, lambda: rg1.index(7.3))
+        assert_raises(ValueError, lambda: rg2.index(7.3))
 
         assert_false(30 in rg1)
         assert_false(30 in rg2)
         assert_false(33.3 in rg1)
         assert_false(33.3 in rg2)
+        assert_raises(ValueError, lambda: rg1.index(30))
+        assert_raises(ValueError, lambda: rg2.index(30))
+        assert_raises(ValueError, lambda: rg1.index(33.3))
+        assert_raises(ValueError, lambda: rg2.index(33.3))
 
     def test_successor(self):
         int_vals = set(int_members)
