@@ -47,6 +47,7 @@
 
 import os
 import nose
+import random
 from nose.tools import assert_equal, assert_not_equal, assert_raises
 from nose.tools import assert_sequence_equal, assert_set_equal
 from nose.tools import assert_less_equal, assert_greater_equal
@@ -470,3 +471,181 @@ class TestRange:
                 continue
             blocks = rg.to_plain_blocks()
             assert_less_equal(len(rg), blockslen(blocks), [rg, blocks])
+
+    def test_getitem(self):
+        for rg in all_ranges():
+            L = list(rg)
+            for i in range(len(L)):
+                assert_equal(L[i], rg[i])
+                assert_equal(L[-i - 1], rg[-i - 1])
+
+            assert_raises(IndexError, lambda: rg[len(rg)])
+            assert_raises(IndexError, lambda: rg[len(rg) + 10])
+
+            assert_raises(IndexError, lambda: L[-len(rg) - 1])
+            assert_raises(IndexError, lambda: rg[-len(rg) - 1])
+
+            if not rg:
+                assert_raises(IndexError, lambda: L[-1])
+                assert_raises(IndexError, lambda: rg[-1])
+
+    def test_slice(self):
+        rand = random.Random(651918493)
+
+        for rg in all_ranges():
+            L = list(rg)
+
+            slices = []
+
+            for start in [0, 1, -1, len(rg) // 2, -len(rg) // 2, len(rg), None]:
+                for stop in [0, 1, -1, len(rg) // 2, -len(rg) // 2, len(rg), None]:
+                    for step in [None, 1, 2, -1, -10, 10, -15, 15]:
+                        slices.append(slice(start, stop, step))
+
+            extra_slices = [slice(i, i+1) for i in range(len(rg))]
+            slices += rand.sample(extra_slices, min(100, len(extra_slices)))
+
+            for index in slices:
+
+                chunk_range = rg[index]
+                chunk_list = L[index]
+
+                assert_equal(list(chunk_range), chunk_list, [rg, index])
+                assert_equal(list(reversed(chunk_range)), chunk_list[::-1], [rg, index])
+                assert_equal(list(chunk_range[::-1]), chunk_list[::-1], [rg, index])
+                assert_equal(chunk_range, rg[index])
+
+                assert_equal(len(chunk_range), len(chunk_list))
+                assert_equal(list(chunk_range[:]), chunk_list[:])
+                assert_equal(chunk_range[:], chunk_range)
+
+                for i in range(min(len(chunk_range), 3)):
+                    assert_equal(chunk_range[i], chunk_list[i], chunk_range)
+                if chunk_range:
+                    for i in [len(chunk_range) - 1, -1]:
+                        assert_equal(chunk_range[i], chunk_list[i], chunk_range)
+
+                assert_raises(IndexError, lambda: chunk_range[len(chunk_range)])
+                assert_raises(IndexError, lambda: chunk_range[-len(chunk_range) - 1])
+
+    def test_count(self):
+        for rg in all_ranges():
+            if rg:
+                first = next(iter(rg))
+                assert_equal(rg.count(rg.predecessor(first)), 0)
+
+            for value in rg:
+                assert_equal(rg.count(value), 1)
+
+            if rg:
+                assert_equal(rg.count(rg.successor(value)), 0)
+
+        for left, right in all_pairs():
+            for value in left - right:
+                assert_equal(right.count(value), 0)
+            for value in right - left:
+                assert_equal(left.count(value), 0)
+
+    def test_index(self):
+
+        for rg in all_ranges():
+            if rg:
+                first = next(iter(rg))
+                assert_raises(ValueError, lambda: rg.index(rg.predecessor(first)))
+                assert rg.predecessor(first) not in rg
+
+            for i, value in enumerate(rg):
+                assert_equal(rg.index(value), i)
+
+            if rg:
+                assert_raises(ValueError, lambda: rg.index(rg.successor(value)))
+                assert rg.successor(value) not in rg
+
+        for left, right in all_pairs():
+            for value in left - right:
+                assert_raises(ValueError, lambda: right.index(value))
+            for value in right - left:
+                assert_raises(ValueError, lambda: left.index(value))
+
+    def test_index_slice(self):
+
+        rand = random.Random(651918493)
+
+        for rg in all_ranges():
+            if rg:
+                first = next(iter(rg))
+                last = next(reversed(rg))
+
+            L = list(rg)
+
+            slices = []
+
+            for start in [0, 1, -1, len(rg) // 2, -len(rg) // 2, len(rg), None]:
+                for stop in [0, 1, -1, len(rg) // 2, -len(rg) // 2, len(rg), None]:
+                    slices.append((start, stop))
+
+            extra_slices = [(i, i+1) for i in range(len(rg))]
+            slices += rand.sample(extra_slices, min(100, len(extra_slices)))
+
+            for start, stop in slices:
+                chunk = rg[start:stop]
+                for v in rand.sample(chunk, min(40, len(chunk))):
+                    real_start = slice(start, stop).indices(len(rg))[0]
+
+                    assert_equal(rg.index(v, start, stop),
+                                 real_start + chunk.index(v),
+                                 [rg, chunk, v, real_start])
+
+                    assert_equal(rg.index(v, start, stop),
+                                 L.index(v, start or 0) if stop is None
+                                    else L.index(v, start or 0, stop),
+                                 [rg, chunk, v, real_start])
+
+                remaining = rg - chunk
+
+                for v in rand.sample(remaining, min(40, len(remaining))):
+                    assert_raises(ValueError, lambda: rg.index(v, start, stop))
+
+                if rg:
+                    assert_raises(ValueError,
+                                  lambda: rg.index(rg.predecessor(first),
+                                                   start, stop))
+                    assert_raises(ValueError,
+                                  lambda: rg.index(rg.successor(last),
+                                                   start, stop))
+
+    def test_reversed(self):
+        for rg in all_ranges():
+            assert_equal(list(reversed(list(rg))), list(reversed(rg)))
+
+    ### These are disabled. Sequences are not actual equal to other sequences.
+    ### E.g. tuples aren't equal to lists. So neither should be ranges.
+    ### The equality here was a temporary fix to support comparison between
+    ### slices of ranges.
+    ## def test_eq_true_list(self):
+    ##     for rg in all_ranges():
+    ##         assert_equal(list(rg), list(rg), rg)
+    ##         assert_equal(rg, rg, rg)
+    ##         assert_equal(rg, list(rg), rg)
+    ##         assert_equal(list(rg), rg, rg)
+    ##
+    ## def test_eq_others_list(self):
+    ##     for left, right in all_pairs():
+    ##         if list(left) == list(right):
+    ##             assert_equal(left, right, [left, right])
+    ##             assert_equal(right, left, [left, right])
+    ##
+    ##             assert_equal(left, list(right), [left, right])
+    ##             assert_equal(right, list(left), [left, right])
+    ##             assert_equal(list(left), right, [left, right])
+    ##             assert_equal(list(right), left, [left, right])
+    ##
+    ##         else:
+    ##             assert_not_equal(left, right, [left, right])
+    ##             assert_not_equal(right, left, [left, right])
+    ##
+    ##             assert_not_equal(list(left), right, [left, right])
+    ##             assert_not_equal(list(right), left, [left, right])
+    ##             assert_not_equal(left, list(right), [left, right])
+    ##             assert_not_equal(right, list(left), [left, right])
+    ##

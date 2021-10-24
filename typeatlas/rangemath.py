@@ -53,12 +53,15 @@ using blockmath.
 
 Like blocks from blockmath, the ranges are defined as their start and end,
 inclusively, unlike Python's range().
+
+For compatibility with range(), the ranges provide the Sequence interface
+as well.
 """
 
 # FIXME Too many hardcoded types, particularly RangeWrapper.
 
-from collections.abc import Set, Iterable, Callable
-from itertools import chain
+from collections.abc import Set, Iterable, Callable, Sequence, Container
+from itertools import chain, islice
 from typeatlas import blockmath
 import re
 import sys
@@ -77,7 +80,7 @@ Optional = generic_type('Optional')
 range_pattern = re.compile(r'(?s)^(.+?)(?:[:-](.+))?$')
 
 
-class RangeBase(Set):
+class RangeBase(Set, Sequence):
 
     """The base class for discrete ranges. Use this class as a type hint.
 
@@ -107,6 +110,47 @@ class RangeBase(Set):
         """Convert to decimal string. This is broken for character ranges
         with spaces at the ends."""
         return ' '.join('%s-%s' % (rg.start, rg.end) for rg in self.ranges)
+
+    def __eq__(self, other):
+        ## Sequences of different types are not equal to each other, but
+        ## one can enable this if they want with this code.
+        #if not isinstance(other, Set) and isinstance(other, Sequence):
+        #    return (len(self) == len(other) and
+        #            all(x == y for x, y in zip(self, other)))
+
+        # Make sure order is respected when comparing to e.g. inverted
+        # ranges.
+        if isinstance(other, _RangeStep):
+            return (len(self) == len(other) and
+                    all(x == y for x, y in zip(self, other)))
+        return super().__eq__(other)
+
+    def __ne__(self, other):
+        ## Sequences of different types are not equal to each other, but
+        ## one can enable this if they want with this code.
+        #if not isinstance(other, Set) and isinstance(other, Sequence):
+        #    return (len(self) != len(other) or
+        #            any(x != y for x, y in zip(self, other)))
+
+        # Make sure order is respected when comparing to e.g. inverted
+        # ranges.
+        if isinstance(other, _RangeStep):
+            return (len(self) != len(other) or
+                    any(x != y for x, y in zip(self, other)))
+        return super().__ne__(other)
+
+    def count(self, value):
+        return int(bool(value in self))
+
+    def index(self, value, start=0, stop=None):
+        if value not in self:
+            raise ValueError("%r not in range %r" % (value, self))
+
+        if start in [0, None] and (stop is None or stop >= len(self)):
+            return bisect.bisect_left(self, value)
+        else:
+            real_start = slice(start, stop).indices(len(self))[0]
+            return real_start + self[start:stop].index(value)
 
     @abc.abstractmethod
     def successor(self, value: object) -> object:
@@ -159,6 +203,9 @@ class RangeWrapper(RangeBase):
 
     def __len__(self):
         return len(self.wrapped)
+
+    def __getitem__(self, index):
+        return self.wrapped[index]
 
     def successor(self, value: object) -> object:
         return self.wrapped.successor(value)
@@ -266,6 +313,11 @@ class EmptyRange(RangeBase):
 
     def __len__(self):
         return 0
+
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            return self
+        raise IndexError("empty ranges are empty")
 
     def successor(self, value: object) -> object:
         raise TypeError("empty ranges don't have values")
@@ -626,6 +678,43 @@ class OrdinalRange(Range):
     def __len__(self):
         return self.end - self.start + 1
 
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            result = range(self.start, self.end + 1)[index]
+
+            if len(result) == len(self) and result.step == 1:
+                assert result.start == self.start, (result, self)
+                return self
+
+            if result.step == 1:
+                if result.start >= result.stop:
+                    return EMPTY_RANGE
+                return type(self)(result.start, result.stop - 1)
+            else:
+                return _RangeStep(self, 1, result)
+
+            return result
+
+        if index < 0:
+            index = len(self) + index
+            if index < 0:
+                raise IndexError("range index out of range")
+
+        value = self.start + index
+        if value <= self.end:
+            return value
+        raise IndexError("range index out of range")
+
+    def index(self, value, start=0, stop=None):
+        if start in [0, None] and (stop is None or stop >= len(self)):
+            if self.start <= value <= self.end:
+                return value - self.start
+            else:
+                raise ValueError("%r not in range %r" % (value, self))
+        else:
+            real_start = slice(start, stop).indices(len(self))[0]
+            return real_start + self[start:stop].index(value)
+
     def successor(self, value: numbers.Real) -> numbers.Real:
         return value + 1
 
@@ -731,6 +820,66 @@ class CharacterRange(Range):
     def __len__(self):
         return self.end_ord - self.start_ord + 1
 
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            length = len(self)
+            start, stop, step = index.indices(length)
+            if stop == length and start == 0 and step == 1:
+                return self
+
+            if step == 1:
+                result = range(self.start_ord, self.end_ord + 1)[index]
+                if result.start >= result.stop:
+                    return EMPTY_RANGE
+                return type(self)(chr(result.start), chr(result.stop - 1))
+            else:
+                #return [chr(x) for x in result]
+
+                if step > 0:
+                    rg = self[start:stop]
+
+                else:
+                    if stop >= start:
+                        return EMPTY_RANGE
+
+                    if step == -1:
+                        tail_length = 0
+                    else:
+                        tail_length = (start - stop - 1) % -step
+
+                    if tail_length != 0:
+                        stop += tail_length
+
+                    rg = self[stop + 1:start + 1]
+
+                if not rg:
+                    return rg
+
+                return _RangeStep(rg, step)
+
+            return result
+
+        if index < 0:
+            index = len(self) + index
+            if index < 0:
+                raise IndexError("range index out of range")
+
+        value = self.start_ord + index
+        if value <= self.end_ord:
+            return chr(value)
+        raise IndexError("range index out of range")
+
+    def index(self, value, start=0, stop=None):
+        if start in [0, None] and (stop is None or stop >= len(self)):
+            value_ord = ord(value)
+            if self.start_ord <= ord(value) <= self.end_ord:
+                return value_ord - self.start_ord
+            else:
+                raise ValueError("%r not in range %r" % (value, self))
+        else:
+            real_start = slice(start, stop).indices(len(self))[0]
+            return real_start + self[start:stop].index(value)
+
     def successor(self, value: str) -> str:
         return chr(ord(value) + 1)
 
@@ -780,7 +929,7 @@ class MultiRange(RangeBase):
     the same operation as the Range() as is returned whenever an operation between
     them would produce a non-contiguous range."""
 
-    __slots__ = ('ranges', 'starts', 'length')
+    __slots__ = ('ranges', 'starts', 'length', '_offsets')
 
     def __init__(self, ranges: IterableOf[RangeBase]=()):
         ranges = sorted(filter(None, ranges),
@@ -795,6 +944,24 @@ class MultiRange(RangeBase):
         self.ranges = tuple(new_ranges)
         self.starts = tuple(rg.sortkey(rg.start) for rg in new_ranges)
         self.length = sum(len(rg) for rg in new_ranges)
+
+        self._offsets = None
+
+    @property
+    def offsets(self):
+        result = self._offsets
+        if result is None:
+
+            def offsets():
+                length = 0
+                yield length
+                for rg in self.ranges:
+                    length += len(rg)
+                    yield length
+
+            self._offsets = result = tuple(offsets())
+
+        return result
 
     @property
     def range_type(self):
@@ -830,6 +997,121 @@ class MultiRange(RangeBase):
 
     def __len__(self):
         return self.length
+
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            length = len(self)
+            start, stop, step = index.indices(length)
+            if stop == length and start == 0 and step == 1:
+                return self
+
+            if step == 1:
+                if start >= stop:
+                    return EMPTY_RANGE
+
+                result = []
+
+                i = bisect.bisect_right(self.offsets, start) - 1
+                j = bisect.bisect_left(self.offsets, stop)
+
+                if 0 <= i < len(self.offsets):
+                    offset = self.offsets[i]
+                    start -= offset
+                    stop -= offset
+
+                for rg in self.ranges[i:j]:
+                    sub_length = len(rg)
+
+                    if start < sub_length:
+                        rg = rg[start:stop]
+                        if rg:
+                            result.append(rg)
+                        start = 0
+                    else:
+                        start -= sub_length
+
+                    stop -= sub_length
+                    if stop < 1:
+                        break
+                if not result:
+                    return EMPTY_RANGE
+                return MultiRange(result)
+
+            else:
+                #return list(self)[index]
+
+                if step > 0:
+                    rg = self[start:stop]
+
+                else:
+
+                    if stop >= start:
+                        return EMPTY_RANGE
+
+                    if step == -1:
+                        tail_length = 0
+                    else:
+                        tail_length = (start - stop - 1) % -step
+
+                    if tail_length != 0:
+                        stop += tail_length
+
+                    rg = self[stop + 1:start + 1]
+
+                if not rg:
+                    return rg
+
+                return _RangeStep(rg, step)
+
+            return result
+
+        if index < 0:
+            index = len(self) + index
+            if index < 0:
+                raise IndexError("range index out of range")
+
+        ranges = self.ranges
+        if ranges:
+            offsets = self.offsets
+
+            i = bisect.bisect(offsets, index) - 1
+            if 0 <= i < len(ranges):
+                rg = ranges[i]
+                index -= offsets[i]
+                if index < len(rg):
+                    return rg[index]
+
+        ## Implementation without bisect
+        #for rg in self.ranges:
+        #    length = len(rg)
+        #    if index < length:
+        #        return rg[index]
+        #    index -= length
+        #    if index < 0:
+        #        break
+
+        raise IndexError("range index out of range")
+
+    def index(self, value, start=0, stop=None):
+        ranges = self.ranges
+
+        if not ranges:
+            raise ValueError("%r not in range %r" % (value, self))
+
+        if start in [0, None] and (stop is None or stop >= len(self)):
+            starts = self.starts
+
+            value_key = ranges[0].sortkey(value)
+
+            i = bisect.bisect(starts, value_key) - 1
+            if 0 <= i < len(ranges):
+                return self.offsets[i] + ranges[i].index(value)
+
+            raise ValueError("%r not in range %r" % (value, self))
+
+        else:
+            real_start = slice(start, stop).indices(len(self))[0]
+            return real_start + self[start:stop].index(value)
 
     def successor(self, value: object) -> object:
         return self.ranges[0].successor(value)
@@ -1117,3 +1399,163 @@ class MultiRange(RangeBase):
     def to_character_range(self) -> 'RangeBase':
         """Get the equivalent character range."""
         return MultiRange(rg.to_character_range() for rg in self.ranges)
+
+
+_STEP_THRESH = 10
+
+class _RangeStep(Set, Sequence):
+
+    """Wraps a range sliced with a step, providing a proxy that skips
+    to every nth element, or reversed the range if needed.
+
+    The stepped range is initialized using the wrapped range, the step,
+    optional sequence of elements (defaulting to the wrapped range), and
+    an optional set or container for the value lookup (defaulting to
+    the sequence of elements.
+
+    Since the wrapped range is only used to provide some range-like APIs,
+    it is not strictly needed, so you can remove it from the code if
+    reusing this class in non-range context. You can also pass None,
+    at the horror of the type checkers, and it will work.
+    """
+
+    def __init__(self, wrapped: RangeBase, step: int=1,
+                       items: Sequence=None, lookup: Container=None):
+        if items is None:
+            items = wrapped
+        if lookup is None:
+            lookup = items
+        self.wrapped = wrapped
+        self.items = items
+        self.lookup = lookup
+        self.step = step
+
+    def __repr__(self):
+        return '%s(%r, %r, %r)' % (type(self).__name__,
+                                   self.wrapped, self.step, self.items)
+
+    @property
+    def range_type(self):
+        return self.wrapped.range_type
+
+    @property
+    def value_type(self):
+        return self.wrapped.value_type
+
+    @property
+    def ranges(self) -> 'SequenceOf[_RangeStep]':
+        """A sequence of self"""
+        return (self, )
+
+    def __contains__(self, value):
+        step = self.step
+        if value not in self.lookup:
+            return False
+        if step == 1 or step == -1:
+            return True
+        if self.items.index(value) % step != 0:
+            return False
+        return True
+
+    def _iter(self, direction=1):
+        items = self.items
+        step = self.step * direction
+
+        if step == 1:
+            return iter(items)
+        if step == -1:
+            return reversed(items)
+
+        length = len(items)
+        if (length - 1) % step:
+            length = 1 + ((length - 1) // abs(step)) * abs(step)
+
+        if step > 0:
+            if step > _STEP_THRESH:
+                return (items[i] for i in range(0, length, step))
+            else:
+                return islice(items, 0, None, step)
+        else:
+            if step > _STEP_THRESH:
+                return (items[i] for i in range(length - 1, -1, step))
+            else:
+                return islice(reversed(items), len(items) - length, None, -step)
+
+    def __iter__(self):
+        return self._iter(1)
+
+    def __reversed__(self):
+        return self._iter(-1)
+
+    def __len__(self):
+        length = len(self.items)
+        step = abs(self.step)
+
+        return length // step + (1 if length % step else 0)
+
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            # We *could* just return an effecitve sequence here, with O(n)
+            # __contains__, as nobody slicing a slice of a sequence would expect,
+            # but for consistency, make it a proper set.
+            items = tuple(self[i] for i in range(len(self))[index])
+            return type(self)(self.wrapped, 1, items, frozenset(items))
+
+        items = self.items
+        step = self.step
+        if index < 0:
+            index = len(self) + index
+            if index < 0:
+                raise IndexError("range slice index out of range")
+
+        if step > 0:
+            return items[index * step]
+
+        else:
+            index = len(items) + index * step - 1
+            if index < 0:
+                raise IndexError("range slice index out of range")
+            return items[index]
+
+    def successor(self, value: object) -> object:
+        return self.wrapped.successor(value)
+
+    def predecessor(self, value: object) -> object:
+        return self.wrapped.predecessor(value)
+
+    def sortkey(self, value: object) -> object:
+        return self.wrapped.sortkey(value)
+
+    def from_iterable(self, it: Iterable) -> RangeBase:
+        return self.wrapped.from_iterable(it)
+
+    def _from_iterable(self, it: Iterable) -> Set:
+        # Here, returning something entirely different from a set performance-wise
+        # *would* be surprising, since this is called on set operations. While
+        # we are supporting those only just in case, as a fallback, having
+        # O(n) lookup performance here would be not what the caller would expect,
+        # so providing a set for the lookup is more essential, even if this
+        # method in itself is not.
+        items = tuple(it)
+        return type(self)(self.wrapped, 1, items, frozenset(items))
+
+    def to_ordinal_range(self) -> 'RangeBase':
+        return OrdinalRange.from_iterable(self)
+
+    def to_character_range(self) -> 'RangeBase':
+        return CharacterRange.from_iterable(self)
+
+    def __eq__(self, other):
+        if isinstance(other, (_RangeStep, RangeBase)):
+            return (len(self) == len(other) and
+                    all(x == y for x, y in zip(self, other)))
+        return super().__eq__(self, other)
+
+    def __ne__(self, other):
+        if isinstance(other, (_RangeStep, RangeBase)):
+            return (len(self) == len(other) and
+                    all(x == y for x, y in zip(self, other)))
+        return super().__eq__(self, other)
+
+    def __getattr__(self, attr):
+        return getattr(self.wrapped, attr)
