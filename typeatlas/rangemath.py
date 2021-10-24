@@ -873,7 +873,7 @@ class CharacterRange(Range):
     def index(self, value, start=0, stop=None):
         if start in [0, None] and (stop is None or stop >= len(self)):
             value_ord = ord(value)
-            if self.start_ord <= ord(value) <= self.end_ord:
+            if self.start_ord <= value_ord <= self.end_ord:
                 return value_ord - self.start_ord
             else:
                 raise ValueError("%r not in range %r" % (value, self))
