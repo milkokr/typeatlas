@@ -667,7 +667,10 @@ class OrdinalRange(Range):
     value_type = int
 
     def __contains__(self, value):
-        return self.start <= value <= self.end and value == int(value)
+        try:
+            return self.start <= value <= self.end and value == int(value)
+        except (TypeError, ValueError):
+            return False
 
     def __iter__(self):
         return iter(range(self.start, self.end + 1))
@@ -707,8 +710,15 @@ class OrdinalRange(Range):
 
     def index(self, value, start=0, stop=None):
         if start in [0, None] and (stop is None or stop >= len(self)):
-            value_int = int(value)
-            if self.start <= value <= self.end and value == value_int:
+            try:
+                value_int = int(value)
+                value_found = (self.start <= value <= self.end and
+                               value == value_int)
+
+            except (TypeError, ValueError):
+                raise ValueError("%r not in range %r" % (value, self))
+
+            if value_found:
                 return value_int - self.start
             else:
                 raise ValueError("%r not in range %r" % (value, self))
@@ -810,7 +820,10 @@ class CharacterRange(Range):
         super().__init__(start, end, *args, **kwargs)
 
     def __contains__(self, value):
-        return self.start_ord <= ord(value) <= self.end_ord
+        try:
+            return self.start_ord <= ord(value) <= self.end_ord
+        except TypeError:
+            return False
 
     def __iter__(self):
         return map(chr, range(self.start_ord, self.end_ord + 1))
@@ -872,7 +885,11 @@ class CharacterRange(Range):
 
     def index(self, value, start=0, stop=None):
         if start in [0, None] and (stop is None or stop >= len(self)):
-            value_ord = ord(value)
+            try:
+                value_ord = ord(value)
+            except TypeError:
+                raise ValueError("%r not in range %r" % (value, self))
+
             if self.start_ord <= value_ord <= self.end_ord:
                 return value_ord - self.start_ord
             else:
@@ -989,9 +1006,13 @@ class MultiRange(RangeBase):
         if not ranges:
             return False
 
-        value_key = ranges[0].sortkey(value)
+        try:
+            value_key = ranges[0].sortkey(value)
+            i = bisect.bisect(starts, value_key) - 1
 
-        i = bisect.bisect(starts, value_key) - 1
+        except (TypeError, ValueError):
+            return False
+
         if 0 <= i < len(ranges):
             return value in ranges[i]
 
@@ -1115,9 +1136,13 @@ class MultiRange(RangeBase):
         if start in [0, None] and (stop is None or stop >= len(self)):
             starts = self.starts
 
-            value_key = ranges[0].sortkey(value)
+            try:
+                value_key = ranges[0].sortkey(value)
+                i = bisect.bisect(starts, value_key) - 1
 
-            i = bisect.bisect(starts, value_key) - 1
+            except (TypeError, ValueError):
+                raise ValueError("%r not in range %r" % (value, self))
+
             if 0 <= i < len(ranges):
                 return self.offsets[i] + ranges[i].index(value)
 

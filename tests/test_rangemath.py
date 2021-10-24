@@ -224,6 +224,29 @@ class TestRange:
         assert_raises(ValueError, lambda: rg1.index(33.3))
         assert_raises(ValueError, lambda: rg2.index(33.3))
 
+        # Questionable API: Like builtin set() return False for values of different
+        # type, or incompatible with the set
+        for rg in [rg1, rg2, EMPTY_RANGE, CharacterRange('A', 'Z')]:
+            assert_false('1' in rg)
+            assert_false('1.0' in rg)
+            assert_false('a' in rg)
+            assert_false('z' in rg)
+            assert_false('abc' in rg)
+            assert_false('ABC' in rg)
+            assert_false(33.3 in rg)
+            assert_false(-300 in rg)
+            assert_false(300 in rg)
+            assert_raises(ValueError, lambda: rg.index('1'))
+            assert_raises(ValueError, lambda: rg.index('1.0'))
+            assert_raises(ValueError, lambda: rg.index('a'))
+            assert_raises(ValueError, lambda: rg.index('abc'))
+            assert_raises(ValueError, lambda: rg.index('ABC'))
+            assert_raises(ValueError, lambda: rg.index(33.3))
+            assert_raises(ValueError, lambda: rg.index(-300))
+            assert_raises(ValueError, lambda: rg.index(300))
+
+        assert_true('A' in CharacterRange('A', 'Z'))
+
     def test_successor(self):
         int_vals = set(int_members)
 
