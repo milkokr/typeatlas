@@ -1599,13 +1599,13 @@ class TransposedModel(QtCore.QAbstractProxyModel):
             return QtCore.QModelIndex()
         return self.index(index.column(), index.row())
 
-    def rowCount(self, parent):
+    def rowCount(self, parent=QtCore.QModelIndex()):
         model = self.sourceModel()
         if model is None or parent.isValid():
             return 0
         return model.columnCount()
 
-    def columnCount(self, parent):
+    def columnCount(self, parent=QtCore.QModelIndex()):
         model = self.sourceModel()
         if model is None or parent.isValid():
             return 0
