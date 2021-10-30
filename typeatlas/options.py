@@ -133,7 +133,8 @@ class Option(object):
                        signalAttribute: str=None,
                        fromString: Callable=None, parseString: Callable=None,
                        toString: Callable=None,
-                       description: str=None):
+                       description: str=None,
+                       shortlabel: str=None):
 
         if hasDefault is None:
             #hasDefault = True if choices oeelse False
@@ -145,6 +146,7 @@ class Option(object):
         self.choices = choices
         self.label = label
         self.icon = icon
+        self.shortlabel = shortlabel
         self.default = default
         self.hasDefault = hasDefault
 
@@ -385,6 +387,42 @@ class Option(object):
             result.setWhatsThis(_(self.description))
 
         return result
+
+    def getAction(self, options: 'OptionsBase',
+                        parent: QtWidgets.QWidget=None) -> QtWidgets.QAction:
+        """Return an action to add to menu or toolbar to edit this option."""
+
+        if issubclass(self.type, bool):
+            result = self.getCheckbox(options, parent)
+            action = QtWidgets.QAction(parent)
+
+            if self.shortlabel is not None:
+                action.setText(_(self.shortlabel))
+                if self.label:
+                    action.setToolTip(_(self.label))
+            else:
+                action.setText(_(self.label))
+
+            if self.icon:
+                action.setIcon(getIcon(self.icon))
+
+            action.setCheckable(True)
+
+            signal = getattr(options, self.signalAttribute)
+            signal.connect(action.setChecked)
+
+            value = options.getValue(self.name, self.section)
+            action.setChecked(value)
+
+            @action.toggled.connect
+            def callback(state):
+                options.setValue(self.name, self.section, bool(state))
+
+        else:
+            action = QtWidgets.QWidgetAction(parent)
+            action.setDefaultWidget(self.getWidget(options, action))
+
+        return action
 
 
 FONT_SIZES = lambda: QtGui.QFontDatabase.standardSizes()
@@ -943,6 +981,11 @@ class OptionsBase(QtCore.QObject):
         """Get the widget for the given option. All arguments are
         passed to the options's getWidget()."""
         return self.options[name].getWidget(self, *args, **kwargs)
+
+    def getAction(self, name: str, *args, **kwargs) -> QtWidgets.QAction:
+        """Get the action for the given option. All arguments are
+        passed to the options's getAction()."""
+        return self.options[name].getAction(self, *args, **kwargs)
 
     def getComboBox(self, name: str, *args, **kwargs) -> QtWidgets.QComboBox:
         """Get the combo box for the given option. All arguments are
