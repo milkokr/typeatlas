@@ -931,7 +931,11 @@ class OptionsBase(QtCore.QObject):
         This is automatcailly invoked when setting the property.
 
         This triggers signals for the edited options."""
-        self.changed = True
+
+        oldValue = self.permanentValues[option]
+        if value != oldValue:
+            self.changed = True
+
         self.permanentValues[option] = value
         self.setDraftValue(option, section, value)
 
