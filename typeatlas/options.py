@@ -573,6 +573,11 @@ options = [
            choices=[Choice('os', N_('Operating system')),
                     Choice('internal', N_('Internal renderer'))]),
 
+    Option('fontgrid-font-rows', 'charmap',
+           N_('Show character map fonts in rows'),
+           icon='object-rotate-right',
+           shortlabel=N_('Rows'),
+           type=bool, default=False),
 
 ]
 

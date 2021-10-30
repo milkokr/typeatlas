@@ -1641,6 +1641,9 @@ class GridOptionsToolbox(Toolbox):
             yield self.action(self.larger, _('Larger'),
                               icon='format-font-size-more')
 
+        self.rotateMultiGrid = \
+            yield self.renderingChoice.options.getAction('fontgrid-font-rows')
+
     def _jump_to_size(self, offset: int):
         """Increate the size with the given offset of jumps. This
         iterates over the .fontsizes property of the grid."""
@@ -1700,6 +1703,7 @@ class FontGrid(QtWidgets.QWidget):
         self.fontDb = fontDb
         self.langDb = langDb
         self.histories = histories
+        self.options = options
         self.renderingChoice = renderingChoice
         self.fontsizes = [12]
         self.fontItem = None
@@ -1820,6 +1824,8 @@ class FontGrid(QtWidgets.QWidget):
         view.setModel(self.filterModel)
         view.selectionModel().currentChanged.connect(self._currentChanged)
 
+        self.optionsToolbox.rotateMultiGrid.setVisible(False)
+
         return view
 
     def _createTableView(self) -> QtWidgets.QTableView:
@@ -1831,11 +1837,13 @@ class FontGrid(QtWidgets.QWidget):
         view.setDragDropMode(view.DragOnly)
         view.setSelectionMode(view.ExtendedSelection)
 
-        #self.transposedModel = transposedModel = TransposedModel()
-        #transposedModel.setSourceModel(self.filterModel)
-        #view.setModel(transposedModel)
+        self.transposedModel = transposedModel = TransposedModel()
+        transposedModel.setSourceModel(self.filterModel)
+        transposedModel.setTransposed(self.options.fontgridFontRows)
+        self.options.fontgridFontRowsChanged.connect(transposedModel.setTransposed)
+        view.setModel(transposedModel)
 
-        view.setModel(self.filterModel)
+        #view.setModel(self.filterModel)
         view.selectionModel().currentChanged.connect(self._currentChanged)
 
         view.setHorizontalHeader(RotatedHeaderView(Qt.Horizontal, angle=0))
@@ -1844,6 +1852,9 @@ class FontGrid(QtWidgets.QWidget):
                       QtWidgets.QHeaderView.ResizeToContents)
         setResizeMode(view.horizontalHeader(),
                       QtWidgets.QHeaderView.ResizeToContents)
+
+        self.optionsToolbox.rotateMultiGrid.setVisible(True)
+
         return view
 
     @Slot(bool)
