@@ -1737,6 +1737,9 @@ class FontGrid(QtWidgets.QWidget):
         searchBar.addWidget(blockCombo)
         searchBar.addWidget(scriptCombo)
 
+        self.optionsToolbox = GridOptionsToolbox(self)
+        self.optionsToolbox.populateToolbar(searchBar)
+
         self.model = model = FontSymbolModel(charDb=charDb, langDb=langDb,
                                              renderingChoice=renderingChoice)
 
@@ -1763,9 +1766,6 @@ class FontGrid(QtWidgets.QWidget):
         self.toolbox = FontGridToolbox(self)
         self.toolbox.addContextMenu(self.view)
         self.toolbox.disableActions()
-
-        self.optionsToolbox = GridOptionsToolbox(self)
-        self.optionsToolbox.populateToolbar(searchBar)
 
         self.characterCount = QtWidgets.QLabel()
         self.characterCount.setTextFormat(Qt.PlainText)
