@@ -1556,6 +1556,19 @@ class TransposedModel(QtCore.QAbstractProxyModel):
 
     """A Qt model proxy that transposes the original model."""
 
+    transposed = True
+
+    @Slot(bool)
+    def setTransposed(self, transposed: bool=True):
+        """Temporary turn off the transposing of the original model."""
+
+        if self.transposed == transposed:
+            return
+
+        self.beginResetModel()
+        self.transposed = transposed
+        self.endResetModel()
+
     def setSourceModel(self, model: QtCore.QAbstractItemModel):
         """Set the model being proxied."""
         oldModel = self.sourceModel()
@@ -1592,29 +1605,48 @@ class TransposedModel(QtCore.QAbstractProxyModel):
         model = self.sourceModel()
         if model is None or index.parent().isValid():
             return QtCore.QModelIndex()
+
+        if not self.transposed:
+            return model.index(index.row(), index.column())
+
         return model.index(index.column(), index.row())
 
     def mapFromSource(self, index):
         if index.parent().isValid():
             return QtCore.QModelIndex()
+
+        if not self.transposed:
+            return self.index(index.row(), index.column())
+
         return self.index(index.column(), index.row())
 
     def rowCount(self, parent=QtCore.QModelIndex()):
         model = self.sourceModel()
         if model is None or parent.isValid():
             return 0
+
+        if not self.transposed:
+            return model.rowCount()
+
         return model.columnCount()
 
     def columnCount(self, parent=QtCore.QModelIndex()):
         model = self.sourceModel()
         if model is None or parent.isValid():
             return 0
+
+        if not self.transposed:
+            return model.columnCount()
+
         return model.rowCount()
 
     def headerData(self, section, orientation, role=Qt.DisplayRole):
         model = self.sourceModel()
         if model is None:
             return None
+
+        if not self.transposed:
+            return model.headerData(section, orientation, role)
 
         if orientation == Qt.Horizontal:
             return model.headerData(section, Qt.Vertical, role)
