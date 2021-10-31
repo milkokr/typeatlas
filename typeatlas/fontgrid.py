@@ -86,6 +86,7 @@ CellHeaderRole = Qt.UserRole + 1
 SampleRendererRole = Qt.UserRole + 2
 CharInfoTextRole = Qt.UserRole + 3
 ModelFontInfoRole = Qt.UserRole + 4
+CharSymbolInfoRole = Qt.UserRole + 5
 
 
 class SvgFontSample(object):
@@ -991,6 +992,10 @@ class FontSymbolModel(QtCore.QAbstractItemModel):
                 return self.modelFontInfo
             else:
                 return self.selected[col - 1]
+        elif role == CharSymbolInfoRole:
+            charsetCodeInfo = self.charsetCodeInfo
+            if charsetCodeInfo is not None:
+                return charsetCodeInfo.get(char)
 
         return None
 
