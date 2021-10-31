@@ -1106,6 +1106,29 @@ class Toolbox(QtCore.QObject):
                 action.setDisabled(False)
             self.actionsEnabled = True
 
+    def hideActions(self, group: Hashable=None, action: Hashable=None):
+        """Completely hide the actions from the specified group, or the specific
+        action by key."""
+        self.setActionsVisible(False, group, action)
+
+    def showActions(self, group: Hashable=None, action: Hashable=None):
+        """Show the actions from the specified group, or the specific
+        action by key."""
+        self.setActionsVisible(True, group, action)
+
+    def setActionsVisible(self, visibility: bool=True,
+                                group: Hashable=None,
+                                action: Hashable=None):
+        """Set the visibility of the actions in the group is specified
+        action."""
+        if group is not None:
+            self.actionGroups[group].setVisible(visibility)
+        elif action is not None:
+            self.actionByKey[action].setVisible(visibility)
+        else:
+            for action in self.actions:
+                action.setVisible(visibility)
+
     def addContextMenu(self, widget: QtWidgets.QWidget):
         """Add the toolbox actions as a context meny of the specified
         widget."""
