@@ -1441,16 +1441,47 @@ class FontGridToolbox(Toolbox):
     def actionParent(self) -> QtCore.QObject:
         return self.grid
 
+    def updateActions(self):
+        """Update the actions to represent the current encoding."""
+
+        encoding = self.grid.model.encoding
+
+        self.setActionsVisible(visibility=encoding is None or encoding.unicode,
+                               group='codepoint')
+        self.setActionsVisible(visibility=encoding is not None and
+                                          encoding.fixed,
+                               group='bytevalue')
+        self.setActionsVisible(visibility=encoding is not None and
+                                          not encoding.morse,
+                               group='bytedata')
+        self.setActionsVisible(visibility=encoding is not None and
+                                          encoding.morse,
+                               group='morse')
+
     def actionDefinitions(self) -> Iterator:
         yield self.action(self.copyFormatted, 
                           _("Copy formatted characters"), 
                           icon='edit-copy', shortcut='Ctrl+C')
         yield self.copyCharacter, _("Copy plain characters")
         yield self.separator()
-        yield self.copyCode, _("Copy decimal code")
-        yield partial(self.copyCode, 'hex'), _("Copy hex code")
-        yield partial(self.copyCode, 'xml'), _("Copy XML code")
-        yield partial(self.copyCode, 'utf8'), _("Copy UTF-8 byte codes")
+
+        with self.group('codepoint'):
+            yield self.copyCode, _("Copy decimal code")
+            yield partial(self.copyCode, 'hex'), _("Copy hex code")
+            yield partial(self.copyCode, 'xml'), _("Copy XML code")
+            yield partial(self.copyCode, 'utf8'), _("Copy UTF-8 byte codes")
+
+        with self.group('bytevalue'):
+            yield self.copyLegacyCode, _("Copy legacy code (integer)")
+        with self.group('bytedata'):
+            yield partial(self.copyLegacyCode, 'hex'), _("Copy legacy code (hex)")
+        with self.group('morse'):
+            yield self.copyMorseCode, _("Copy telegraph code")
+
+        self.hideActions(group='bytevalue')
+        self.hideActions(group='bytedata')
+        self.hideActions(group='morse')
+
         yield self.separator()
         yield self.copyName, _("Copy name")
         yield self.copyImage, _("Copy image")
@@ -1500,6 +1531,60 @@ class FontGridToolbox(Toolbox):
             charCode = '&#%d;' % (charCode, )
         elif which == 'utf8':
             charCode = ' '.join(map(hex, chr(charCode).encode('utf8')))
+
+        clipboard = QtWidgets.QApplication.clipboard()
+        clipboard.setText(charCode)
+
+    @Slot()
+    def copyLegacyCode(self, which: str='integer'):
+        """Copy the legacy code to clipboard, either as integer, hex or utf8"""
+        current = self.grid.view.selectionModel().currentIndex()
+        if not current.isValid():
+            return
+
+        charInfo = current.data(CharSymbolInfoRole)
+        if charInfo is None:
+            return
+
+        encoding = charInfo.encoding
+
+        if which == 'integer':
+            if charInfo.charvalue is None:
+                return
+
+            if encoding is None or not encoding.fixed:
+                charCode = ' '.join(map(str, charInfo.bytedata))
+            else:
+                charCode = str(charInfo.charvalue)
+
+        elif which == 'hex':
+            if charInfo.bytedata is None:
+                return
+            charCode = ' '.join(map(hex, charInfo.bytedata))
+
+        clipboard = QtWidgets.QApplication.clipboard()
+        clipboard.setText(charCode)
+
+    @Slot()
+    def copyMorseCode(self, which: str='raw'):
+        """Copy the legacy code to clipboard, either as integer, hex or utf8"""
+        current = self.grid.view.selectionModel().currentIndex()
+        if not current.isValid():
+            return
+
+        charInfo = current.data(CharSymbolInfoRole)
+        if charInfo is None:
+            return
+
+        encoding = charInfo.encoding
+
+        if encoding is None or not encoding.morse:
+            return
+
+        if which == 'raw':
+            charCode = encoding.alpha_codes.get(chr(charInfo.codepoint))
+            if charCode is None:
+                return
 
         clipboard = QtWidgets.QApplication.clipboard()
         clipboard.setText(charCode)
@@ -2169,6 +2254,7 @@ class FontGrid(QtWidgets.QWidget):
                            *args, **kwargs)
 
         if not nochange:
+            self.toolbox.updateActions()
             self._updateUnicodeSelectors()
         else:
             self.view.reset()
@@ -2209,6 +2295,7 @@ class FontGrid(QtWidgets.QWidget):
                                 (self.modelFontInfoForItem(item, *args, **kwargs)
                                  for item in selected))
 
+        self.toolbox.updateActions()
         self._updateUnicodeSelectors()
 
     @Slot()
