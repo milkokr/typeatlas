@@ -709,7 +709,8 @@ class FontDelegate(QtWidgets.QStyledItemDelegate):
         self.fontDb = fontDb
         self.fontItemRole = fontItemRole
 
-    def paint(self, painter, option, index):
+    def paint(self, painter, opt, index):
+        option = QtWidgets.QStyleOptionViewItem(opt)
         self.initStyleOption(option, index)
 
         font = option.font
@@ -718,7 +719,7 @@ class FontDelegate(QtWidgets.QStyledItemDelegate):
             item = index.data(self.fontItemRole)
 
         if not font:
-            return super(FontDelegate, self).paint(painter, option, index)
+            return super(FontDelegate, self).paint(painter, opt, index)
 
         writingSystems = getattr(item, 'writingSystems', None)
         if writingSystems is None:

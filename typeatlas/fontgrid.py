@@ -1239,12 +1239,14 @@ class GridCellDelegate(QtWidgets.QStyledItemDelegate):
         return QtCore.QSize(max(result.width(), result.height()),
                             result.height())
 
-    def paint(self, painter, option, index):
+    def paint(self, painter, opt, index):
+
+        option = QtWidgets.QStyleOptionViewItem(opt)
         self.initStyleOption(option, index)
 
         font = option.font
         if not font:
-            return super(GridCellDelegate, self).paint(painter, option, index)
+            return super(GridCellDelegate, self).paint(painter, opt, index)
 
         if self.view is None:
             style = QtWidgets.QApplication.style()
