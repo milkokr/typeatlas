@@ -373,7 +373,7 @@ class LanguageSamples(object):
 
                 yield sample
 
-    def generate_sample(self, charset: SetOf[int]=None, size: int=None,
+    def generate_sample(self, charset: SequenceOf[int]=None, size: int=None,
                               alternative: int=0, long: bool=False,
                               group_sizes: SequenceOf[int]=None) -> SampleInfo:
         """Generate a sample from a character set. The sample will not be
@@ -386,8 +386,6 @@ class LanguageSamples(object):
             group_sizes = [3, 5, 5, 3, 6, 4, 3, 4, 4, 3]
 
         group_sizes = iter(cycle(group_sizes))
-
-        charset = list(charset)
 
         if len(charset) <= size:
             sample_chars = charset
