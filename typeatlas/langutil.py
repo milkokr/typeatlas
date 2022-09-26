@@ -760,6 +760,7 @@ class LanguageDatabase(object):
     def samples_langs(self, langs: LangListType, alternative: int=0,
                             long: bool=False, charset: SetOf[int]=None,
                             exhaustive_search: bool=True,
+                            auto_braille: bool=False,
                             **kwargs) -> IteratorOf[SampleInfo]:
         """Yield language samples for font testing. They can be selected by
         a list of languages (or ANY if unknown), or font-supported
@@ -787,7 +788,7 @@ class LanguageDatabase(object):
                              alternative=alternative, **kwargs)
 
         if charset is not None:
-            has_braille = charinfo.BRAILLE_RANGE <= charset
+            has_braille = auto_braille and charinfo.BRAILLE_RANGE <= charset
 
             result = ManagedIter(sample for sample in result
                                  if all(ord(c) in charset for c in sample.text))
@@ -852,7 +853,8 @@ class LanguageDatabase(object):
                 alternative = 0
 
         return self.samples_langs(langs, alternative, long=long,
-                                  charset=font.get_charset())
+                                  charset=font.get_charset(),
+                                  auto_braille=True)
 
     def samples_font_intersection(self,
                                   fonts: 'IterableOf[typeatlas.fontlist.FontLike]',
@@ -926,7 +928,8 @@ class LanguageDatabase(object):
                 alternative = 0
 
         return self.samples_langs(common_langs, alternative, long=long,
-                                  charset=common_charset)
+                                  charset=common_charset,
+                                  auto_braille=True)
 
     def sample_texts_font(self, font: 'typeatlas.fontlist.FontLike'
                          ) -> IteratorOf[str]:
