@@ -64,6 +64,9 @@ setup(
     requires=[
         'fonttools', 'PyQt5'
     ],
+    extras_require={
+        'accurate_filetype':  ['magic'],
+    },
     scripts=['typeatlas-qt', 'glyphatlas-qt', 'glyphatlas-select-qt', 'typefind'],
     classifiers=[
         'Programming Language :: Python :: 3',
