@@ -81,6 +81,7 @@ SequenceOf = generic_type('Sequence')
 
 
 FREETYPE_COLR_VERSION_MIN = '2.10.0'
+FREETYPE_SVG_VERSION_MIN = '2.12.0'
 
 WINDOWS_COLR_VERSION_MIN = '8.1'
 WINDOWS_SVG_VERSION_MIN = '10'
@@ -234,8 +235,10 @@ def svg_fonts_supported() -> bool:
         _svg_fonts_supported = (version_key(platform.release()) >=
                                 version_key(DARWIN_SVG_VERSION_MIN))
     elif is_posix:
-        # FreeType does not yet support SVG fonts
-        _svg_fonts_supported = False
+        # FIXME: Check features?
+        version = freetype_version()
+        _svg_fonts_supported = (version_key(version) >=
+                                version_key(FREETYPE_SVG_VERSION_MIN))
     else:
         _svg_fonts_supported = False
 
