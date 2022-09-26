@@ -856,12 +856,13 @@ def glyphatlasCliChooser():
     if not args.debug:
         disable_debug()
 
-    app = QtWidgets.QApplication([sys.argv[0]])
 
     # Loading the style after the application ensures the colour
     # scheme is properly loaded.
     if configuredStyle:
         QtWidgets.QApplication.setStyle(configuredStyle)
+
+    app = QtWidgets.QApplication([sys.argv[0]])
 
     # Python 3 is a broken downgrade from 2, and no longer supports Unicode
     # paths until we set the filesystem encoding, and so opening the splash
