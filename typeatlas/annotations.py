@@ -21,7 +21,7 @@
 #                                 ***
 #
 #    Alternatively, you may use this file (part of TypeAtlas libraries)
-#    under the terms of the X11/MIT license as follows:
+#    under the terms of the Expat/MIT license as follows:
 #
 #    Permission is hereby granted, free of charge, to any person
 #    obtaining a copy of this software and associated documentation
