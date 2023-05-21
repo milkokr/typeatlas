@@ -3,6 +3,8 @@
 #    TypeAtlas Qt Compatibility
 #    Written in 2018-2021 by Milko Krachounov
 #
+#    SPDX-License-Identifier: CC0-1.0
+#
 #    This file is part of TypeAtlas.
 #
 #    To the extent possible under law, Milko Krachunov has waived all copyright

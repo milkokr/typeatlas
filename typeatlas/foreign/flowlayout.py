@@ -4,6 +4,8 @@
 ## Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
 ## All rights reserved.
 ##
+##   SPDX-License-Identifier: BSD-3-Clause
+##
 ## This file is part of the examples of PyQt.
 ##
 ## $QT_BEGIN_LICENSE:BSD$

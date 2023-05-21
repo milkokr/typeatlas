@@ -3,6 +3,8 @@
 # Written by Martin v. Löwis <loewis@informatik.hu-berlin.de>
 # This file can redistributed under the terms of the
 # PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
+#
+#    SPDX-License-Identifier: PSF-2.0
 
 
 """Generate binary message catalog from textual translation description.

@@ -3,6 +3,8 @@
 # Copyright (c) 2005-2010 ActiveState Software Inc.
 # Copyright (c) 2013 Eddy Petrișor
 #
+#    SPDX-License-Identifier: MIT
+#
 # This is the MIT license
 #
 # Permission is hereby granted, free of charge, to any person obtaining a

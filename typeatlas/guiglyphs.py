@@ -3,6 +3,8 @@
 #    GlyphAtlas Character Selector and Character Map
 #    Copyright (C) 2021 Milko Krachounov
 #
+#    SPDX-License-Identifier: GPL-3.0-or-later
+#
 #    This file is part of TypeAtlas
 #
 #    TypeAtlas is free software: you can redistribute it and/or modify

@@ -3,6 +3,8 @@
 #    TypeAtlas Data Definitions for Open Font Format/OpenType Font Files
 #    Copyright (C) 2018-2021 Milko Krachounov
 #
+#    SPDX-License-Identifier: GPL-3.0-or-later OR MIT
+#
 #    This file is part of TypeAtlas
 #
 #    TypeAtlas is free software: you can redistribute it and/or modify
