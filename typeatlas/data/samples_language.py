@@ -31,8 +31,8 @@
 #   2) This notice lists ll the sources, the copyright, and their license.
 #   3) This notice adds additional permissions and clarifications
 #      pertaining to this collection, if seen as a collective derivative work,
-#      and all additional contributions are quintuple-licensed under GPL 3,
-#      LGPL 2, MIT/X11, CC-BY-SA 3.0 and CC-BY-SA 4.0 (just to be on the safe
+#      and all additional contributions are quintuple-licensed under GPL 3 or later,
+#      LGPL 2 or later, MIT/Expat license, CC-BY-SA 3.0 and CC-BY-SA 4.0 (just to be on the safe
 #      side). (If this is too restrictive, I can be persuaded to grant more).
 #   4) Each sample individually cites its own sources.
 #

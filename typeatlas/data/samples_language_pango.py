@@ -67,8 +67,8 @@
 #    phrases, contributed by third parties, were included. That includes
 #    six phrases also included by Pango. The six Pango phrases are in this file.
 
-# Any contributions to this file by Milko Krachounov are quintuple-licensed under GPL 3,
-#      LGPL 2, MIT/X11, CC-BY-SA 3.0 and CC-BY-SA 4.0 (just to be on the safe
+# Any contributions to this file by Milko Krachounov are quintuple-licensed under GPL 3 or later,
+#      LGPL 2 or later, MIT/Expat license, CC-BY-SA 3.0 and CC-BY-SA 4.0 (just to be on the safe
 #      side). (If this is too restrictive, I can be persuaded to grant more).
 #      See the notice in samples_language.py on the matter.
 
