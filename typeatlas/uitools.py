@@ -2006,10 +2006,11 @@ class Downloader(QtCore.QObject):
                 pass
 
             else:
-                timestamp = date.currentMSecsSinceEpoch() / 1000.
-                if st.st_size == length and int(st.st_mtime) >= timestamp:
-                    self._finished(request, True)
-                    return
+                if date is not None and length is not None:
+                    timestamp = date.currentMSecsSinceEpoch() / 1000.
+                    if st.st_size == length and int(st.st_mtime) >= timestamp:
+                        self._finished(request, True)
+                        return
 
             output = open(destination, 'wb')
 
