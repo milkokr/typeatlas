@@ -94,6 +94,7 @@ SequenceOf = generic_type('Sequence')
 SetOf = generic_type('Set')
 Union = generic_type('Union')
 Optional = generic_type('Optional')
+Any = generic_type('Any')
 
 
 MISSING_CHARSET_THRESHOLD = 0.90
@@ -531,14 +532,40 @@ class TypeAtlasActionToolbox(Toolbox):
                                       shortcut='Ctrl+Q',
                                       shortcutContext=Qt.ApplicationShortcut)
 
+    def download(self, name: str, registry: Any):
+        downloadables = list(registry.downloadables())
+
+        dialog = QtWidgets.QMessageBox(
+            QtWidgets.QMessageBox.Warning,
+            _("Download %s") % (name, ),
+            _("This will download %s from the internet. Are you sure you want "
+              "to proceed?" % (name, )),
+             QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+
+        dialog.setWindowModality(Qt.WindowModal)
+        if dialog.exec() != QtWidgets.QMessageBox.Yes:
+            return
+
+        progress = QtWidgets.QProgressDialog(
+                        _("Download %s") % (self.atlasLibrary.charDb.name, ),
+                        _("Abort"), 0, len(downloadables))
+        progress.setWindowModality(Qt.WindowModal)
+
+        def callback():
+            registry.populate()
+
+        self.downloader.downloadMany(downloadables, callback=callback, progress=progress)
+
+
     def downloadCharRegistry(self, registry: CharacterDatabase):
         """Download the characters for a given registry of characters,
         such as Unicode data."""
-        self.downloader.downloadMany(registry.downloadables())
+        self.download(registry.name, registry)
 
     def downloadISOLangData(self):
         """Download ISO language data."""
-        self.downloader.downloadMany(self.atlasLibrary.langDb.downloadables())
+        self.download(_('ISO language and country data'),
+                      self.atlasLibrary.langDb)
 
 
 class FontToolbox(Toolbox):
