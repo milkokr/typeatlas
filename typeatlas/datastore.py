@@ -53,7 +53,8 @@ import typeatlas
 from typeatlas.util import OrderedSet, Overwriter, warnmsgf, errmsgf, U_, N_
 from typeatlas.util import generic_type
 from typeatlas import proginfo, opentype, rangemath, event
-from collections import namedtuple, Mapping, Callable
+from collections import namedtuple
+from collections.abc import Mapping, Callable
 import time
 import json
 import os
