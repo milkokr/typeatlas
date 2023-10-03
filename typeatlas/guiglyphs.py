@@ -37,7 +37,7 @@ from typeatlas.langutil import LanguageDatabase, install_locales
 from typeatlas.datastore import MetadataCache
 from typeatlas.options import Options
 
-from typeatlas.uitools import QtExecutor
+from typeatlas.uitools import QtExecutor, Downloader
 from typeatlas.uitools import setDefaultFontFamilies
 from typeatlas.uitools import getIcon, getImage
 
@@ -226,6 +226,17 @@ class GlyphSelectorMixin():
         action.setData(None)
         action.triggered.connect(self._charsetClicked)
 
+        charsetMenu.addSeparator()
+        action = charsetMenu.addAction(_('Download %s') % (self.atlasLibrary.charDb.name, ))
+        action.triggered.connect(self._downloadUnicodeData)
+
+        charsetMenu.addSeparator()
+        action = charsetMenu.addAction(_('&Quit'))
+        action.setShortcut('Ctrl+Q')
+        action.setShortcutContext(Qt.ApplicationShortcut)
+        action.triggered.connect(self.atlasLibrary.quit)
+
+
     def populateInterpretationMenu(self):
         """Populate the interpretations menu."""
         menu = self.interpretationMenu
@@ -278,6 +289,35 @@ class GlyphSelectorMixin():
 
         self.encoding = self.encoding.interpretation(self.interpretation)
         self.updateFontGrid()
+
+    def _downloadUnicodeData(self, confirm=True):
+
+        dialog = QtWidgets.QMessageBox(
+            QtWidgets.QMessageBox.Warning,
+            _("Download %s") % (self.atlasLibrary.charDb.name, ),
+            _("This will download %s from the internet. Are you sure you want "
+              "to proceed?" % (self.atlasLibrary.charDb.name, )),
+             QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+
+        dialog.setWindowModality(Qt.WindowModal)
+        if dialog.exec() != QtWidgets.QMessageBox.Yes:
+            return
+
+        if not hasattr(self, 'downloader'):
+            self.downloader = Downloader()
+
+        downloadables = list(self.atlasLibrary.charDb.downloadables())
+
+        progress = QtWidgets.QProgressDialog(
+                        _("Download %s") % (self.atlasLibrary.charDb.name, ),
+                        _("Abort"), 0, len(downloadables))
+        progress.setWindowModality(Qt.WindowModal)
+
+        def callback():
+            self.atlasLibrary.charDb.populate()
+            self.updateFontGrid()
+
+        self.downloader.downloadMany(downloadables, callback=callback, progress=progress)
 
     def updateFontGrid(self):
         """Update the font grid character map widget."""
@@ -392,10 +432,11 @@ class GlyphAtlas(GlyphSelectorMixin, QtWidgets.QMainWindow):
                        parent: QtWidgets.QWidget=None,
                        splash: QtWidgets.QSplashScreen=None):
 
-        super().__init__(parent)
-
         if atlasLibrary is None:
             atlasLibrary = GlyphAtlasLibrary.getInstance(splash)
+        self.atlasLibrary = atlasLibrary
+
+        super().__init__(parent)
 
         self.resize(atlasLibrary.options.glyphAtlasSize)
 
@@ -409,7 +450,6 @@ class GlyphAtlas(GlyphSelectorMixin, QtWidgets.QMainWindow):
         self.populateCharsetMenu()
         self.populateInterpretationMenu()
 
-        self.atlasLibrary = atlasLibrary
         self.renderingChoice = FontRenderingChoice()
 
         self.fontGrid = fontgrid.FontGrid(atlasLibrary.charDb,
@@ -515,10 +555,11 @@ class CharSelectDialog(GlyphSelectorMixin, QtWidgets.QDialog):
                        selectFromFont: bool=False,
                        renderingChoice: FontRenderingChoice=None):
 
-        super().__init__(parent)
-
         if atlasLibrary is None:
             atlasLibrary = GlyphAtlasLibrary.getInstance()
+        self.atlasLibrary = atlasLibrary
+
+        super().__init__(parent)
 
         self.resize(atlasLibrary.options.glyphAtlasSize)
 
@@ -528,7 +569,6 @@ class CharSelectDialog(GlyphSelectorMixin, QtWidgets.QDialog):
         if renderingChoice is None:
             renderingChoice = FontRenderingChoice()
 
-        self.atlasLibrary = atlasLibrary
         self.renderingChoice = renderingChoice
 
         self.fontGrid = fontgrid.FontGrid(atlasLibrary.charDb,
