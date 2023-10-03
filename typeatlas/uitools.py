@@ -1917,6 +1917,8 @@ class Downloader(QtCore.QObject):
         super(Downloader, self).__init__(parent)
         self.manager = QtNetwork.QNetworkAccessManager(self)
         self.bufsize = bufsize
+        self.callbacks = {}
+        self.progressbar = {}
 
     started = Signal(int)
     progress = Signal(int)
@@ -1924,7 +1926,8 @@ class Downloader(QtCore.QObject):
     queueFinished = Signal(int, bool)
 
     def downloadMany(self, iterable: IterableOf[TupleOf[str, AnyStr]],
-                           callback: Callable=None) -> int:
+                           callback: Callable=None,
+                           progress: 'QtWidgets.QProgressBar'=None) -> int:
         """Download many URLs into many paths. They are specified as
         tuples source url, destination path; so the first argument is
         just an iterable as the downloadables() method returns for
@@ -1938,15 +1941,34 @@ class Downloader(QtCore.QObject):
         Each individual download will emit the finished() signal with
         the request and the success status.
         """
-        return self._processQueue(iter(iterable))
+
+        if progress is None:
+            iterable = list(iterable)
+            progress.setMaximum(len(iterable))
+
+        result = self._processQueue(iter(iterable))
+        if callback is not None and result is not None:
+            self.callbacks[result] = callback
+        if progress is not None and result is not None:
+            self.progressbar[result] = progress
+            progress.setValue(0)
+            progress.show()
+        return result
 
     def _processQueue(self, queue: IteratorOf[TupleOf[str, AnyStr]]):
         """Download the next element of the queue."""
 
         try:
             url, destination = next(queue)
+
         except StopIteration:
             self.queueFinished.emit(id(queue), True)
+            callback = self.callbacks.pop(id(queue), None)
+            progress = self.progressbar.pop(id(queue), None)
+            if callback is not None:
+                callback()
+            if progress is not None:
+                progress.reset()
             return
 
         request = self.download(url, destination,
@@ -1960,6 +1982,13 @@ class Downloader(QtCore.QObject):
         self.finished.emit(request, successful)
         queue = request.attribute(DOWNLOAD_QUEUE)
         if queue is not None:
+            progress = self.progressbar.get(id(queue))
+            if progress is not None:
+                progress.setValue(progress.value() + 1)
+                if progress.wasCanceled():
+                    self.callbacks.pop(id(queue), None)
+                    self.progressbar.pop(id(queue), None)
+                    return
             self._processQueue(queue)
 
     def download(self, url: str, destination: AnyStr,
