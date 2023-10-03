@@ -1025,8 +1025,10 @@ class CharacterDatabase(object):
                         info.combining = \
                             int(info.combining)
 
-                info.category = sys.intern(info.category)
-                info.bidirectional = sys.intern(info.bidirectional)
+                info.category = sys.intern(info.category
+                                                if info.category is not None
+                                                else 'Cn')
+                info.bidirectional = sys.intern(info.bidirectional or '')
                 existing = self.info_by_code.get(info.code)
                 if existing is not None:
                     existing.merge(info)
