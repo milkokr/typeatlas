@@ -762,8 +762,8 @@ class FontSymbolModel(QtCore.QAbstractItemModel):
                 factor = 1.3
             else:
                 factor = 1.1
-            self.gridView.setGridSize(QtCore.QSize(pixelSize * factor,
-                                                   pixelSize * factor))
+            self.gridView.setGridSize(QtCore.QSize(int(pixelSize * factor),
+                                                   int(pixelSize * factor)))
 
         self.modelFontInfo = SymbolModelFontInfo(font, *args, **kwargs,
                                                  options=options)
@@ -791,6 +791,7 @@ class FontSymbolModel(QtCore.QAbstractItemModel):
                                 else 1.1)
                            for mfi in allFonts
                            if mfi.font is not None)
+            gridSize = int(gridSize)
 
             self.gridView.setGridSize(QtCore.QSize(gridSize, gridSize))
 
@@ -1231,7 +1232,7 @@ class GridCellDelegate(QtWidgets.QStyledItemDelegate):
 
             height = result.height() * 1.1 + headerSize.height()
 
-            return QtCore.QSize(width, height)
+            return QtCore.QSize(int(width), int(height))
 
         result = super().sizeHint(option, index)
 

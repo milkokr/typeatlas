@@ -432,18 +432,18 @@ FONT_SIZES = lambda: QtGui.QFontDatabase.standardSizes()
 options = [
 
     Option('type-atlas-size', 'window', type=QtCore.QSize,
-           default=lambda: QtCore.QSize(generalWidth(refSize=1200),
-                                        generalHeight(refSize=800))),
+           default=lambda: QtCore.QSize(int(generalWidth(refSize=1200)),
+                                        int(generalHeight(refSize=800)))),
     Option('font-sampler-size', 'window', type=QtCore.QSize,
-           default=lambda: QtCore.QSize(generalWidth(refSize=1200),
-                                        generalHeight(refSize=800))),
+           default=lambda: QtCore.QSize(int(generalWidth(refSize=1200)),
+                                        int(generalHeight(refSize=800)))),
     Option('font-duel-size', 'window', type=QtCore.QSize,
-           default=lambda: QtCore.QSize(generalWidth(refSize=800),
-                                        generalHeight(refSize=600))),
+           default=lambda: QtCore.QSize(int(generalWidth(refSize=800)),
+                                        int(generalHeight(refSize=600)))),
 
     Option('glyph-atlas-size', 'window', type=QtCore.QSize,
-           default=lambda: QtCore.QSize(generalWidth(refSize=800),
-                                        generalHeight(refSize=600))),
+           default=lambda: QtCore.QSize(int(generalWidth(refSize=800)),
+                                        int(generalHeight(refSize=600)))),
 
     Option('type-atlas-state', 'window', type=bytes, default=b''),
     Option('type-atlas-arrangement', 'window', type=str, default='simple'),

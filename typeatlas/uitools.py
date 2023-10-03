@@ -565,7 +565,7 @@ iconHeight = iconWidth
 
 def iconSize(*args, **kwargs) -> QtCore.QSize:
     """Return an icon size. See iconWidth() for help."""
-    sz = iconWidth(*args, **kwargs)
+    sz = int(iconWidth(*args, **kwargs))
     return QtCore.QSize(sz, sz)
 
 
@@ -613,8 +613,8 @@ def generalSize(*args, **kwargs) -> QtCore.QSize:
     """Return a size in pixels of a general object (window, image,
     splash). See the help in generalWidth()."""
 
-    return QtCore.QSize(generalWidth(*args, **kwargs),
-                        generalHeight(*args, **kwargs))
+    return QtCore.QSize(int(generalWidth(*args, **kwargs)),
+                        int(generalHeight(*args, **kwargs)))
 
 
 def hasDarkBackground(palette: QtGui.QPalette=None) -> bool:
@@ -664,7 +664,7 @@ def getIconHtml(icon: str, size: Union[int, float, QtCore.QSize],
     """Get the HTML of a given icon at a given size. This can use
     a data URL, or an URL referring to a file."""
     if isinstance(size, (int, float)):
-        size = QtCore.QSize(size, size)
+        size = QtCore.QSize(int(size), int(size))
 
     if isinstance(icon, str):
         key = icon, size.width(), size.height()
@@ -680,7 +680,7 @@ def getImageHtml(icon: str, size: Union[int, float, QtCore.QSize],
     """Get the HTML of a given image at a given size. This can use
     a data URL, or an URL referring to a file."""
     if isinstance(size, (int, float)):
-        size = QtCore.QSize(size, size)
+        size = QtCore.QSize(int(size), int(size))
 
     if isinstance(icon, str):
         key = icon, size.width(), size.height()
