@@ -517,7 +517,7 @@ class TypeAtlasActionToolbox(Toolbox):
                                         _('Character map'),
                                         icon='glyphatlas')
         yield self.separator()
-        yield self.action(self.downloadCharRegistry,
+        yield self.action(self.downloadISOLangData,
                           _('Download ISO language and country data'))
         for registry in self.atlasLibrary.charDb.registries():
             yield self.action(partial(self.downloadCharRegistry, registry),
