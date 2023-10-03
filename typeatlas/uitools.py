@@ -1986,9 +1986,9 @@ class Downloader(QtCore.QObject):
             if progress is not None:
                 progress.setValue(progress.value() + 1)
                 if progress.wasCanceled():
-                    self.callbacks.pop(id(queue), None)
-                    self.progressbar.pop(id(queue), None)
-                    return
+                    # Consume the iterable and let _processQueue() handle it to avoid
+                    # code duplication and bugs resulting from it
+                    collections.deque(queue, maxlen=0)
             self._processQueue(queue)
 
     def download(self, url: str, destination: AnyStr,
